@@ -33,14 +33,15 @@ createUser = function(uniqueID, summonerName, region) {
 	});
 }
 
-/* Modify current match history
+/* Add new matches to user match history
+ * @param {String} uniqueID
+ * @param {JSON} matchID
  * @returns void
  */
- updateMatchHistory = function(uniqueID, gameID) {
- 	// check if match id exists
-	let ref = admin.database().ref().child('/match_history/match')
+updateMatchHistory = function(uniqueID, matchID) {
+
+	let ref = firebase.database().ref().child('/match_history/match')
 	let currentMatchIDs = []
-	let addMatches = []
 	ref.once('value', function(snap) {
 
 	    snap.forEach(function(item) {
@@ -48,18 +49,14 @@ createUser = function(uniqueID, summonerName, region) {
 	       	currentMatchIDs.push(matchResults);
 	    });
 
-	    for (let ID in gameID) {
-	    	if (gameID.includes(ID)) {
-	    		addMatches.push(allM[i].wordcount);
-	    	}
+	    for (int i = 0; i < matchID.length; i++) { // << highkey probably not work?
+		    for (let ID in currentMatchIDs) {
+		    	if !(currentMatchIDs.includes(matchID[i].gameId)) {
+					firebase.database().ref().ref.('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+						snap.numChildren().toString(): allM[i].wordcount,
+					});
+		    	}
+		    }
 	    }
-
 	});
-
- 	// admin.database().ref().ref.('/' + uniqueID + '/match_history').update({
- 	// 	"profileThumbnail": url,
- 	// });
- }
-
-// updateMatchHistory("asdfasdfasdf", )
-createUser("asdfasdfasdf", "asdf", "asdf")
+}
