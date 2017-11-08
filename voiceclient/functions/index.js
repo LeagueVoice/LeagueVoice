@@ -5,12 +5,12 @@ var admin = require("firebase-admin");
 const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js')
 
-const welcomeIntent = () => {
-
+const welcomeIntent = (app) => {
+    app.ask("Hello World!")
 }
 
-const Actions = { // the action names from the API.AI intent. actions mapped to functions
-
+const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
+    WELCOME_INTENT = "input.welcome"
 }
 
 const actionMap = new Map();
