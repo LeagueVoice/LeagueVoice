@@ -9,3 +9,19 @@ userIsTracked = function(uniqueID) {
   })
   return user !== null;
 }
+
+/* Create a new user with default values 
+ * @param {String} uniqueID - Google Home ID
+ * @returns void
+*/
+createUser = function(uniqueID) {
+	admin.database().ref('/' + uniqueID).push({
+	  	"champion" : null,
+	  	"item" : {
+	  		"0" : "temp",
+	  	}
+	  	"rank" : null,
+	  	"region" : null,
+	  	"username" : null,
+	});
+}
