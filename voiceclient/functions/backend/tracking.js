@@ -13,6 +13,8 @@ userIsTracked = function(uniqueID) {
 
 /* Create a new user with default values 
  * @param {String} uniqueID - Google Home ID
+ * @param {String} summonerName - Users's summoner name
+ * @param {String} region - User's Region
  * @returns void
 */
 createUser = function(uniqueID, summonerName, region) {
