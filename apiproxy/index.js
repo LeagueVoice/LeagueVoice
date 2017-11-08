@@ -32,4 +32,5 @@ app.get('/rgapi/:platform/league/getAllLeaguePositionsForSummoner/:summonerid', 
 });
 
 const port = 3000;
-app.listen(port, () => console.log('Listening on port ' + port + '.'));
+const mask = '0.0.0.0';
+app.listen(port, mask, () => console.log('Listening on ' + mask + ':' + port + '.'));
