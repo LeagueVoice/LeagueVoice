@@ -40,8 +40,8 @@
 	  "user" : "mingwei",
 	  "host" : ["104.196.43.62"],
 	  "ref"  : "origin/master",
-	  "repo" : "git@github.com/JustinHoUMD/League-Voice",
-	  "path" : "/home/ubuntu/league-voice",
+	  "repo" : "git@github.com:JustinHoUMD/League-Voice",
+	  "path" : "/home/mingwei/league-voice",
 	  "post-deploy" : "cd backend && rm -rf node_modules && npm install && cd ../apiproxy && npm install && cd .. && pm2 startOrRestart pm2.json --env production"
 	}
   }
