@@ -18,7 +18,7 @@
 	},
 	{
 	  "name"      : "Backend",
-	  "script"    : "backend/bin/www.js",
+	  "script"    : "backend/bin/www",
 	  "env": {
 		"NODE_ENV": "development"
 	  },
@@ -42,7 +42,7 @@
 	  "ref"  : "origin/master",
 	  "repo" : "git@github.com:JustinHoUMD/League-Voice",
 	  "path" : "/home/mingwei/league-voice",
-	  "post-deploy" : "cd backend && rm -rf node_modules && npm install && cd ../apiproxy && npm install && cd .. && pm2 startOrRestart pm2.json --env production"
+	  "post-deploy" : "cd backend && rm -rf node_modules && npm install && cd ../apiproxy && rm -rf node_modules && npm install && cd .. && pm2 startOrRestart pm2.json --env production"
 	}
   }
 }
