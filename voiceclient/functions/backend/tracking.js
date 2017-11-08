@@ -10,6 +10,7 @@ userIsTracked = function(uniqueID) {
   return user !== null;
 }
 
+
 /* Create a new user with default values 
  * @param {String} uniqueID - Google Home ID
  * @returns void
