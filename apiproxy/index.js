@@ -31,6 +31,7 @@ app.get('/rgapi/:platform/league/getAllLeaguePositionsForSummoner/:summonerid', 
     .catch(error => res.status(500).json({ error }).end());
 });
 
-const port = 3000;
+const config = require('../config.json')
+const port = config.apiproxy.port;
 const mask = '0.0.0.0';
 app.listen(port, mask, () => console.log('Listening on ' + mask + ':' + port + '.'));

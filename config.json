@@ -1,0 +1,9 @@
+{
+  "apiproxy": {
+    "port": 3000
+  },
+  "backend": {
+    "port": 3001
+  },
+  "voiceclient": {}
+}
