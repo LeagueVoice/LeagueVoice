@@ -26,9 +26,9 @@ createUser = function(uniqueID, summonerName, region) {
 	  		},
 	  		"winrate" : "default",
 	  	},
-	  	"region"     : "default",
+	  	"region"     : region,
 	  	"username"   : "default",
-	  	"summonerID" : "default",
+	  	"summonerID" : summonerName,
 	  	"accountID"  : "default",
 	});
 }
