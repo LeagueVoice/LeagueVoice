@@ -14,14 +14,23 @@ userIsTracked = function(uniqueID) {
  * @param {String} uniqueID - Google Home ID
  * @returns void
 */
-createUser = function(uniqueID) {
+createUser = function(uniqueID, summonerName, region) {
 	admin.database().ref('/' + uniqueID).push({
-	  	"champion" : null,
-	  	"item" : {
+	  	"champion"   : "default",
+	  	"item"       : {
 	  		"0" : "temp",
-	  	}
-	  	"rank" : null,
-	  	"region" : null,
-	  	"username" : null,
+	  	},
+	  	"match_history" : {
+	  		"match" : {
+	  			"0" : "default",
+	  		},
+	  		"winrate" : "default",
+	  	},
+	  	"region"     : "default",
+	  	"username"   : "default",
+	  	"summonerID" : "default",
+	  	"accountID"  : "default",
 	});
 }
+
+// local functions to modify states
