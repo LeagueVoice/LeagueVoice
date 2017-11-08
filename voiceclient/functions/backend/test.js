@@ -1,5 +1,5 @@
 const foo = require('./client.js');
 
-foo.getBySummonerName('foo', 'bar').then(function(res) {
+foo.getBySummonerName('waddlechirp', 'na1').then(function(res) {
   console.log(res);
 })
