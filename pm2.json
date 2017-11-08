@@ -1,0 +1,48 @@
+{
+  /**
+   * Application configuration section
+   * http://pm2.keymetrics.io/docs/usage/application-declaration/
+   */
+  "apps" : [
+	{
+	  "name"      : "API Proxy",
+	  "script"    : "apiproxy/index.js",
+	  "env": {
+		"NODE_ENV": "development"
+	  },
+	  // Environment variables injected when starting with --env production
+	  // http://pm2.keymetrics.io/docs/usage/application-declaration/#switching-to-different-environments
+	  "env_production" : {
+		"NODE_ENV": "production"
+	  }
+	},
+	{
+	  "name"      : "Backend",
+	  "script"    : "backend/bin/www.js",
+	  "env": {
+		"NODE_ENV": "development"
+	  },
+	  // Environment variables injected when starting with --env production
+	  // http://pm2.keymetrics.io/docs/usage/application-declaration/#switching-to-different-environments
+	  "env_production" : {
+		"NODE_ENV": "production"
+	  }
+	}
+  ],
+
+  /**
+   * Deployment section
+   * http://pm2.keymetrics.io/docs/usage/deployment/
+   */
+  "deploy" : {
+	"production" : {
+	  "key"  : "C:/Users/KrispinJonas/.ssh/apiproxy_rsa",
+	  "user" : "mingwei",
+	  "host" : ["104.196.43.62"],
+	  "ref"  : "origin/master",
+	  "repo" : "git@github.com/JustinHoUMD/League-Voice",
+	  "path" : "/home/ubuntu/league-voice",
+	  "post-deploy" : "cd backend && rm -rf node_modules && npm install && cd ../apiproxy && npm install && cd .. && pm2 startOrRestart pm2.json --env production"
+	}
+  }
+}
