@@ -10,7 +10,7 @@ const welcomeIntent = (app) => {
 }
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
-    WELCOME_INTENT = "input.welcome"
+    "WELCOME_INTENT": "input.welcome"
 }
 
 const actionMap = new Map();
