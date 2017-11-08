@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use strict';
 
 const DialogflowApp = require('actions-on-google').DialogflowApp;
@@ -29,13 +28,3 @@ module.exports = {
 if (!tracking.userIsTracked) {
     console.log("hello")
 }
-=======
-const functions = require('firebase-functions');
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
->>>>>>> 26fe688a44df9e708349ba8ccbbeb96640e52703
