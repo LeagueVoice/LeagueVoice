@@ -53,7 +53,7 @@ updateMatchHistory = function(uniqueID, matchID) {
 	    for (int i = 0; i < matchID.length; i++) { // << highkey probably not work?
 		    for (let ID in currentMatchIDs) {
 		    	if !(currentMatchIDs.includes(matchID[i].gameId)) {
-					firebase.database().ref().ref.('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+					firebase.database().ref().('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
 						snap.numChildren().toString(): allM[i].wordcount,
 					});
 		    	}
