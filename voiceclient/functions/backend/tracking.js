@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-// const functions = require('firebase-functions');
-// const admin = require('firebase-admin');
-// admin.initializeApp(functions.config().firebase);
-=======
 const firebase = require('firebase');
->>>>>>> 26fe688a44df9e708349ba8ccbbeb96640e52703
 
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
@@ -16,9 +10,7 @@ userIsTracked = function(uniqueID) {
   return user !== null;
 }
 
-<<<<<<< HEAD
-module.exports = userIsTracked
-=======
+
 /* Create a new user with default values 
  * @param {String} uniqueID - Google Home ID
  * @returns void
@@ -43,4 +35,3 @@ createUser = function(uniqueID, summonerName, region) {
 }
 
 // local functions to modify states
->>>>>>> 26fe688a44df9e708349ba8ccbbeb96640e52703
