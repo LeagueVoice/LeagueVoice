@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
     "actions-on-google": "*",
     "firebase": "^4.6.1",
     "firebase-admin": "*",

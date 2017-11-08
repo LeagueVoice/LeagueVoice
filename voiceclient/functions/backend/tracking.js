@@ -40,6 +40,7 @@ createUser = function(uniqueID, summonerName, region) {
  */
 updateMatchHistory = function(uniqueID, matchID) {
 
+	let finishedRunning = false;
 	let ref = firebase.database().ref().child('/match_history/match')
 	let currentMatchIDs = []
 	ref.once('value', function(snap) {
@@ -59,4 +60,23 @@ updateMatchHistory = function(uniqueID, matchID) {
 		    }
 	    }
 	});
+}
+
+/* Calculate winrate in current match games logged
+ * @returns void
+ */
+calculateWinrate = function() {
+	let ref = firebase.database().ref().child('/match_history/match')
+	let won = 0
+	ref.once('value', function(snap) {
+		snap.forEach(function(item) {
+	        let matchResults = item.val();
+	        if (matchResults) {
+	        	won += 1
+	        }
+	    });
+		firebase.database().ref().ref.('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+			"winrate" : (won/snapshot.numChildren())*100,
+		});
+	})
 }
