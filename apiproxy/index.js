@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const { RGAPI_KEY, CGGAPI_KEY } = require('keys');
+const { RGAPI_KEY, CGGAPI_KEY } = process.env;
 const TeemoJS = require('teemojs');
 const rgapi = new TeemoJS(RGAPI_KEY);
 
