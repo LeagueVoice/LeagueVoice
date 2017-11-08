@@ -1,12 +1,15 @@
 const express = require('express');
 const app = express();
 
+const { RGAPI_KEY, CGGAPI_KEY } = process.env;
 const TeemoJS = require('teemojs');
-const rgapi = new TeemoJS(process.env.RGAPI_KEY);
+const rgapi = new TeemoJS(RGAPI_KEY);
 
 const cGG = require("cgg").cGG;
-const cggapi = new cGG(process.env.CGGAPI_KEY);
+const cggapi = new cGG(CGGAPI_KEY);
 
+console.log("RGAPI_KEY: " + (RGAPI_KEY && RGAPI_KEY.replace(/[a-f0-9]/g, '*')));
+console.log("CGGAPI_KEY: " + (CGGAPI_KEY && CGGAPI_KEY.replace(/[a-f0-9]/g, '*')));
 
 app.get('/rgapi/:platform/summoner/getBySummonerName/:name', (req, res) => {
   const { platform, name } = req.params;
