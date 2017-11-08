@@ -4,7 +4,7 @@ const firebase = require('firebase');
 // if it's a new user.
 userIsTracked = function(uniqueID) {
   var database = firebase.database();
-  var user = database.ref(uniqueID).once('value').then(function(snapshot) {
+  var user = database.ref('/' + uniqueID).once('value').then(function(snapshot) {
     return snapshot;
   })
   return user !== null;
