@@ -15,22 +15,50 @@ userIsTracked = function(uniqueID) {
  * @returns void
 */
 createUser = function(uniqueID, summonerName, region) {
-	admin.database().ref('/' + uniqueID).push({
+	firebase.database().ref('/' + uniqueID).push({
 	  	"champion"   : "default",
 	  	"item"       : {
 	  		"0" : "temp",
 	  	},
 	  	"match_history" : {
 	  		"match" : {
-	  			"0" : "default",
+	  			"0" : "default", // win or loss
 	  		},
 	  		"winrate" : "default",
 	  	},
 	  	"region"     : region,
-	  	"username"   : "default",
 	  	"summonerID" : summonerName,
 	  	"accountID"  : "default",
 	});
 }
 
-// local functions to modify states
+/* Modify current match history
+ * @returns void
+ */
+ updateMatchHistory = function(uniqueID, gameID) {
+ 	// check if match id exists
+	let ref = admin.database().ref().child('/match_history/match')
+	let currentMatchIDs = []
+	let addMatches = []
+	ref.once('value', function(snap) {
+
+	    snap.forEach(function(item) {
+	        let matchResults = item.val();
+	       	currentMatchIDs.push(matchResults);
+	    });
+
+	    for (let ID in gameID) {
+	    	if (gameID.includes(ID)) {
+	    		addMatches.push(allM[i].wordcount);
+	    	}
+	    }
+
+	});
+
+ 	// admin.database().ref().ref.('/' + uniqueID + '/match_history').update({
+ 	// 	"profileThumbnail": url,
+ 	// });
+ }
+
+// updateMatchHistory("asdfasdfasdf", )
+createUser("asdfasdfasdf", "asdf", "asdf")
