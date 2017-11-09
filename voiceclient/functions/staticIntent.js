@@ -26,21 +26,18 @@ function _getChampionAbilities(championKey) {
 }
 
 function championAbility(assistant) {
-  return champs
-    .then(champs => {
-      let champion = assistant.getArgument('champion');
-      let ability = assistant.getArgument('ability');
+    let champion = assistant.getArgument('champion');
+    let ability = assistant.getArgument('ability');
 
-      let champName = champs.then(json => json.data[champion].name);
-      let champData = _getChampionAbilities(champion)
-        .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
+    let champName = champs.then(json => json.data[champion].name);
+    let champData = _getChampionAbilities(champion)
+      .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
 
-      return Promise.all([ champName, champData ])
-        .then(list => {
-          let [ name, data ] = list;
-          assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
-        });
-    });
+    return Promise.all([ champName, champData ])
+      .then(list => {
+        let [ name, data ] = list;
+        assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
+      });
 }
 
 module.exports = {
