@@ -12,7 +12,10 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRankIntent = (app) => {
-    app.tell("You're a diamond player! Congratulatory statement.")
+	tracking.createUser(10, "waddlechirp", "NA1");
+/*	tracking.getUserRankByQueue(10).then(function(res){
+		app.tell("You're a " + res + " player! Congratulatory statement.")
+	});*/
 }
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
