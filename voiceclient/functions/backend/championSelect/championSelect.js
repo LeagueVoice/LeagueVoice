@@ -1,5 +1,5 @@
 const tracking = require('../tracking')
-const client = require('./client')
+const client = require('../client')
 const helper = require('../helper')
 const fbUser = require('../../firebase/user')
 const aggregate = require('../aggregate')
