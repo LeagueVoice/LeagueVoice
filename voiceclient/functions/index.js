@@ -6,6 +6,7 @@ const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js')
 const client = require('./backend/client.js')
 const firebase = require('firebase');
+const fbUser = require('../firebase/user')
 
 const staticIntent = require('./staticIntent');
 
@@ -54,7 +55,7 @@ const SummonerIntent = (app) => {
 }
 
 const RegionIntent = (app) => {
-  tracking.createUser(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
+  fbUser.createFromSummonerName(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
     app.tell("Your region is set to: " + app.getArgument('region') + ".")
   });
 }

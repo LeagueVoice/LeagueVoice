@@ -2,33 +2,6 @@ const firebase = require('firebase');
 const client = require('./client.js');
 const fbUser = require('../firebase/user')
 
-/* Create a new user with default values
- * @param {String} uniqueID - Google Home ID
- * @param {String} summonerName - Users's summoner name
- * @param {String} region - User's Region
- * @returns void
-*/
-createUser = function (uniqueID, summonerName, region) {
-  return client.getBySummonerName(summonerName, region).then(function (res) {
-    return firebase.database().ref('users/' + uniqueID).set({
-      "champion": "default",
-      "item": {
-        "0": "temp"
-      },
-      "match_history": {
-        "match": {
-          "0": "default" // win or loss
-        },
-        "winrate": "default"
-      },
-      "region": region,
-      "summonerID": res.id,
-      "accountID": res.accountId,
-      "summonerName": summonerName
-    });
-  })
-}
-
 getUserChampionMasteries = function (uniqueID) {
   return fbUser.getById(uniqueID).then(user => {
     return client.getAllChampionMasteriesForSummoner(user['summonerID'], user['region'])
@@ -227,7 +200,6 @@ calculateIndividualChampWinrate = function (uniqueID) {
 }
 
 module.exports = {
-  "createUser": createUser,
   "getUserRanksByQueue": getUserRanksByQueue,
   "getUserChampionMasteries": getUserChampionMasteries
 }
