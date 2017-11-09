@@ -1,17 +1,21 @@
 const firebase = require('firebase');
 const client = require('./client.js');
 
+const getUser = function (uniqueID) {
+  return firebase.database()
+    .ref('users/' + uniqueID)
+    .once('value')
+}
+
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
 userIsTracked = function(uniqueID) {
-  return firebase.database()
-      .ref('users/' + uniqueID)
-      .once('value').then(function(snapshot) {
+  getUser(uniqueID).then(function(snapshot) {
     return snapshot !== null;
   })
 }
 
-/* Create a new user with default values 
+/* Create a new user with default values
  * @param {String} uniqueID - Google Home ID
  * @param {String} summonerName - Users's summoner name
  * @param {String} region - User's Region
@@ -39,10 +43,7 @@ createUser = function(uniqueID, summonerName, region) {
 }
 
 getUserChampionMasteries = function (uniqueID) {
-	return firebase.database()
-		.ref('/' + uniqueID)
-		.once('value')
-		.then(snapshot => {
+	return getUser(uniqueID).then(snapshot => {
 			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
 		})
 }
@@ -55,15 +56,18 @@ getUserRanksByQueue = function(uniqueID) {
       .ref('users/' + uniqueID)
       .once('value')
       .then(function(snapshot) {
-    return client.getAllLeaguePositionsForSummoner(snapshot.val()['summonerID'], snapshot.val()['region']);
-  }).then(function(positions) {
-    let byQueue = {};
-    positions.forEach(function(pos) {
-      byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+  		return getUser(uniqueID)
+  	}).then(function(snapshot) {
+    	return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID, snapshot.val().region);
+  	}).then(function(positions) {
+    	let byQueue = {};
+    	positions.forEach(function(pos) {
+      	byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
     });
     return byQueue;
-  });
+	});
 }
+
 
 /* Add new matches to user match history
  * @param {String} uniqueID
@@ -115,9 +119,9 @@ calculateWinrate = function() {
 
 module.exports = {
   "userIsTracked": userIsTracked,
+	"getUser": getUser,
   "createUser": createUser,
   "getUserRanksByQueue": getUserRanksByQueue,
-	// "getUser ": getUser,
-	"getUserChampionMasteries": getUserChampionMasteries
+  "getUserChampionMasteries": getUserChampionMasteries
 }
 
