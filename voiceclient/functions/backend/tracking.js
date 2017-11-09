@@ -38,6 +38,24 @@ createUser = function(uniqueID, summonerName, region) {
 	})
 }
 
+// Returns a promise that resoves to a map from queue type to string rank
+// within that league. The input user uniqueID is assumed to correspond to a
+// user that has already been created.
+getUserRanksByQueue = function(uniqueID) {
+  return firebase.database()
+      .ref('/' + uniqueID)
+      .once('value')
+      .then(function(snapshot) {
+    return client.getAllLeaguePositionsForSummoner(snapshot['summonerID']);
+  }).then(function(positions) {
+    let byQueue = {}; 
+    positions.forEach(function(pos) {
+      byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+    }); 
+    return byQueue;
+  });
+}
+
 /* Add new matches to user match history
  * @param {String} uniqueID
  * @param {JSON} matchID
@@ -76,7 +94,7 @@ calculateWinrate = function() {
 	ref.once('value', function(snap) {
 		snap.forEach(function(item) {
 	        let matchResults = item.val();
-	        if (matchResults) {
+	        if (matchResults != "default") {
 	        	won += 1
 	        }
 	    });
@@ -85,3 +103,10 @@ calculateWinrate = function() {
 		});
 	})
 }
+
+module.exports = {
+  "userIsTracked": userIsTracked,
+  "createUser": createUser, 
+  "getUserRanksByQueue": getUserRanksByQueue
+}
+

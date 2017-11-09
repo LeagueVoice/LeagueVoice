@@ -16,7 +16,7 @@ getBySummonerName = function(name, region) {
 
 // Returns a promise for getRecentMatchList that resolves to the returned JSON
 // from the Riot API matchlists/by-account/./recent endpoint.
-getRecentMatchList = function(accountID) {
+getRecentMatchList = function(accountID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/match/getRecentMatchlist/' + accountID,
@@ -27,7 +27,7 @@ getRecentMatchList = function(accountID) {
 
 // Returns a promise for getMatch that resolves to the returned JSON from the
 // Riot API matches/. endpoint.
-getMatch = function(matchID) {
+getMatch = function(matchID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/match/getMatch/' + matchID,
@@ -36,9 +36,23 @@ getMatch = function(matchID) {
   return rp(options)
 }
 
+// Returns a promise for getAllLeaguePositionsForSummoner that resolves to the
+// returned JSON from the Riot API positions/by-summoner/. endpoint.
+getAllLeaguePositionsForSummoner = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/league/getAllLeaguePositionsForSummoner/' + summonerID,
+    json: true 
+  }
+  return rp(options)
+}
+
+
+
 module.exports = {
   "getBySummonerName": getBySummonerName,
   "getRecentMatchList": getRecentMatchList, 
-  "getMatch": getMatch
+  "getMatch": getMatch,
+  "getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner
 }
 
