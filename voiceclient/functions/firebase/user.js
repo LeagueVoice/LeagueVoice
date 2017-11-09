@@ -1,5 +1,5 @@
 const firebase = require('firebase');
-const client = require('./client.js');
+const client = require('../backend/client.js');
 
 const user = {
   /**
@@ -9,7 +9,7 @@ const user = {
    * @param getRef if true, resolves to firebase ref, otherwise JSON
    * @returns {Promise}
    */
-  getById: function (uniqueID, {getRef = false}) {
+  getById: function (uniqueID, {getRef} = {getRef:false}) {
     return new Promise((resolve, reject) => {
       firebase.database()
         .ref('users')

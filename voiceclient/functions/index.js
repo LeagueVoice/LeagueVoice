@@ -6,7 +6,7 @@ const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js')
 const client = require('./backend/client.js')
 const firebase = require('firebase');
-const fbUser = require('../firebase/user')
+const fbUser = require('./firebase/user')
 const aggregate = require('./backend/aggregate')
 
 const staticIntent = require('./staticIntent');
@@ -18,7 +18,7 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue("test", firebase).then(function(res){
+	aggregate.userRanksByQueue("test").then(function(res){
 		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
@@ -63,7 +63,7 @@ const RegionIntent = (app) => {
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
-    CHECK_USER_RANK: 'CheckUserRank',
+    CHECK_USER_RANKS: 'CheckUserRanks',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     WHO_TO_BAN: 'WhoToBan',
     WIN_RATE_AGAINST: 'WinRateAgainst',
@@ -87,14 +87,14 @@ function initialize() {
 initialize();
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
-actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
+actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 
-// getUserRanksByQueue("test", firebase).then(function(response){
+// checkUserRanksIntent("test").then(function(response){
 // 	console.log(JSON.stringify(response));
 // }).catch(function(e){
 // 	console.log(e);
