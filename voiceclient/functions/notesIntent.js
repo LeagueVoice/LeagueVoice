@@ -10,7 +10,11 @@ const ReadNoteIntent = (app) => {
 	// championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).forEach(function (note) {
 	// 	big_string+= note + "."
 	// })
+<<<<<<< HEAD
 	app.tell(championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')))
+=======
+	app.tell(championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')));
+>>>>>>> fix arg list
 }
 
 module.exports = {
