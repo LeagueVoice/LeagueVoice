@@ -47,8 +47,9 @@ getUserRanksByQueue = function(uniqueID) {
       .once('value')
       .then(function(snapshot) {
     return client.getAllLeaguePositionsForSummoner(snapshot['summonerID']);
-  }.then(function(positions) {
-    let byQueue = {}; positions.forEach(function(pos) {
+  }).then(function(positions) {
+    let byQueue = {}; 
+    positions.forEach(function(pos) {
       byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
     }); 
     return byQueue;
