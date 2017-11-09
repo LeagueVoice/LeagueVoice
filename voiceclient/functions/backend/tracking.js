@@ -28,11 +28,20 @@ function userIsTracked(uniqueID) {
 function createUser(uniqueID, summonerName, region) {
 	return client.getBySummonerName(summonerName, region).then(function(res) {
 		return firebase.database().ref('users/' + uniqueID).set({
+			"accountID"  : res.accountId,
 			"champion"   : "default",
-			"item"       : {
-				"0" : "temp",
+			"currentMatch"       : {
+				"objectives" : {
+					"0" : "default",
+				},
+				"players" : {
+					"0" : "default",
+				},
 			},
 			"match_history" : {
+				"champ_winrate" : {
+					"0" : "default",
+				},
 				"match" : {
 					"0" : "default", // win or loss
 				},
@@ -40,8 +49,12 @@ function createUser(uniqueID, summonerName, region) {
 			},
 			"region"     : region,
 			"summonerID" : res.id,
-			"accountID"  : res.accountId,
-	  "summonerName": summonerName
+	  		"summonerName": summonerName,
+  			"userNotes" : {
+				"champion" : {
+					"0" : "default",
+				},
+			},
 		});
 	})
 }
