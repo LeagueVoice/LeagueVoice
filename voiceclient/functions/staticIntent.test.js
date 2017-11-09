@@ -18,7 +18,14 @@ describe('staticIntent.js', function() {
     }, string => {
       expect(string).to.equal("Zyra's auto attack range is 575 units.");
     }))
-    .then(done)
-    .catch(done);
+    .then(done, done);
+  });
+  it('test championCount', function(done) {
+    staticIntent.championCount(sim({
+      champion: 'Zyra'
+    }, string => {
+      expect(string).to.match(/\d{3,} champions\./);
+    }))
+    .then(done, done);
   });
 });
