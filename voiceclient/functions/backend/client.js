@@ -20,7 +20,7 @@ getRecentMatchList = function(accountID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/match/getRecentMatchlist/' + accountID,
-    json: true 
+    json: true
   }
   return rp(options)
 }
@@ -31,7 +31,7 @@ getMatch = function(matchID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/match/getMatch/' + matchID,
-    json: true 
+    json: true
   }
   return rp(options)
 }
@@ -42,17 +42,26 @@ getAllLeaguePositionsForSummoner = function(summonerID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/league/getAllLeaguePositionsForSummoner/' + summonerID,
-    json: true 
+    json: true
   }
   return rp(options)
 }
 
+getAllChampionMasteriesForSummoner = function(summonerID, region) {
+	const options = {
+		method: 'GET',
+		uri: `${APIPROXY}/rgapi/${region}/championMastery/getAllChampionMasteries/${summonerID}`,
+		json: true
+	}
+	return rp(options)
+}
 
 
 module.exports = {
-  "getBySummonerName": getBySummonerName,
-  "getRecentMatchList": getRecentMatchList, 
-  "getMatch": getMatch,
-  "getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner
+	"getBySummonerName": getBySummonerName,
+	"getRecentMatchList": getRecentMatchList,
+	"getMatch": getMatch,
+	"getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner,
+	"getAllChampionMasteriesForSummoner": getAllChampionMasteriesForSummoner
 }
 
