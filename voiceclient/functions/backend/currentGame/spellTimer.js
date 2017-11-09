@@ -25,6 +25,7 @@ const storeObjectiveTime = function(uniqueID, objective) {
  * @param {String} spell - spell used to store time for
  */
 const checkSpellTime = function(uniqueID, champion, spell) {
+<<<<<<< HEAD
 	return new Promise((resolve, reject)=>{
 		firebase.database()
 		.ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell)
@@ -46,6 +47,16 @@ const getSpellTime = function(uniqueID, champion, spell) {
 			return 0;
 		}
 		return diff;
+=======
+	return firebase.database().ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell).once('value', snap => {
+		const diff = Date.now() - snap.val()
+		if (diff >= 300000) {
+			return 0;
+		}
+		// else {
+			return diff/1000;
+		// }
+>>>>>>> updating static spells
 	});
 }
 
@@ -55,4 +66,3 @@ module.exports = {
   "checkSpellTime" : checkSpellTime,
   "getSpellTime" : getSpellTime
 }
-

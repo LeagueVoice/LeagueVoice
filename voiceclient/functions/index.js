@@ -127,7 +127,8 @@ champselect.suggestChampionToPick("test", "mid")
 // tracking.getWinrateForChamp("test", 70)
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 const leagueVoice = functions.https.onRequest((request, response) => {
-  const app = new DialogflowApp( {request, response});  app.handleRequest(actionMap);
+  const app = new DialogflowApp( {request, response});
+  app.handleRequest(actionMap);
 });
 
 // client.getBestMatchupsByLane(client.getChampionID("annie"))
