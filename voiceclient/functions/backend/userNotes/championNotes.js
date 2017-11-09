@@ -15,10 +15,14 @@ const getChampionNotes = function(uniqueID, championID) {
     .ref(championNoteKey(uniqueID, championID))
     .once('value')
     .then(function(snapshot) {
-      if (snapshot == null) {
-        return [];
+        if (snapshot == null) {
+          return [];
+        } else {
+          var values = Object.keys(snapshot.val()).map(function(e) {
+            return snapshot.val()[e]
+          })
+          return values
       }
-      return Object.values(snapshot.val());
     });
 }
 
