@@ -1,0 +1,56 @@
+/* Add new games from recent 20 matches
+ * @param {String} uniqueID
+ * @param {String} summonerID
+ * @param {String} region
+ * @returns void
+ */
+const addNewMatches = function(uniqueID, summonerID, region) {
+
+	client.getRecentMatchList(summonerID, region).then(res => {
+		console.log(res)
+		matchHistory = res
+
+		let championId = []
+		let gameId = []
+		// console.log(matchHistory["matches"])
+		for (let key of matchHistory["matches"]) {
+			// console.log(key["champion"])
+			// console.log("-------------------------------------")
+			championId.push(key["champion"]) // list of champions for each game
+			gameId.push(key["gameId"])
+		}
+		// console.log(matchHistory)
+		// console.log("reeeeee")
+
+		let asdf = []
+		for (let game of gameId) { // every game: gameId[index]
+			const index = gameId.indexOf(game) // index for game data
+			lient.getMatch(game, region)
+				.then(res => {
+					for (let key of res["participants"]) {
+						if (key["championId"] !== championId[index])
+							continue;
+						console.log("TEAM: " + key["teamId"])
+						console.log("halsdfkldsjakljl")
+						if (key["teamId"] == 100) {
+							asdf.push(res["teams"][0]["win"])
+							console.log("asjdkfljsdklafjklds")
+						}
+						else {
+							asdf.push(res["teams"][1]["win"])
+							console.log("asdfsdfasdfasf")
+						}
+						let ref = firebase.database().ref().child('/users/match_history/match')
+						ref.once('value', snap => {
+							var count = 0
+							firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
+								"champion" : championId[index],
+								"status" : asdf[index]
+							});
+						});
+						break;
+					}
+				});
+		}
+	})
+}
