@@ -6,15 +6,23 @@ const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js')
 
 const welcomeIntent = (app) => {
-    app.ask("Hello World!")
+    //Do exist:
+    //Don't exist:
+    app.tell("Hello World!")
+}
+
+const checkUserRankIntent = (app) => {
+    app.tell("You're a diamond player! Congratulatory statement.")
 }
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
-    "WELCOME_INTENT": "input.welcome"
+    "WELCOME_INTENT": "input.welcome",
+    "CHECK_USER_RANK": "CheckUserRank"
 }
 
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
+actionMap.set(Actions.CHECK_USER_RANK, checkUserRankIntent)
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
@@ -24,7 +32,3 @@ const leagueVoice = functions.https.onRequest((request, response) => {
 module.exports = {
   leagueVoice
 };
-
-if (!tracking.userIsTracked) {
-    console.log("hello")
-}
