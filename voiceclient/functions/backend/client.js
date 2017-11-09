@@ -36,6 +36,15 @@ getMatch = function(matchID, region) {
   return rp(options)
 }
 
+getCurrentMatch = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/lol/spectator/v3/active-games/by-summoner/' + summonerID,
+    json: true
+  }
+  return rp(options)
+}
+
 // Returns a promise for getAllLeaguePositionsForSummoner that resolves to the
 // returned JSON from the Riot API positions/by-summoner/. endpoint.
 getAllLeaguePositionsForSummoner = function(summonerID, region) {
@@ -171,6 +180,7 @@ module.exports = {
   "getGGChampionsForRole": getGGChampionsForRole,
   "getBestMatchupsByLane": getBestMatchupsByLane,
   "getChampionName": getChampionName,
-  "getChampionID": getChampionID
+  "getChampionID": getChampionID,
+  "getCurrentMatch": getCurrentMatch
 }
 

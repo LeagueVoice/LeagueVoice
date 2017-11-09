@@ -6,6 +6,7 @@ const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js');
 const client = require('./backend/client.js');
 const champselect = require('./backend/championSelect/championSelect.js');
+const gameTimer = require('./backend/currentGame/gameTimer.js');
 
 const firebase = require('firebase');
 
@@ -108,7 +109,7 @@ actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
 actionMap.set(Actions.SUMMONER_SPELL_INTENT, matchIntent.SummonerSpellIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
-acitonMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
+actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 
 // getUserRanksByQueue("test", firebase).then(function(response){
@@ -123,11 +124,13 @@ champselect.suggestChampionToPick("test", "mid")
     // ("Based on your mastery and current winrate, champs you could play are " + response)
   });
 
-getWinrateForChamp("test", 70)
+//getWinrateForChamp("test", 70)
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});  app.handleRequest(actionMap);
 });
+
+console.log(gameTimer.gameTimeAdvice(23, "NA1"));
 
 // client.getBestMatchupsByLane(client.getChampionID("annie"))
 //  .then(function(response){
