@@ -12,7 +12,7 @@ const firebase = require('firebase');
 const fbUser = require('./firebase/user')
 const aggregate = require('./backend/aggregate')
 const spell = require('./backend/currentGame/spellTimer.js');
-const staticIntent = require('./staticIntent');
+const staticIntent = require('./static/staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 
@@ -134,7 +134,7 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 tracking.createUser("test3", "sarby13", "na1")
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 const leagueVoice = functions.https.onRequest((request, response) => {
-  const app = new DialogflowApp( {request, response});
+  const app = new DialogflowApp({request, response});
   app.handleRequest(actionMap);
 });
 //tracking.createUser(99, "Warden Parus", "NA1");
