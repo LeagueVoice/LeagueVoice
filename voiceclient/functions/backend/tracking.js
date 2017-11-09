@@ -2,14 +2,6 @@ const firebase = require('firebase');
 const client = require('./client.js');
 const fbUser = require('../firebase/user')
 
-// Returns true if given unique ID is already tracked by us. Returns false
-// if it's a new user.
-userIsTracked = function (uniqueID) {
-  return fbUser.getById(uniqueID).then(function (snapshot) {
-    return snapshot !== null;
-  })
-}
-
 /* Create a new user with default values
  * @param {String} uniqueID - Google Home ID
  * @param {String} summonerName - Users's summoner name
@@ -235,7 +227,6 @@ calculateIndividualChampWinrate = function (uniqueID) {
 }
 
 module.exports = {
-  "userIsTracked": userIsTracked,
   "createUser": createUser,
   "getUserRanksByQueue": getUserRanksByQueue,
   "getUserChampionMasteries": getUserChampionMasteries
