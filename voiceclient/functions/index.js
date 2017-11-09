@@ -7,6 +7,7 @@ const tracking = require('./backend/tracking.js')
 const client = require('./backend/client.js')
 const firebase = require('firebase');
 const fbUser = require('../firebase/user')
+const aggregate = require('./backend/aggregate')
 
 const staticIntent = require('./staticIntent');
 
@@ -17,7 +18,7 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	tracking.getUserRanksByQueue("test", firebase).then(function(res){
+	aggregate.userRanksByQueue("test", firebase).then(function(res){
 		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
