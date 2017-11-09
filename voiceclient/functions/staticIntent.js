@@ -16,30 +16,37 @@ const champs = latest
   .then(version => rp(`${CDN}${version}/data/en_US/champion.json`))
   .then(JSON.parse);
 
-const abilitiesIndicies = [ 'Q', 'W', 'E', 'R', 'passive' ];
+const abilitiesIndicies = [ 'Q', 'W', 'E', 'R' ];
 
-function _getChampionAbilities(championKey) {
+function _getChampion(championKey) {
   return latest
     .then(version => req(`${CDN}${version}/data/en_US/champion/${championKey}.json`))
     .then(JSON.parse)
-    .then(json => json.data[championKey].spells);
+    .then(json => json.data[championKey]);
 }
 function _getChampionAbility(championKey, ability) {
-  return _getChampionAbilities(championKey)
-    .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
+  if ('passive' === ability) {
+    return _getChampion(championKey)
+      .then(champ => champ.passive);
+  }
+  else {
+    return _getChampion(championKey)
+      .then(champ => champ.spells)
+      .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
+  }
 }
 
 function _cooldownToString(arr) {
   // Constant cooldown.
   if ((new Set(arr)).size === 1)
-    return `${arr[0]} seconds at all levels.`;
+    return `${arr[0]} seconds at all levels`;
   // Linear cooldown.
   let deltas = [];
   for (let i = 1; i < arr.length; i++)
     deltas.push(arr[i] - arr[i - 1]);
   if ((new Set(deltas)).size === 1)
     return `${arr[0]} seconds at level 1, decreasing by ${-deltas[0]} seconds per level, to `
-      + `${arr[arr.length - 1]} seconds at level ${arr.length}.`;
+      + `${arr[arr.length - 1]} seconds at level ${arr.length}`;
   let strs = arr.map((x, i) => `${x} seconds at level ${i + 1}`);
   strs[strs.length - 1] = 'and ' + strs[strs.length - 1];
   return strs.join(', ');
@@ -62,6 +69,9 @@ function championAbility(assistant) {
 function championAbilityCooldown(assistant) {
   let champion = assistant.getArgument('champion');
   let ability = assistant.getArgument('ability');
+
+  if ('passive' === ability)
+    return;
 
   let champName = champs.then(json => json.data[champion].name);
   let champData = _getChampionAbility(champion, ability);
