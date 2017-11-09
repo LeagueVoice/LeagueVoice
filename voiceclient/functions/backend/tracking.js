@@ -2,9 +2,13 @@ const firebase = require('firebase');
 const client = require('./client.js');
 
 const getUser = function (uniqueID) {
-  return firebase.database()
-    .ref('users/' + uniqueID)
-    .once('value')
+  return new Promise((resolve, reject)=>{
+    firebase.database()
+      .ref('users')
+      .once('value', function(snapshot){
+				resolve(snapshot.val())
+      }, reject)
+	})
 }
 
 // Returns true if given unique ID is already tracked by us. Returns false
@@ -22,8 +26,8 @@ userIsTracked = function(uniqueID) {
  * @returns void
 */
 createUser = function(uniqueID, summonerName, region) {
-	client.getBySummonerName(summonerName, region).then(function(res) {
-		firebase.database().ref('users/' + uniqueID).set({
+	return client.getBySummonerName(summonerName, region).then(function(res) {
+		return firebase.database().ref('users/' + uniqueID).set({
 			"champion"   : "default",
 			"item"       : {
 				"0" : "temp",
