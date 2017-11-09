@@ -125,7 +125,7 @@ champselect.suggestChampionToPick("test", "mid")
   });
 
 // tracking.getWinrateForChamp("test", 70)
-spell.checkSpellTime('test', 'annie', 'flash').then(console.log())
+//spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});  app.handleRequest(actionMap);
 });
