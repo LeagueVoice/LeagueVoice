@@ -1,8 +1,13 @@
 const foo = require('./client.js');
+  console.log(foo.getChampionID('ashe'));
+  console.log(foo.getChampionName(22));
+  
 
+/*
   foo.getBestMatchupsByLane(18).then(function(matchups) {
     console.log(matchups);
   });
+  */
 
 // foo.getGGMatchupsTEST().then(console.log)
   /*
