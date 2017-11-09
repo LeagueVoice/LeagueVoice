@@ -65,7 +65,7 @@ function initialize() {
   firebase.initializeApp(config);
 }
 
-initialize();
+//initialize();
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
@@ -79,7 +79,7 @@ actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent)
 // 	console.log(e);
 // });
 
-champselect.suggestChampionToPick("test", "mid", firebase)
+champselect.suggestChampionToPick("test", "mid")
   .then(function(response){
      console.log(response);
     // ("Based on your mastery and current winrate, champs you could play are " + response)
