@@ -47,9 +47,8 @@ createUser = function(uniqueID, summonerName, region) {
 }
 
 getUserChampionMasteries = function (uniqueID) {
-	return getUser(uniqueID).then(snapshot => {
-	console.log(snapshot )
-			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
+	return getUser(uniqueID).then(user => {
+			return client.getAllChampionMasteriesForSummoner(user['summonerID'],user['region'])
 		})
 }
 
