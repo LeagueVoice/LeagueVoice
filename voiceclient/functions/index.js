@@ -113,7 +113,7 @@ actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
 actionMap.set(Actions.SS_STORE_INTENT, matchIntent.SummonerSpellStoreIntent);
-actionMap.set(Actions.SS_GET_INTENT, matchIntent.SummonerSpellGetIntent)
+actionMap.set(Actions.SS_GET_INTENT, matchIntent.SummonerSpellGetIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);

@@ -19,5 +19,5 @@ const SummonerSpellGetIntent = (app) => {
 }
 
 module.exports = {
-	AdviceIntent, SummonerSpellStoreIntent
+	AdviceIntent, SummonerSpellStoreIntent, SummonerSpellGetIntent
 }
