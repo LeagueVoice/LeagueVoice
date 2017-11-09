@@ -7,7 +7,7 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "./node_modules/.bin/mocha static/**/*.test.js firebase/**/*.test.js backend/**/*.test.js"
+    "test": "./node_modules/.bin/mocha *.test.js firebase/**/*.test.js backend/**/*.test.js"
   },
   "dependencies": {
     "actions-on-google": "*",
