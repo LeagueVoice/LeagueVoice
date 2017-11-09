@@ -39,7 +39,7 @@ getMatch = function(matchID, region) {
 getCurrentMatch = function(summonerID, region) {
   const options = {
     method: 'GET',
-    uri: APIPROXY + '/rgapi/' + region + '/lol/spectator/v3/active-games/by-summoner/' + summonerID,
+    uri: APIPROXY + '/rgapi/' + region + '/spectator/getCurrentGameInfoBySummoner/' + summonerID,
     json: true
   }
   return rp(options)

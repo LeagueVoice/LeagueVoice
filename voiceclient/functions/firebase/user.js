@@ -1,3 +1,5 @@
+'use strict';
+
 const firebase = require('firebase');
 const client = require('../backend/client.js');
 
@@ -9,9 +11,9 @@ const user = {
    * @param getRef if true, resolves to firebase ref, otherwise JSON
    * @returns {Promise}
    */
-  getById: function (uniqueID, {getRef} = {getRef:false}) {
+getById: function (uniqueID, {getRef} = {getRef:false}) {
     return new Promise((resolve, reject) => {
-      firebase.database()
+      return firebase.database()
         .ref('users')
         .once('value', function (snapshot) {
           const value = getRef ? snapshot : snapshot.val()[uniqueID]
@@ -32,7 +34,8 @@ const user = {
     }
     return client.getBySummonerName(summonerName, region)
       .then(function (res) {
-        return user.getById(uniqueID, {getRef: true}).set({
+        return user.getById(uniqueID, {getRef: true}).then(function(snapshot) {
+          snapshot.ref.set({
           "champion": "default",
           "item": {
             "0": "temp"
@@ -49,6 +52,7 @@ const user = {
           "summonerName": summonerName
         });
       })
+    })
   },
 
   /* Add new matches to user match history

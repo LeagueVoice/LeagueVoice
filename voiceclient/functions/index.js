@@ -23,7 +23,7 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue("test").then(function(res){
+	aggregate.userRanksByQueue(app.getUser().userId).then(function(res){
   		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
@@ -76,6 +76,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     CHECK_USER_RANKS: 'CheckUserRanks',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
+    STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
@@ -84,7 +85,8 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     SUMMONER: 'Summoner',
     REGION: 'Region',
     ADVICE: 'Advice',
-    WRITE_NOTE: 'WriteNote'
+    WRITE_NOTE: 'WriteNote',
+    READ_NOTE: 'ReadNote'
 }
 
 function initialize() {
@@ -106,6 +108,7 @@ actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
+actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
@@ -115,6 +118,7 @@ actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
+actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
 // checkUserRanksIntent("test").then(function(response){
 // 	console.log(JSON.stringify(response));
