@@ -8,6 +8,8 @@ const client = require('./backend/client.js');
 const champselect = require('./backend/championSelect/championSelect.js');
 
 const firebase = require('firebase');
+const fbUser = require('./firebase/user')
+const aggregate = require('./backend/aggregate')
 
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
@@ -20,8 +22,8 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	tracking.getUserRanksByQueue(app.getUser().userId, firebase).then(function(res){
-		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
+	aggregate.userRanksByQueue("test").then(function(res){
+  		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
 
@@ -63,14 +65,14 @@ const SummonerIntent = (app) => {
 }
 
 const RegionIntent = (app) => {
-  tracking.createUser(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
+  fbUser.createFromSummonerName(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
     app.tell("Your region is set to: " + app.getArgument('region') + ".")
   });
 }
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
-    CHECK_USER_RANK: 'CheckUserRank',
+    CHECK_USER_RANKS: 'CheckUserRanks',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
     WIN_RATE_AGAINST: 'WinRateAgainst',
@@ -99,7 +101,7 @@ function initialize() {
 initialize();
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
-actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
+actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
@@ -111,7 +113,7 @@ actionMap.set(Actions.REGION, RegionIntent);
 acitonMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 
-// getUserRanksByQueue("test", firebase).then(function(response){
+// checkUserRanksIntent("test").then(function(response){
 // 	console.log(JSON.stringify(response));
 // }).catch(function(e){
 // 	console.log(e);
