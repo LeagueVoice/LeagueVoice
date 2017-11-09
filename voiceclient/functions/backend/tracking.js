@@ -5,7 +5,7 @@ const fbUser = require('../firebase/user')
 /*
  * Returns a promise that resolves to the user's summoner level
  */
-getUserLevel = function (summonerName, region) {
+getUserLevel = function (summonerName, region) { // TODO: needed? if so, move elsewhere
   return client.getBySummonerName(summonerName, region)
     .then(function (res) {
       return res['summonerLevel'];
@@ -15,42 +15,12 @@ getUserLevel = function (summonerName, region) {
 /*
  * Returns a promise that resolves to the date and time when the user was last active
  */
-getUserLastActiveTime = function (summonerName, region) {
+getUserLastActiveTime = function (summonerName, region) { // TODO: needed? if so, move elsewhere
   return client.getBySummonerName(summonerName, region)
     .then(function (res) {
       return new Date(res['revisionDate']).toString();
     });
 }
-
-/* Add new matches to user match history
- * @param {String} uniqueID
- * @param {JSON} matchID
- * @returns void
- */
-updateMatchHistory = function (uniqueID, matchID) {
-
-  let finishedRunning = false;
-  let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
-  let currentMatchIDs = []
-  ref.once('value', function (snap) {
-
-    snap.forEach(function (item) {
-      let matchResults = item.val();
-      currentMatchIDs.push(matchResults);
-    });
-
-    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
-      for (let ID in currentMatchIDs) {
-        if (!(currentMatchIDs.includes(matchID[i].gameId))) {
-          firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-            [snap.numChildren().toString()]: allM[i].wordcount
-          });
-        }
-      }
-    }
-  });
-}
-
 /* Calculate winrate in current match games logged
  * @returns void
  */

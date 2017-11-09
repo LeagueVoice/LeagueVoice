@@ -27,7 +27,7 @@ const user = {
    * @param region
    */
   createFromSummonerName: function (uniqueID, summonerName, region) {
-    if (!summonerName || !region){
+    if (!summonerName || !region) {
       throw new ReferenceError(`summonerName or region missing - summonerName: ${summonerName}, region: ${region}`)
     }
     return client.getBySummonerName(summonerName, region)
@@ -49,6 +49,33 @@ const user = {
           "summonerName": summonerName
         });
       })
+  },
+
+  /* Add new matches to user match history
+   * @param {String} uniqueID
+   * @param {JSON} matchID
+   * @returns void
+   */
+  updateMatchHistory: function (uniqueId, matchID) {
+    let finishedRunning = false;
+    let ref = user.getById(uniqueId, {getRef: true}).child('/match_history/match')
+    let currentMatchIDs = []
+    ref.once('value', function (snap) {
+      snap.forEach(function (item) {
+        let matchResults = item.val();
+        currentMatchIDs.push(matchResults);
+      });
+
+      for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
+        for (let ID in currentMatchIDs) {
+          if (!(currentMatchIDs.includes(matchID[i].gameId))) {
+            firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+              [snap.numChildren().toString()]: allM[i].wordcount
+            });
+          }
+        }
+      }
+    });
   }
 }
 
