@@ -40,7 +40,9 @@ const checkSpellTime = function(uniqueID, champion, spell) {
  * @param {String} spell - spell used to store time for
  */
 const getSpellTime = function(uniqueID, champion, spell) {
+	console.log("in get spell time")
 	return checkSpellTime(uniqueID, champion, spell).then(function(snapshot){
+		console.log(snapshot)
 		var diff = Date.now()-snapshot
 		if (diff >= 300000) {
 			return 0;
