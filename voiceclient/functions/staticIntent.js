@@ -24,22 +24,56 @@ function _getChampionAbilities(championKey) {
     .then(JSON.parse)
     .then(json => json.data[championKey].spells);
 }
+function _getChampionAbility(championKey, ability) {
+  return _getChampionAbilities(championKey)
+    .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
+}
+
+function _cooldownToString(arr) {
+  // Constant cooldown.
+  if ((new Set(arr)).size === 1)
+    return `${arr[0]} seconds at all levels.`;
+  // Linear cooldown.
+  let deltas = [];
+  for (let i = 1; i < arr.length; i++)
+    deltas.push(arr[i] - arr[i - 1]);
+  if ((new Set(deltas)).size === 1)
+    return `${arr[0]} seconds at level 1, decreasing by ${-deltas[0]} seconds per level, to `
+      + `${arr[arr.length - 1]} seconds at level ${arr.length}.`;
+  let strs = arr.map((x, i) => `${x} seconds at level ${i + 1}`);
+  strs[strs.length - 1] = 'and ' + strs[strs.length - 1];
+  return strs.join(', ');
+}
 
 function championAbility(assistant) {
-    let champion = assistant.getArgument('champion');
-    let ability = assistant.getArgument('ability');
+  let champion = assistant.getArgument('champion');
+  let ability = assistant.getArgument('ability');
 
-    let champName = champs.then(json => json.data[champion].name);
-    let champData = _getChampionAbilities(champion)
-      .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
+  let champName = champs.then(json => json.data[champion].name);
+  let champData = _getChampionAbility(champion, ability);
 
-    return Promise.all([ champName, champData ])
-      .then(list => {
-        let [ name, data ] = list;
-        assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
-      });
+  return Promise.all([ champName, champData ])
+    .then(list => {
+      let [ name, data ] = list;
+      assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
+    });
+}
+
+function championAbilityCooldown(assistant) {
+  let champion = assistant.getArgument('champion');
+  let ability = assistant.getArgument('ability');
+
+  let champName = champs.then(json => json.data[champion].name);
+  let champData = _getChampionAbility(champion, ability);
+
+  return Promise.all([ champName, champData ])
+    .then(list => {
+      let [ name, data ] = list;
+      assistant.tell(`${name}'s ${ability} cooldown is ${_cooldownToString(data.cooldown)}.`);
+    });
 }
 
 module.exports = {
-  championAbility
+  championAbility,
+  championAbilityCooldown
 };
