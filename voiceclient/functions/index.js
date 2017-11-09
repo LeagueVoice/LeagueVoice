@@ -47,7 +47,7 @@ getUserRanksByQueue("test").then(function(response){
 	console.log(JSON.stringify(response));
 }).catch(function(e){
 	console.log(e);
-})
+});
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
