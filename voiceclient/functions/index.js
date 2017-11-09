@@ -36,12 +36,37 @@ const WinRateAgainstIntent = (app) => {
   });
 }
 
+const WhoToBanIntent = (app) => {
+  client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
+  .then(function(response){
+    console.log(response);
+    if (response[0].count != 0){
+      app.tell("You should ban " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
+    }
+    else {
+      app.tell("I don't know. Best of luck, scrub.");
+    }
+  });
+}
+
+const SummonerIntent = (app) => {
+  app.ask("Your summoner name is set to: " + app.getArgument('summoner') + ". What region do you play in?")
+}
+
+const RegionIntent = (app) => {
+  tracking.createUser(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
+    app.tell("Your region is set to: " + app.getArgument('region') + ".")
+  });
+}
+
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANK: 'CheckUserRank',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
-    //WHO_AM_I: 'WhoAmI',
-    WIN_RATE_AGAINST: 'WinRateAgainst'
+    WHO_TO_BAN: 'WhoToBan',
+    WIN_RATE_AGAINST: 'WinRateAgainst',
+    SUMMONER: 'Summoner',
+    REGION: 'Region'
 }
 
 function initialize() {
@@ -63,6 +88,9 @@ actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
+actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
+actionMap.set(Actions.SUMMONER, SummonerIntent);
+actionMap.set(Actions.REGION, RegionIntent);
 
 // getUserRanksByQueue("test", firebase).then(function(response){
 // 	console.log(JSON.stringify(response));
@@ -71,8 +99,7 @@ actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 // });
 
 const leagueVoice = functions.https.onRequest((request, response) => {
-  const app = new DialogflowApp( {request, response});
-  app.handleRequest(actionMap);
+  const app = new DialogflowApp( {request, response});  app.handleRequest(actionMap);
 });
 
 // client.getBestMatchupsByLane(client.getChampionID("annie"))
