@@ -6,7 +6,8 @@
     "shell": "firebase experimental:functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "test": "./node_modules/.bin/mocha *.test.js firebase/**/*.test.js backend/**/*.test.js"
   },
   "dependencies": {
     "actions-on-google": "*",
@@ -18,6 +19,7 @@
   },
   "private": true,
   "devDependencies": {
-    "chai": "^4.1.2"
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
   }
 }

@@ -2,7 +2,7 @@ const client = require('../client')
 const user = require('../../firebase/user')
 const rp = require('request-promise');
 
-const timeLogic = function(gameLength) {
+timeLogic = function(gameLength) {
 	const gameTimerEnum = {
 		MIDGAME : 1200,
 		LATEGAME : 1800
@@ -11,7 +11,7 @@ const timeLogic = function(gameLength) {
 	if (gameLength < gameTimerEnum.MIDGAME){
 		return new Promise((resolve, reject)=>{
 			resolve("It is still early game! Focus on your lane.")
-			});
+		});
 	}
 	else if (gameLength > gameTimerEnum.MIDGAME && gameLength < gameTimerEnum.LATEGAME){
 		return "It is mid game! Look to group with your team and push inner turrets."
@@ -23,6 +23,7 @@ const timeLogic = function(gameLength) {
 
 const gameTimeAdvice = function (uniqueID, region) {
 	return user.getById(uniqueID).then(function(response){
+		console.log(response)
 		console.log("asdf" + JSON.stringify(response))
 		console.log(response["summonerID"]);
 		client.getCurrentMatch(response["summonerID"], region).then(function(response){
