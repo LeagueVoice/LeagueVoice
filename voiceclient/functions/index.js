@@ -13,7 +13,11 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRankIntent = (app) => {
+<<<<<<< HEAD
 	tracking.getUserRanksByQueue("test", firebase).then(function(res){
+=======
+	tracking.getUserRankByQueue("test", firebase).then(function(res){
+>>>>>>> b14887664d82f738fc7f28f20703efc7a43464e9
 		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	}).catch(function(e){
 		app.tell(JSON.stringify(e));
@@ -43,16 +47,27 @@ const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRankIntent)
 
+<<<<<<< HEAD
 getUserRanksByQueue("test", firebase).then(function(response){
 	console.log(JSON.stringify(response));
 }).catch(function(e){
 	console.log(e);
 });
+=======
+// getUserRanksByQueue("test", firebase).then(function(response){
+// 	console.log(JSON.stringify(response));
+// }).catch(function(e){
+// 	console.log(e);
+// });
+>>>>>>> b14887664d82f738fc7f28f20703efc7a43464e9
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
   app.handleRequest(actionMap);
 });
+
+// calculateIndividualChampWinrate("test")
+// addNewMatches("test", 237254272, "na1")
 
 module.exports = {
   leagueVoice

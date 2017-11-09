@@ -2,9 +2,19 @@ const firebase = require('firebase');
 const client = require('./client.js');
 
 const getUser = function (uniqueID, my_firebase) {
+<<<<<<< HEAD
   return my_firebase.database()
     .ref('users/' + uniqueID)
     .once('value')
+=======
+  return new Promise((resolve, reject)=>{
+    my_firebase.database()
+      .ref('users')
+      .once('value', function(snapshot){
+				resolve(snapshot.val()[uniqueID])
+      }, reject)
+	})
+>>>>>>> b14887664d82f738fc7f28f20703efc7a43464e9
 }
 
 // Returns true if given unique ID is already tracked by us. Returns false
@@ -22,8 +32,8 @@ userIsTracked = function(uniqueID) {
  * @returns void
 */
 createUser = function(uniqueID, summonerName, region) {
-	client.getBySummonerName(summonerName, region).then(function(res) {
-		firebase.database().ref('users/' + uniqueID).set({
+	return client.getBySummonerName(summonerName, region).then(function(res) {
+		return firebase.database().ref('users/' + uniqueID).set({
 			"champion"   : "default",
 			"item"       : {
 				"0" : "temp",
@@ -44,6 +54,7 @@ createUser = function(uniqueID, summonerName, region) {
 
 getUserChampionMasteries = function (uniqueID) {
 	return getUser(uniqueID).then(snapshot => {
+    console.log(snapshot )
 			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
 		})
 }
@@ -52,6 +63,7 @@ getUserChampionMasteries = function (uniqueID) {
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
 getUserRanksByQueue = function(uniqueID, my_firebase) {
+<<<<<<< HEAD
 
   return getUser(uniqueID, my_firebase).then(function(snapshot) {
     return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID);
@@ -59,6 +71,20 @@ getUserRanksByQueue = function(uniqueID, my_firebase) {
     let byQueue = {};
     positions.forEach(function(pos) {
       byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+=======
+  return my_firebase.database()
+      .ref('users/' + uniqueID)
+      .once('value')
+      .then(function(snapshot) {
+  		return getUser(uniqueID, my_firebase)
+  	}).then(function(snapshot) {
+  		console.log(snapshot);
+    	return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
+  	}).then(function(positions) {
+    	let byQueue = {};
+    	positions.forEach(function(pos) {
+      	byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+>>>>>>> b14887664d82f738fc7f28f20703efc7a43464e9
     });
     return byQueue;
   });
@@ -112,6 +138,7 @@ calculateWinrate = function() {
 	})
 }
 
+<<<<<<< HEAD
 calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
 
 	// client.getRecentMatchList(summonerID, region).then(function(res) {
@@ -161,6 +188,76 @@ calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
 }
 
 calculateIndividualChampWinrate("test", 237254272, "na1")
+=======
+
+addNewMatches = function(uniqueID, summonerID, region) {
+
+	client.getRecentMatchList(summonerID, region).then(function(res) {
+		console.log(res)
+		matchHistory = res
+
+		let championId = []
+		let gameId = []
+		// console.log(matchHistory["matches"])
+		for (let key of matchHistory["matches"]) {
+			// console.log(key["champion"])
+			// console.log("-------------------------------------")
+			championId.push(key["champion"]) // list of champions for each game
+			gameId.push(key["gameId"])
+		}
+		// console.log(matchHistory)
+		// console.log("reeeeee")
+
+		let asdf = []
+		for (let game of gameId) { // every game: gameId[index]
+			const index = gameId.indexOf(game) // index for game data
+			loop2: client.getMatch(game, region).then(function(res) {
+
+
+				loop: for (let key of res["participants"]) {
+					if (key["championId"] == championId[index]) {
+						console.log("TEAM: " + key["teamId"])
+						console.log("halsdfkldsjakljl")
+						if (key["teamId"] == 100) {
+							asdf.push(res["teams"][0]["win"])
+							console.log("asjdkfljsdklafjklds")
+						}
+						else {
+							asdf.push(res["teams"][1]["win"])
+							console.log("asdfsdfasdfasf")
+						}
+						let ref = firebase.database().ref().child('/users/match_history/match')
+						ref.once('value', function(snap) {
+							var count = 0
+							firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
+								"champion" : championId[index],
+								"status" : asdf[index]
+							});
+						})
+						break loop;
+					}
+				}
+			})
+		}
+	})
+}
+
+calculateIndividualChampWinrate = function(uniqueID) {
+	let ref = firebase.database().ref().child('/match_history/match')
+	let won = 0
+	ref.once('value', function(snap) {
+		for (let i = 0; i < snap.numChildren(); i++) {
+			snap.forEach(function(item) {
+	        	let matchResults = item.val();
+	        	console.log(matchResults[i]["champion"])
+	   		});
+		}
+		// firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+		// 	"winrate" : (won/snapshot.numChildren())*100,
+		// });
+	})
+}
+>>>>>>> b14887664d82f738fc7f28f20703efc7a43464e9
 
 module.exports = {
   "userIsTracked": userIsTracked,
