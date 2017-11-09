@@ -2,18 +2,18 @@ const firebase = require('firebase');
 
 
 // Time Flash
-storeSpellTime = function(uniqueID, champion, spell) {
+const storeSpellTime = function(uniqueID, champion, spell) {
 	firebase.database().ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell)
 		.set(Date.now())
 }
 
-storeObjectiveTime = function(uniqueID, objective) {
+const storeObjectiveTime = function(uniqueID, objective) {
 	firebase.database().ref('users/' + uniqueID + '/currentMatch/objectives/' + objective)
 		.set(Date.now())
 }
 
 
-checkSpellTime = function(uniqueID, champion, spell) {
+const checkSpellTime = function(uniqueID, champion, spell) {
 	firebase.database().ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell).once('value', snap => {
 		const diff = Date.now() - snap.val()
 		if (diff >= 300000) {

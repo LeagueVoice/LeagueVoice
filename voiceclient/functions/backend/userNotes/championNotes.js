@@ -1,7 +1,7 @@
 const firebase = require('firebase');
 
 // Returns the database key for the user and champion ID.
-championNoteKey = function(uniqueID, championID) {
+const championNoteKey = function(uniqueID, championID) {
   return 'users/' + uniqueID + '/userNotes/champion/' + championID;
 }
 
@@ -10,7 +10,7 @@ championNoteKey = function(uniqueID, championID) {
 // 
 // If inGameSeconds == 0, then the note should be delivered during or
 // immediately after champion selection.
-getChampionNotes = function(uniqueID, championID) {
+const getChampionNotes = function(uniqueID, championID) {
   return firebase.database()
     .ref(championNoteKey(uniqueID, championID))
     .once('value')
@@ -25,7 +25,7 @@ getChampionNotes = function(uniqueID, championID) {
 // Adds a champion note for the user and champion that should be delievered
 // after the given number of seconds. If inGameSeconds is zero, then the note
 // should be delievered during or immediately after champion selection.
-addChampionNote = function(uniqueID, championID, inGameSeconds, note) {
+const addChampionNote = function(uniqueID, championID, inGameSeconds, note) {
   return firebase.database()
     .ref(championNoteKey(uniqueID, championID))
     .push({
