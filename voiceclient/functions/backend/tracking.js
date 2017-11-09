@@ -2,23 +2,20 @@ const firebase = require('firebase');
 const client = require('./client.js');
 
 const getUser = function (uniqueID, my_firebase) {
-  return my_firebase.database()
-    .ref('users/' + uniqueID)
-    .once('value')
- 	//  return new Promise((resolve, reject)=>{
- 	//    my_firebase.database()
- 	//      .ref('users')
- 	//      .once('value', function(snapshot){
-	// 			resolve(snapshot.val()[uniqueID])
- 	//      }, reject)
-	// })
+	return new Promise((resolve, reject)=>{
+   	  my_firebase.database()
+	  .ref('users')
+	  .once('value', function(snapshot){
+		resolve(snapshot.val()[uniqueID])
+	  }, reject)
+	})
 }
 
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
 userIsTracked = function(uniqueID) {
   getUser(uniqueID).then(function(snapshot) {
-    return snapshot !== null;
+	return snapshot !== null;
   })
 }
 
@@ -44,14 +41,14 @@ createUser = function(uniqueID, summonerName, region) {
 			"region"     : region,
 			"summonerID" : res.id,
 			"accountID"  : res.accountId,
-      "summonerName": summonerName
+	  "summonerName": summonerName
 		});
 	})
 }
 
 getUserChampionMasteries = function (uniqueID) {
 	return getUser(uniqueID).then(snapshot => {
-    console.log(snapshot )
+	console.log(snapshot )
 			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
 		})
 }
@@ -60,28 +57,22 @@ getUserChampionMasteries = function (uniqueID) {
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
 getUserRanksByQueue = function(uniqueID, my_firebase) {
-  return getUser(uniqueID, my_firebase).then(function(snapshot) {
-    return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID);
-  }).then(function(positions) {
-    let byQueue = {};
-    positions.forEach(function(pos) {
-      byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
-	  // return my_firebase.database()
-	  //     .ref('users/' + uniqueID)
-	  //     .once('value')
-	  //     .then(function(snapshot) {
-	  // 		return getUser(uniqueID, my_firebase)
-	  // 	}).then(function(snapshot) {
-	  // 		console.log(snapshot);
-	  //   	return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
-	  // 	}).then(function(positions) {
-	  //   	let byQueue = {};
-	  //   	positions.forEach(function(pos) {
-	  //     	byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
-	  //   });
-	  //   return byQueue;
+  return my_firebase.database()
+	  .ref('users/' + uniqueID)
+	  .once('value')
+	  .then(function(snapshot) {
+		return getUser(uniqueID, my_firebase)
+	}).then(function(snapshot) {
+		console.log(snapshot);
+		return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
+	}).then(function(positions) {
+		let byQueue = {};
+		positions.forEach(function(pos) {
+		byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+	});
+	return byQueue;
   });
-})}
+}
 
 /* Add new matches to user match history
  * @param {String} uniqueID
@@ -95,20 +86,20 @@ updateMatchHistory = function(uniqueID, matchID) {
 	let currentMatchIDs = []
 	ref.once('value', function(snap) {
 
-	    snap.forEach(function(item) {
-	        let matchResults = item.val();
-	       	currentMatchIDs.push(matchResults);
-	    });
+		snap.forEach(function(item) {
+			let matchResults = item.val();
+			currentMatchIDs.push(matchResults);
+		});
 
-	    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
-		    for (let ID in currentMatchIDs) {
-		    	if (!(currentMatchIDs.includes(matchID[i].gameId))) {
+		for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
+			for (let ID in currentMatchIDs) {
+				if (!(currentMatchIDs.includes(matchID[i].gameId))) {
 					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-            [snap.numChildren().toString()]: allM[i].wordcount
-          });
-          }
-		    }
-	    }
+			[snap.numChildren().toString()]: allM[i].wordcount
+		  });
+		  }
+			}
+		}
 	});
 }
 
@@ -120,11 +111,11 @@ calculateWinrate = function() {
 	let won = 0
 	ref.once('value', function(snap) {
 		snap.forEach(function(item) {
-	        let matchResults = item.val();
-	        if (matchResults != "default") {
-	        	won += 1
-	        }
-	    });
+			let matchResults = item.val();
+			if (matchResults != "default") {
+				won += 1
+			}
+		});
 		firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
 			"winrate" : (won/snapshot.numChildren())*100,
 		});
@@ -189,9 +180,9 @@ calculateIndividualChampWinrate = function(uniqueID) {
 	ref.once('value', function(snap) {
 		for (let i = 0; i < snap.numChildren(); i++) {
 			snap.forEach(function(item) {
-	        	let matchResults = item.val();
-	        	console.log(matchResults[i]["champion"])
-	   		});
+				let matchResults = item.val();
+				console.log(matchResults[i]["champion"])
+			});
 		}
 		// firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
 		// 	"winrate" : (won/snapshot.numChildren())*100,
