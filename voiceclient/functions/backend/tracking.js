@@ -4,13 +4,12 @@ const client = require('./client.js');
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
 userIsTracked = function(uniqueID) {
-  var database = firebase.database();
-  var user = database.ref('/' + uniqueID).once('value').then(function(snapshot) {
-    return snapshot;
+  return firebase.database()
+      .ref('/' + uniqueID)
+      .once('value').then(function(snapshot) {
+    return snapshot !== null;
   })
-  return user !== null;
 }
-
 
 /* Create a new user with default values 
  * @param {String} uniqueID - Google Home ID
