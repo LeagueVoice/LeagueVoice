@@ -52,6 +52,26 @@ getUserChampionMasteries = function (uniqueID) {
 		})
 }
 
+/*
+ * Returns a promise that resolves to the user's summoner level
+ */
+getUserLevel = function(summonerName, region) {
+	return client.getBySummonerName(summonerName, region)
+		.then(function(res) {
+			return res['summonerLevel'];
+		});
+}
+
+/*
+ * Returns a promise that resolves to the date and time when the user was last active
+ */
+getUserLastActiveTime = function(summonerName, region) {
+	return client.getBySummonerName(summonerName, region)
+		.then(function(res) {
+			return new Date(res['revisionDate']).toString();
+		});
+}
+
 // Returns a promise that resoves to a map from queue type to string rank
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
