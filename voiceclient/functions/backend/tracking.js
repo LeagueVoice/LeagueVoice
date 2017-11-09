@@ -5,7 +5,7 @@ const client = require('./client.js');
 // if it's a new user.
 userIsTracked = function(uniqueID) {
   return firebase.database()
-      .ref('/' + uniqueID)
+      .ref('users/' + uniqueID)
       .once('value').then(function(snapshot) {
     return snapshot !== null;
   })
@@ -19,7 +19,7 @@ userIsTracked = function(uniqueID) {
 */
 createUser = function(uniqueID, summonerName, region) {
 	client.getBySummonerName(summonerName, region).then(function(res) {
-		firebase.database().ref('/' + uniqueID).push({
+		firebase.database().ref('users/' + uniqueID).set({
 			"champion"   : "default",
 			"item"       : {
 				"0" : "temp",
@@ -43,7 +43,7 @@ createUser = function(uniqueID, summonerName, region) {
 // user that has already been created.
 getUserRanksByQueue = function(uniqueID) {
   return firebase.database()
-      .ref('/' + uniqueID)
+      .ref('users/' + uniqueID)
       .once('value')
       .then(function(snapshot) {
     return client.getAllLeaguePositionsForSummoner(snapshot['summonerID']);
@@ -64,7 +64,7 @@ getUserRanksByQueue = function(uniqueID) {
 updateMatchHistory = function(uniqueID, matchID) {
 
 	let finishedRunning = false;
-	let ref = firebase.database().ref().child('/match_history/match')
+	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
 	let currentMatchIDs = []
 	ref.once('value', function(snap) {
 
