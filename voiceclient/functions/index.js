@@ -11,6 +11,7 @@ const firebase = require('firebase');
 
 const staticIntent = require('./staticIntent');
 const trackingIntent = require('./matchIntent');
+const notesIntent = require('./notesIntent');
 
 const welcomeIntent = (app) => {
     //Do exist:
@@ -76,7 +77,8 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     WHO_TO_BAN: 'WhoToBan',
     SUMMONER: 'Summoner',
     REGION: 'Region',
-    ADVICE: 'Advice'
+    ADVICE: 'Advice',
+    WRITE_NOTE: 'WriteNote'
 }
 
 function initialize() {
@@ -103,6 +105,7 @@ actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 acitonMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
+actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 
 // getUserRanksByQueue("test", firebase).then(function(response){
 // 	console.log(JSON.stringify(response));
