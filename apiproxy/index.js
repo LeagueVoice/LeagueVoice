@@ -11,6 +11,7 @@ const cggapi = new cGG(CGGAPI_KEY);
 console.log("RGAPI_KEY: " + (RGAPI_KEY && RGAPI_KEY.replace(/[a-f0-9]/g, '*')));
 console.log("CGGAPI_KEY: " + (CGGAPI_KEY && CGGAPI_KEY.replace(/[a-f0-9]/g, '*')));
 
+
 Object.entries(rgapi.config.endpoints).forEach(kv => {
   const [ endpointName, methods ] = kv;
   Object.entries(methods).forEach(kv => {
@@ -18,13 +19,12 @@ Object.entries(rgapi.config.endpoints).forEach(kv => {
     let route = '/rgapi/:platform/' + endpointName + '/' + methodName + '/';
     if (url.includes('%s'))
       route += ':id';
-    console.log('Adding route: "' + route + '".')
     app.get(route, (req, res) => {
       let { platform, id } = req.params;
-      rgapi.get(platform, endpointName + '.' + methodName, id)
+      rgapi.get(platform, endpointName + '.' + methodName, id, req.query)
         .then(data => {
           if (!data)
-            res.status(404).end();
+            res.status(204).end();
           else
             res.json(data).end();
         })
@@ -32,6 +32,71 @@ Object.entries(rgapi.config.endpoints).forEach(kv => {
     });
   });
 });
+
+app.get('/cggapi/champions', (req, res) => {
+  cggapi.champions(req.query)
+    .then(data => {
+      if (!data)
+        res.status(204).end();
+      else
+        res.json(JSON.parse(data)).end();
+    })
+    .catch(error => res.status(500).json({ error }).end());
+});
+
+app.get('/cggapi/matchupsByRole/:id/:role', (req, res) => {
+  let { id, role } = req.params;
+  cggapi.matchupsByRole(id, role, req.query)
+    .then(data => {
+      if (!data)
+        res.status(204).end();
+      else
+        res.json(JSON.parse(data)).end();
+    })
+    .catch(error => res.status(500).json({ error }).end());
+});
+
+app.get('/cggapi/averagesByChamp/:id/', (req, res) => {
+  let { id } = req.params;
+  cggapi.averagesByChampion(id, req.query)
+    .then(data => {
+      if (!data)
+        res.status(204).end();
+      else
+        res.json(JSON.parse(data)).end();
+    })
+    .catch(error => res.status(500).json({ error }).end());
+});
+
+app.get('/cggapi/generalSiteInformation', (req, res) => {
+  cggapi.generalSiteInformation(req.query)
+    .then(data => {
+      if (!data)
+        res.status(204).end();
+      else
+        res.json(JSON.parse(data)).end();
+    })
+    .catch(error => res.status(500).json({ error }).end());
+});
+
+app.get('/cggapi/overall', (req, res) => {
+  cggapi.overall(req.query)
+    .then(data => {
+      if (!data)
+        res.status(204).end();
+      else
+        res.json(JSON.parse(data)).end();
+    })
+    .catch(error => res.status(500).json({ error }).end());
+});
+
+
+console.log('Available routes:')
+app._router.stack.forEach(function(r){
+  if (r.route && r.route.path){
+    console.log('  - "' + r.route.path + '"');
+  }
+})
 
 const config = require('../config.json')
 const port = config.apiproxy.port;

@@ -20,7 +20,7 @@ getRecentMatchList = function(accountID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/match/getRecentMatchlist/' + accountID,
-    json: true 
+    json: true
   }
   return rp(options)
 }
@@ -31,14 +31,52 @@ getMatch = function(matchID, region) {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/match/getMatch/' + matchID,
-    json: true 
+    json: true
   }
   return rp(options)
 }
 
+// Returns a promise for getAllLeaguePositionsForSummoner that resolves to the
+// returned JSON from the Riot API positions/by-summoner/. endpoint.
+getAllLeaguePositionsForSummoner = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/league/getAllLeaguePositionsForSummoner/' + summonerID,
+    json: true
+  }
+  return rp(options)
+}
+
+getAllChampionMasteriesForSummoner = function(summonerID, region) {
+	const options = {
+		method: 'GET',
+		uri: `${APIPROXY}/rgapi/${region}/championMastery/getAllChampionMasteries/${summonerID}`,
+		json: true
+	}
+	return rp(options)
+}
+
+/**
+ * returns Promise resolving into championGG Champion data, sorted by winrate (descending)
+ * @param position
+ * @param rank {'BRONZE' |  'SILVER' |  'GOLD' |  'PLATINUM'  | 'DIAMOND'  | 'MASTER' |  'CHALLENGER'} = 'PLATINUM'
+ */
+getGGChampionsForRole = function (position, rank = 'PLATINUM') {
+  const options = {
+    method: 'GET',
+    uri: `${APIPROXY}/cggapi/champions?elo=${rank}&sort=winRate-desc`,
+    json: true
+  }
+  return rp(options)
+}
+
+
 module.exports = {
-  "getBySummonerName": getBySummonerName,
-  "getRecentMatchList": getRecentMatchList, 
-  "getMatch": getMatch
+	"getBySummonerName": getBySummonerName,
+	"getRecentMatchList": getRecentMatchList,
+	"getMatch": getMatch,
+	"getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner,
+	"getAllChampionMasteriesForSummoner": getAllChampionMasteriesForSummoner,
+  "getGGChampionsForRole": getGGChampionsForRole
 }
 

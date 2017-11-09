@@ -1,18 +1,21 @@
 const firebase = require('firebase');
 const client = require('./client.js');
 
+const getUser = function (uniqueID) {
+  return firebase.database()
+    .ref('users/' + uniqueID)
+    .once('value')
+}
+
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
 userIsTracked = function(uniqueID) {
-  var database = firebase.database();
-  var user = database.ref('/' + uniqueID).once('value').then(function(snapshot) {
-    return snapshot;
+  getUser(uniqueID).then(function(snapshot) {
+    return snapshot !== null;
   })
-  return user !== null;
 }
 
-
-/* Create a new user with default values 
+/* Create a new user with default values
  * @param {String} uniqueID - Google Home ID
  * @param {String} summonerName - Users's summoner name
  * @param {String} region - User's Region
@@ -20,7 +23,7 @@ userIsTracked = function(uniqueID) {
 */
 createUser = function(uniqueID, summonerName, region) {
 	client.getBySummonerName(summonerName, region).then(function(res) {
-		firebase.database().ref('/' + uniqueID).push({
+		firebase.database().ref('users/' + uniqueID).set({
 			"champion"   : "default",
 			"item"       : {
 				"0" : "temp",
@@ -32,10 +35,32 @@ createUser = function(uniqueID, summonerName, region) {
 				"winrate" : "default",
 			},
 			"region"     : region,
-			"summonerID" : summonerName,
+			"summonerID" : res.id,
 			"accountID"  : res.accountId,
+      "summonerName": summonerName
 		});
 	})
+}
+
+getUserChampionMasteries = function (uniqueID) {
+	return getUser(uniqueID).then(snapshot => {
+			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
+		})
+}
+
+// Returns a promise that resoves to a map from queue type to string rank
+// within that league. The input user uniqueID is assumed to correspond to a
+// user that has already been created.
+getUserRanksByQueue = function(uniqueID) {
+  return getUser(uniqueID).then(function(snapshot) {
+    return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID);
+  }).then(function(positions) {
+    let byQueue = {};
+    positions.forEach(function(pos) {
+      byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+    });
+    return byQueue;
+  });
 }
 
 /* Add new matches to user match history
@@ -46,7 +71,7 @@ createUser = function(uniqueID, summonerName, region) {
 updateMatchHistory = function(uniqueID, matchID) {
 
 	let finishedRunning = false;
-	let ref = firebase.database().ref().child('/match_history/match')
+	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
 	let currentMatchIDs = []
 	ref.once('value', function(snap) {
 
@@ -135,3 +160,11 @@ calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
 }
 
 calculateIndividualChampWinrate("test", 237254272, "na1")
+
+module.exports = {
+  "userIsTracked": userIsTracked,
+	"getUser": getUser,
+  "createUser": createUser,
+  "getUserRanksByQueue": getUserRanksByQueue,
+  "getUserChampionMasteries": getUserChampionMasteries
+}
