@@ -55,13 +55,13 @@ updateMatchHistory = function(uniqueID, matchID) {
 	       	currentMatchIDs.push(matchResults);
 	    });
 
-	    for (int i = 0; i < matchID.length; i++) { // << highkey probably not work?
+	    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
 		    for (let ID in currentMatchIDs) {
-		    	if !(currentMatchIDs.includes(matchID[i].gameId)) {
-					firebase.database().ref().('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-						snap.numChildren().toString(): allM[i].wordcount,
-					});
-		    	}
+		    	if (!(currentMatchIDs.includes(matchID[i].gameId))) {
+					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+            [snap.numChildren().toString()]: allM[i].wordcount
+          });
+          }
 		    }
 	    }
 	});
@@ -80,7 +80,7 @@ calculateWinrate = function() {
 	        	won += 1
 	        }
 	    });
-		firebase.database().ref().ref.('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+		firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
 			"winrate" : (won/snapshot.numChildren())*100,
 		});
 	})
