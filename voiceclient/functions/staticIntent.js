@@ -14,7 +14,8 @@ const latest = versions.then(versions => versions[0]);
 
 const champs = latest
   .then(version => rp(`${CDN}${version}/data/en_US/champion.json`))
-  .then(JSON.parse);
+  .then(JSON.parse)
+  .then(json => json.data);
 
 const abilitiesIndicies = [ 'Q', 'W', 'E', 'R' ];
 
@@ -52,11 +53,20 @@ function _cooldownToString(arr) {
   return strs.join(', ');
 }
 
+function championAttackRange(assistant) {
+  let champion = assistant.getArgument('champion');
+
+  return champs.get(data => {
+    let champ = data[champion];
+    assistant.tell(`${champ.name}'s auto attack range is ${champ.stats.attackrange}.`);
+  });
+}
+
 function championAbility(assistant) {
   let champion = assistant.getArgument('champion');
   let ability = assistant.getArgument('ability');
 
-  let champName = champs.then(json => json.data[champion].name);
+  let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
 
   return Promise.all([ champName, champData ])
@@ -73,7 +83,7 @@ function championAbilityCooldown(assistant) {
   if ('passive' === ability)
     return;
 
-  let champName = champs.then(json => json.data[champion].name);
+  let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
 
   return Promise.all([ champName, champData ])
@@ -82,6 +92,8 @@ function championAbilityCooldown(assistant) {
       assistant.tell(`${name}'s ${ability} cooldown is ${_cooldownToString(data.cooldown)}.`);
     });
 }
+
+function championRange()
 
 module.exports = {
   championAbility,
