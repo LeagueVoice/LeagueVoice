@@ -2,13 +2,16 @@ const firebase = require('firebase');
 const client = require('./client.js');
 
 const getUser = function (uniqueID, my_firebase) {
-  return new Promise((resolve, reject)=>{
-    my_firebase.database()
-      .ref('users')
-      .once('value', function(snapshot){
-				resolve(snapshot.val()[uniqueID])
-      }, reject)
-	})
+  return my_firebase.database()
+    .ref('users/' + uniqueID)
+    .once('value')
+ 	//  return new Promise((resolve, reject)=>{
+ 	//    my_firebase.database()
+ 	//      .ref('users')
+ 	//      .once('value', function(snapshot){
+	// 			resolve(snapshot.val()[uniqueID])
+ 	//      }, reject)
+	// })
 }
 
 // Returns true if given unique ID is already tracked by us. Returns false
@@ -57,23 +60,28 @@ getUserChampionMasteries = function (uniqueID) {
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
 getUserRanksByQueue = function(uniqueID, my_firebase) {
-  return my_firebase.database()
-      .ref('users/' + uniqueID)
-      .once('value')
-      .then(function(snapshot) {
-  		return getUser(uniqueID, my_firebase)
-  	}).then(function(snapshot) {
-  		console.log(snapshot);
-    	return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
-  	}).then(function(positions) {
-    	let byQueue = {};
-    	positions.forEach(function(pos) {
-      	byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
-    });
-    return byQueue;
-	});
-}
-
+  return getUser(uniqueID, my_firebase).then(function(snapshot) {
+    return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID);
+  }).then(function(positions) {
+    let byQueue = {};
+    positions.forEach(function(pos) {
+      byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+	  // return my_firebase.database()
+	  //     .ref('users/' + uniqueID)
+	  //     .once('value')
+	  //     .then(function(snapshot) {
+	  // 		return getUser(uniqueID, my_firebase)
+	  // 	}).then(function(snapshot) {
+	  // 		console.log(snapshot);
+	  //   	return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
+	  // 	}).then(function(positions) {
+	  //   	let byQueue = {};
+	  //   	positions.forEach(function(pos) {
+	  //     	byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+	  //   });
+	  //   return byQueue;
+  });
+})}
 
 /* Add new matches to user match history
  * @param {String} uniqueID
@@ -122,7 +130,6 @@ calculateWinrate = function() {
 		});
 	})
 }
-
 
 addNewMatches = function(uniqueID, summonerID, region) {
 
@@ -199,4 +206,3 @@ module.exports = {
   "getUserRanksByQueue": getUserRanksByQueue,
   "getUserChampionMasteries": getUserChampionMasteries
 }
-
