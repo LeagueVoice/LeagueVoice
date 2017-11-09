@@ -68,33 +68,34 @@ getUserRanksByQueue = function(uniqueID) {
  * @param {JSON} matchID
  * @returns void
  */
-updateMatchHistory = function(uniqueID, matchID) {
+// updateMatchHistory = function(uniqueID, matchID) {
 
-	let finishedRunning = false;
-	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
-	let currentMatchIDs = []
-	ref.once('value', function(snap) {
+// 	let finishedRunning = false;
+// 	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
+// 	let currentMatchIDs = []
+// 	ref.once('value', function(snap) {
 
-	    snap.forEach(function(item) {
-	        let matchResults = item.val();
-	       	currentMatchIDs.push(matchResults);
-	    });
+// 	    snap.forEach(function(item) {
+// 	        let matchResults = item.val();
+// 	       	currentMatchIDs.push(matchResults);
+// 	    });
 
-	    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
-		    for (let ID in currentMatchIDs) {
-		    	if (!(currentMatchIDs.includes(matchID[i].gameId))) {
-					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-            [snap.numChildren().toString()]: allM[i].wordcount
-          });
-          }
-		    }
-	    }
-	});
-}
+// 	    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
+// 		    for (let ID in currentMatchIDs) {
+// 		    	if (!(currentMatchIDs.includes(matchID[i].gameId))) {
+// 					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+//             [snap.numChildren().toString()]: allM[i].wordcount
+//           });
+//           }
+// 		    }
+// 	    }
+// 	});
+// }
 
 /* Calculate winrate in current match games logged
  * @returns void
  */
+// this is dead now
 calculateWinrate = function() {
 	let ref = firebase.database().ref().child('/match_history/match')
 	let won = 0
@@ -140,16 +141,14 @@ calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
 						console.log("TEAM: " + key["teamId"])
 						if (key["teamId"] == 100) {
 							asdf.push(res["teams"][0]["win"])
-						  // teams: 
 						}
 						else {
 							asdf.push(res["teams"][1]["win"])
 						}
-						console.log(championId)
-						console.log(asdf)
 
 						firebase.database().ref('/' + uniqueID + '/match_history/match/' + snap.numChildren()).update({
-							[snap.numChildren().toString()] : "asdf"
+							"champion" : championId[index],
+							"status" : asdf[index]
 						});
 						break loop;
 					}
