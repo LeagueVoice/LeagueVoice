@@ -43,19 +43,19 @@ const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRankIntent)
 
-getUserRanksByQueue("test").then(function(response){
-	console.log(JSON.stringify(response));
-}).catch(function(e){
-	console.log(e);
-});
+// getUserRanksByQueue("test").then(function(response){
+// 	console.log(JSON.stringify(response));
+// }).catch(function(e){
+// 	console.log(e);
+// });
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
   app.handleRequest(actionMap);
 });
 
-// calculateIndividualChampWinrate("test")
-addNewMatches("test", 237254272, "na1")
+calculateIndividualChampWinrate("test")
+// addNewMatches("test", 237254272, "na1")
 
 module.exports = {
   leagueVoice

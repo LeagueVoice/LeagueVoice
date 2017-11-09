@@ -101,21 +101,21 @@ updateMatchHistory = function(uniqueID, matchID) {
 /* Calculate winrate in current match games logged
  * @returns void
  */
-calculateWinrate = function() {
-	let ref = firebase.database().ref().child('/match_history/match')
-	let won = 0
-	ref.once('value', function(snap) {
-		snap.forEach(function(item) {
-	        let matchResults = item.val();
-	        if (matchResults != "default") {
-	        	won += 1
-	        }
-	    });
-		firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-			"winrate" : (won/snapshot.numChildren())*100,
-		});
-	})
-}
+// calculateWinrate = function() {
+// 	let ref = firebase.database().ref().child('/match_history/match')
+// 	let won = 0
+// 	ref.once('value', function(snap) {
+// 		snap.forEach(function(item) {
+// 	        let matchResults = item.val();
+// 	        if (matchResults != "default") {
+// 	        	won += 1
+// 	        }
+// 	    });
+// 		firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+// 			"winrate" : (won/snapshot.numChildren())*100,
+// 		});
+// 	})
+// }
 
 
 addNewMatches = function(uniqueID, summonerID, region) {
@@ -171,18 +171,55 @@ addNewMatches = function(uniqueID, summonerID, region) {
 }
 
 calculateIndividualChampWinrate = function(uniqueID) {
-	let ref = firebase.database().ref().child('/match_history/match')
-	let won = 0
-	ref.once('value', function(snap) {
-		for (let i = 0; i < snap.numChildren(); i++) {
-			snap.forEach(function(item) {
-	        	let matchResults = item.val();
-	        	console.log(matchResults[i]["champion"])
-	   		});
-		}
-		// firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-		// 	"winrate" : (won/snapshot.numChildren())*100,
-		// });
+	let championsPlayed = []
+	let ref = firebase.database().ref().child('/users/' + uniqueID + '/match_history/')
+	ref.child('champ_winrate').set({
+		"0" : "default"
+	})
+	ref.child("match").once('value', function(snap) {
+		snap.forEach(function(item) {
+        	let matchResults = item.val();
+        	console.log("sadjkflsjaklf")
+        	console.log(typeof(matchResults["champion"]))
+
+        	// // console.log(championsPlayed.indexOf(matchResults["champion"]))
+        	if (typeof matchResults !== 'undefined') {
+        	// 	console.log("accessed")
+	        	ref.child('champ_winrate/' + matchResults["champion"]).once('value', function(snap) {
+
+	        		if (snap.val() === null) {
+	        			// console.log("samerip")
+	        			if (matchResults["status"] === 'Win') {
+		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
+		        				"win" : 1,
+		        				"total" : 1
+		        			})
+	        			}
+	        			else {
+		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
+		        				"win" : 0,
+		        				"total" : 1
+		        			})
+	        			}
+	        		}
+	        		else {
+	        			console.log("ASDFADFSDAFADSF")
+	        			if (matchResults["status"] === 'Win') {
+		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
+		        				"win" : snap.val()["total"] + 1,
+		        				"total" : snap.val()["total"] + 1,
+		        			})
+	        			}
+	        			else {
+		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
+		        				"win" : snap.val()["total"],
+		        				"total" : snap.val()["total"] + 1,
+		        			})
+	        			}
+	        		}
+	        	})
+        	}
+   		});
 	})
 }
 
