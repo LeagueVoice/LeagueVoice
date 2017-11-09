@@ -10,7 +10,7 @@ const champselect = require('./backend/championSelect/championSelect.js');
 const firebase = require('firebase');
 
 const staticIntent = require('./staticIntent');
-const trackingIntent = require('./matchIntent');
+const matchIntent = require('./matchIntent');
 
 const welcomeIntent = (app) => {
     //Do exist:
