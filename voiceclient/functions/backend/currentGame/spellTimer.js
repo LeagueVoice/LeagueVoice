@@ -5,7 +5,7 @@ const firebase = require('firebase');
  * @param {Int} champion - champion number identifier
  * @param {String} spell - spell used to store time for
  */
-storeSpellTime = function(uniqueID, champion, spell) {
+const storeSpellTime = function(uniqueID, champion, spell) {
 	firebase.database().ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell)
 		.set(Date.now())
 }
@@ -14,7 +14,7 @@ storeSpellTime = function(uniqueID, champion, spell) {
  * @param {String} uniqueID - Google Home ID
  * @param {String} objective - objective name to store time for
  */
-storeObjectiveTime = function(uniqueID, objective) {
+const storeObjectiveTime = function(uniqueID, objective) {
 	firebase.database().ref('users/' + uniqueID + '/currentMatch/objectives/' + objective)
 		.set(Date.now())
 }
@@ -24,7 +24,8 @@ storeObjectiveTime = function(uniqueID, objective) {
  * @param {Int} champion - champion number identifier
  * @param {String} spell - spell used to store time for
  */
-checkSpellTime = function(uniqueID, champion, spell) {
+
+const checkSpellTime = function(uniqueID, champion, spell) {
 	firebase.database().ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell).once('value', snap => {
 		const diff = Date.now() - snap.val()
 		if (diff >= 300000) {
