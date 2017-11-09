@@ -16,7 +16,7 @@ function championAbility(assistant) {
     .then(champs => {
       let champion = assistant.getArgument('champion');
       let ability = assistant.getArgument('ability');
-      assistant.say(`What is ${champion}'s ${ability}? I don't know`);
+      assistant.tell(`What is ${champion}'s ${ability}? I don't know`);
     });
 }
 

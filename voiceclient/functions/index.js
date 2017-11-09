@@ -23,7 +23,9 @@ const checkUserRanksIntent = (app) => {
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANK: 'CheckUserRank',
-    STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility'
+    STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
+    WHO_AM_I: 'WhoAmI',
+    WIN_RATE_AGAINST: 'WinRateAgainst'
 }
 
 function initialize() {
