@@ -129,13 +129,16 @@ actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 //   });
 
 // tracking.getWinrateForChamp("test", 70)
+tracking.createUser("test3", "sarby13", "na1")
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
   app.handleRequest(actionMap);
 });
 //tracking.createUser(99, "Warden Parus", "NA1");
-console.log(gameTimer.gameTimeAdvice(99, "NA1"));
+gameTimer.gameTimeAdvice('test3', "NA1").then(function(response) {
+  console.log(response)
+});
 
 // client.getBestMatchupsByLane(client.getChampionID("annie"))
 //  .then(function(response){

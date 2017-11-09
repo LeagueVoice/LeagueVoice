@@ -93,7 +93,7 @@ function championAbilityCooldown(assistant) {
     });
 }
 
-function championRange()
+// function championRange()
 
 module.exports = {
   championAbility,

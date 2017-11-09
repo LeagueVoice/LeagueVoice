@@ -287,5 +287,6 @@ const calculateIndividualChampWinrate = function(uniqueID) {
 }
 
 module.exports = {
-	getWinrateForChamp
+	getWinrateForChamp,
+	createUser
 }
