@@ -12,7 +12,7 @@ const firebase = require('firebase');
 const fbUser = require('./firebase/user')
 const aggregate = require('./backend/aggregate')
 const spell = require('./backend/currentGame/spellTimer.js');
-const staticIntent = require('./static/staticIntent');
+const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 
