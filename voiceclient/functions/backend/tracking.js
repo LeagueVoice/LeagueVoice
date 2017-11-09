@@ -117,7 +117,6 @@ module.exports = {
   "userIsTracked": userIsTracked,
   "createUser": createUser,
   "getUserRanksByQueue": getUserRanksByQueue,
-	"getUser ": getUser,
-	"getUserChampionMasteries": getUserChampionMasteries
+  "getUserChampionMasteries": getUserChampionMasteries
 }
 
