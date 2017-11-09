@@ -1,4 +1,5 @@
 const firebase = require('firebase');
+const client = require('./client.js');
 
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
@@ -18,21 +19,23 @@ userIsTracked = function(uniqueID) {
  * @returns void
 */
 createUser = function(uniqueID, summonerName, region) {
-	firebase.database().ref('/' + uniqueID).push({
-	  	"champion"   : "default",
-	  	"item"       : {
-	  		"0" : "temp",
-	  	},
-	  	"match_history" : {
-	  		"match" : {
-	  			"0" : "default", // win or loss
-	  		},
-	  		"winrate" : "default",
-	  	},
-	  	"region"     : region,
-	  	"summonerID" : summonerName,
-	  	"accountID"  : "default",
-	});
+	client.getBySummonerName(summonerName, region).then(function(res) {
+		firebase.database().ref('/' + uniqueID).push({
+			"champion"   : "default",
+			"item"       : {
+				"0" : "temp",
+			},
+			"match_history" : {
+				"match" : {
+					"0" : "default", // win or loss
+				},
+				"winrate" : "default",
+			},
+			"region"     : region,
+			"summonerID" : summonerName,
+			"accountID"  : res.accountId,
+		});
+	})
 }
 
 /* Add new matches to user match history
