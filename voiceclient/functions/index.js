@@ -122,7 +122,7 @@ champselect.suggestChampionToPick("test", "mid")
     // ("Based on your mastery and current winrate, champs you could play are " + response)
   });
 
-// getWinrateForChamp("test", 70)
+// tracking.getWinrateForChamp("test", 70)
 spell.storeSpellTime('test', 'annie', 'flash');
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});  app.handleRequest(actionMap);
