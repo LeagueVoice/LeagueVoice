@@ -52,50 +52,55 @@ getUserChampionMasteries = function (uniqueID) {
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
 getUserRanksByQueue = function(uniqueID) {
-  return getUser(uniqueID).then(function(snapshot) {
-    return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID);
-  }).then(function(positions) {
-    let byQueue = {};
-    positions.forEach(function(pos) {
-      byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
+  return firebase.database()
+      .ref('users/' + uniqueID)
+      .once('value')
+      .then(function(snapshot) {
+  		return getUser(uniqueID)
+  	}).then(function(snapshot) {
+    	return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID, snapshot.val().region);
+  	}).then(function(positions) {
+    	let byQueue = {};
+    	positions.forEach(function(pos) {
+      	byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
     });
     return byQueue;
-  });
+	});
 }
+
 
 /* Add new matches to user match history
  * @param {String} uniqueID
  * @param {JSON} matchID
  * @returns void
  */
-// updateMatchHistory = function(uniqueID, matchID) {
+updateMatchHistory = function(uniqueID, matchID) {
 
-// 	let finishedRunning = false;
-// 	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
-// 	let currentMatchIDs = []
-// 	ref.once('value', function(snap) {
+	let finishedRunning = false;
+	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
+	let currentMatchIDs = []
+	ref.once('value', function(snap) {
 
-// 	    snap.forEach(function(item) {
-// 	        let matchResults = item.val();
-// 	       	currentMatchIDs.push(matchResults);
-// 	    });
+	    snap.forEach(function(item) {
+	        let matchResults = item.val();
+	       	currentMatchIDs.push(matchResults);
+	    });
 
-// 	    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
-// 		    for (let ID in currentMatchIDs) {
-// 		    	if (!(currentMatchIDs.includes(matchID[i].gameId))) {
-// 					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-//             [snap.numChildren().toString()]: allM[i].wordcount
-//           });
-//           }
-// 		    }
-// 	    }
-// 	});
-// }
+	    for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
+		    for (let ID in currentMatchIDs) {
+		    	if (!(currentMatchIDs.includes(matchID[i].gameId))) {
+					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+            [snap.numChildren().toString()]: allM[i].wordcount
+          });
+          }
+		    }
+	    }
+	});
+}
 
 /* Calculate winrate in current match games logged
  * @returns void
  */
-// this is dead now
 calculateWinrate = function() {
 	let ref = firebase.database().ref().child('/match_history/match')
 	let won = 0
@@ -111,6 +116,7 @@ calculateWinrate = function() {
 		});
 	})
 }
+
 
 addNewMatches = function(uniqueID, summonerID, region) {
 
@@ -180,7 +186,6 @@ calculateIndividualChampWinrate = function(uniqueID) {
 	})
 }
 
-
 module.exports = {
   "userIsTracked": userIsTracked,
 	"getUser": getUser,
@@ -188,3 +193,4 @@ module.exports = {
   "getUserRanksByQueue": getUserRanksByQueue,
   "getUserChampionMasteries": getUserChampionMasteries
 }
+
