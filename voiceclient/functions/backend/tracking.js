@@ -103,3 +103,10 @@ calculateWinrate = function() {
 		});
 	})
 }
+
+module.exports = {
+  "userIsTracked": userIsTracked,
+  "createUser": createUser, 
+  "getUserRanksByQueue": getUserRanksByQueue
+}
+
