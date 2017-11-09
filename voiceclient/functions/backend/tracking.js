@@ -41,7 +41,7 @@ createUser = function(uniqueID, summonerName, region) {
 // Returns a promise that resoves to a map from queue type to string rank
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
-getUserRanksByLeague = function(uniqueID) {
+getUserRanksByQueue = function(uniqueID) {
   return firebase.database()
       .ref('/' + uniqueID)
       .once('value')
