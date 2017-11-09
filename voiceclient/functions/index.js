@@ -58,7 +58,7 @@ const leagueVoice = functions.https.onRequest((request, response) => {
   app.handleRequest(actionMap);
 });
 
-calculateIndividualChampWinrate("test")
+calculateWinrate("test")
 
 module.exports = {
   leagueVoice

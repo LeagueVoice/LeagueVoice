@@ -47,9 +47,8 @@ createUser = function(uniqueID, summonerName, region) {
 }
 
 getUserChampionMasteries = function (uniqueID) {
-	return getUser(uniqueID).then(snapshot => {
-	console.log(snapshot )
-			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
+	return getUser(uniqueID).then(user => {
+			return client.getAllChampionMasteriesForSummoner(user['summonerID'],user['region'])
 		})
 }
 
@@ -106,22 +105,23 @@ updateMatchHistory = function(uniqueID, matchID) {
 /* Calculate winrate in current match games logged
  * @returns void
  */
-calculateWinrate = function() {
-	let ref = firebase.database().ref().child('/match_history/match')
+calculateWinrate = function(uniqueID) {
 	let won = 0
-	ref.once('value', function(snap) {
+	let total = 0
+	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/')
+	ref.child("match").once('value', function(snap) {
 		snap.forEach(function(item) {
-			let matchResults = item.val();
-			if (matchResults != "default") {
-				won += 1
-			}
-		});
-		firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-			"winrate" : (won/snapshot.numChildren())*100,
-		});
+        	let matchResults = item.val();
+        	total += 1
+        	if (matchResults["status"] === 'Win') {
+        		won += 1
+        	}
+        	ref.update({
+        		"winrate" : won/total
+			})
+   		})
 	})
 }
-
 
 addNewMatches = function(uniqueID, summonerID, region) {
 
