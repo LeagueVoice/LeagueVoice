@@ -165,6 +165,10 @@ function addNewMatches(uniqueID, summonerID, region) {
   })
 }
 
+/* Update winrates from match history for each champion
+ * @param {String} uniqueID
+ * @returns void
+ */
 function calculateIndividualChampWinrate(uniqueID) {
 	let championsPlayed = []
 	let ref = firebase.database().ref().child('/users/' + uniqueID + '/match_history/')
