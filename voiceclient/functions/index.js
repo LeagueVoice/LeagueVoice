@@ -26,7 +26,6 @@ const WinRateAgainstIntent = (app) => {
   console.log(client.getChampionID(app.getArgument('champion').toLowerCase()));
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
-    console.log(response);
     if (response[0].count != 0){
       app.tell("You should play " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
     }
@@ -39,7 +38,6 @@ const WinRateAgainstIntent = (app) => {
 const WhoToBanIntent = (app) => {
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
-    console.log(response);
     if (response[0].count != 0){
       app.tell("You should ban " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
     }
