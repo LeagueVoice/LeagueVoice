@@ -117,6 +117,72 @@ calculateWinrate = function() {
 	})
 }
 
+
+addNewMatches = function(uniqueID, summonerID, region) {
+
+	client.getRecentMatchList(summonerID, region).then(function(res) {
+		console.log(res)
+		matchHistory = res
+
+		let championId = []
+		let gameId = []
+		// console.log(matchHistory["matches"])
+		for (let key of matchHistory["matches"]) {
+			// console.log(key["champion"])
+			// console.log("-------------------------------------")
+			championId.push(key["champion"]) // list of champions for each game
+			gameId.push(key["gameId"])
+		}
+		// console.log(matchHistory)
+		// console.log("reeeeee")
+
+		let asdf = []
+		for (let game of gameId) { // every game: gameId[index]
+			const index = gameId.indexOf(game) // index for game data
+			loop2: client.getMatch(game, region).then(function(res) {
+
+
+				loop: for (let key of res["participants"]) {
+					if (key["championId"] == championId[index]) {
+						console.log("TEAM: " + key["teamId"])
+						if (key["teamId"] == 100) {
+							asdf.push(res["teams"][0]["win"])
+						}
+						else {
+							asdf.push(res["teams"][1]["win"])
+						}
+						let ref = firebase.database().ref().child('/match_history/match')
+						ref.once('value', function(snap) {
+							firebase.database().ref('/' + uniqueID + '/match_history/match/' + snap.numChildren()).update({
+								"champion" : championId[index],
+								"status" : asdf[index]
+							});
+						})
+						break loop;
+					}
+				}
+			})
+		}
+	})
+}
+
+calculateIndividualChampWinrate = function(uniqueID) {
+	let ref = firebase.database().ref().child('/match_history/match')
+	let won = 0
+	ref.once('value', function(snap) {
+		snap.forEach(function(item) {
+	        let matchResults = item.val();
+	        // if (matchResults != "default") {
+	        // 	won += 1
+	        // }
+	        console.log(matchResults)
+	    });
+		// firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+		// 	"winrate" : (won/snapshot.numChildren())*100,
+		// });
+	})
+}
+
 module.exports = {
   "userIsTracked": userIsTracked,
 	"getUser": getUser,
