@@ -148,6 +148,15 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 	})
 }
 
+/**
+ * Gets user's most played lane based on most recent matches
+ */
+/*const getUsersMostPlayedLane = function(uniqueID, summonerID, region) {
+	addNewMatches(uniqueID, summonerID, region);
+	firebase.database().ref('/users/' + uniqueID + '/match_history')
+		.once('value', function(matches))
+}*/
+
 /* Calculate winrate in current match games logged
  * @param {String} uniqueID
  * @returns void

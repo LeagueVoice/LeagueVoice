@@ -80,7 +80,8 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
-    SUMMONER_SPELL_INTENT: 'SummonerSpellTracking',
+    SS_STORE_INTENT: 'SummonerSpellStore',
+    SS_GET_INTENT: 'SummonerSpellGet',
     SUMMONER: 'Summoner',
     REGION: 'Region',
     ADVICE: 'Advice',
@@ -111,7 +112,8 @@ actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackR
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
-actionMap.set(Actions.SUMMONER_SPELL_INTENT, matchIntent.SummonerSpellIntent);
+actionMap.set(Actions.SS_STORE_INTENT, matchIntent.SummonerSpellStoreIntent);
+actionMap.set(Actions.SS_GET_INTENT, matchIntent.SummonerSpellGetIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
@@ -136,13 +138,13 @@ tracking.addNewMatches("test3", "sarby13", "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 const leagueVoice = functions.https.onRequest((request, response) => {
-  const app = new DialogflowApp( {request, response});
+  const app = new DialogflowApp({request, response});
   app.handleRequest(actionMap);
 });
 //tracking.createUser(99, "Warden Parus", "NA1");
-gameTimer.gameTimeAdvice('test3', "NA1").then(function(response) {
-  console.log(response)
-});
+// gameTimer.gameTimeAdvice('test3', "NA1").then(function(response) {
+//   console.log(response)
+// });
 
 // client.getBestMatchupsByLane(client.getChampionID("annie"))
 //  .then(function(response){

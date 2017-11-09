@@ -56,9 +56,9 @@ function _cooldownToString(arr) {
 function championAttackRange(assistant) {
   let champion = assistant.getArgument('champion');
 
-  return champs.get(data => {
+  return champs.then(data => {
     let champ = data[champion];
-    assistant.tell(`${champ.name}'s auto attack range is ${champ.stats.attackrange}.`);
+    assistant.tell(`${champ.name}'s auto attack range is ${champ.stats.attackrange} units.`);
   });
 }
 
