@@ -19,13 +19,12 @@ const storeObjectiveTime = function(uniqueID, objective) {
 		.set(Date.now())
 }
 
-/* Check if time for spell is up again
+/* Check if time for spell is up again (ref: getSpellTime)
  * @param {String} uniqueID - Google Home ID
  * @param {Int} champion - champion number identifier
  * @param {String} spell - spell used to store time for
  */
-
-checkSpellTime = function(uniqueID, champion, spell) {
+const checkSpellTime = function(uniqueID, champion, spell) {
 	return new Promise((resolve, reject)=>{
 		firebase.database()
 		.ref('users/' + uniqueID + '/currentMatch/players/' + champion + '/' + spell)
@@ -35,7 +34,12 @@ checkSpellTime = function(uniqueID, champion, spell) {
 	});
 }
 
-getSpellTime = function(uniqueID, champion, spell) {
+/* Return difference in spell time (ref: checkSpellTime)
+ * @param {String} uniqueID - Google Home ID
+ * @param {Int} champion - champion number identifier
+ * @param {String} spell - spell used to store time for
+ */
+const getSpellTime = function(uniqueID, champion, spell) {
 	return checkSpellTime(uniqueID, champion, spell).then(function(snapshot){
 		var diff = Date.now()-snapshot
 		if (diff >= 300000) {
