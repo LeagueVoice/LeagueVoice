@@ -20,7 +20,7 @@ const abilitiesIndicies = [ 'Q', 'W', 'E', 'R', 'passive' ];
 
 function _getChampionAbilities(championKey) {
   return latest
-    .then(version => req(`${CDN}${version}/data/en_US/champion/Aatrox.json`))
+    .then(version => req(`${CDN}${version}/data/en_US/champion/' + championKey + '.json`))
     .then(JSON.parse)
     .then(json => json.data[championKey].spells);
 }
