@@ -112,7 +112,7 @@ calculateWinrate = function() {
 	})
 }
 
-calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
+addNewMatches = function(uniqueID, summonerID, region) {
 
 	client.getRecentMatchList(summonerID, region).then(function(res) {
 		console.log(res)
@@ -145,11 +145,13 @@ calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
 						else {
 							asdf.push(res["teams"][1]["win"])
 						}
-
-						firebase.database().ref('/' + uniqueID + '/match_history/match/' + snap.numChildren()).update({
-							"champion" : championId[index],
-							"status" : asdf[index]
-						});
+						let ref = firebase.database().ref().child('/match_history/match')
+						ref.once('value', function(snap) {
+							firebase.database().ref('/' + uniqueID + '/match_history/match/' + snap.numChildren()).update({
+								"champion" : championId[index],
+								"status" : asdf[index]
+							});
+						})
 						break loop;
 					}
 				}
@@ -158,7 +160,24 @@ calculateIndividualChampWinrate = function(uniqueID, summonerID, region) {
 	})
 }
 
-calculateIndividualChampWinrate("test", 237254272, "na1")
+calculateIndividualChampWinrate = function(uniqueID) {
+	let ref = firebase.database().ref().child('/match_history/match')
+	let won = 0
+	ref.once('value', function(snap) {
+		snap.forEach(function(item) {
+	        let matchResults = item.val();
+	        // if (matchResults != "default") {
+	        // 	won += 1
+	        // }
+	        console.log(matchResults)
+	    });
+		// firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
+		// 	"winrate" : (won/snapshot.numChildren())*100,
+		// });
+	})
+}
+
+calculateIndividualChampWinrate("test")
 
 module.exports = {
   "userIsTracked": userIsTracked,
