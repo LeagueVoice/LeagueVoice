@@ -58,7 +58,7 @@ getAllChampionMasteriesForSummoner = function(summonerID, region) {
 
 /**
  * returns Promise resolving into championGG Champion data, sorted by winrate (descending)
- * @param position
+ * @param position {'MIDDLE' | 'JUNGLE' | 'TOP' | 'DUO_CARRY' | 'DUO_SUPPORT'}
  * @param rank {'BRONZE' |  'SILVER' |  'GOLD' |  'PLATINUM'  | 'DIAMOND'  | 'MASTER' |  'CHALLENGER'} = 'PLATINUM'
  */
 getGGChampionsForRole = function (position, rank = 'PLATINUM') {
@@ -67,7 +67,9 @@ getGGChampionsForRole = function (position, rank = 'PLATINUM') {
     uri: `${APIPROXY}/cggapi/champions?elo=${rank}&sort=winRate-desc`,
     json: true
   }
-  return rp(options)
+  return rp(options).then(champions => {
+    return champions.filter(champion => champion.role === position)
+  })
 }
 
 
