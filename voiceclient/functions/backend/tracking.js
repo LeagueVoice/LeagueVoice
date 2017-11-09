@@ -115,21 +115,23 @@ updateMatchHistory = function(uniqueID, matchID) {
 /* Calculate winrate in current match games logged
  * @returns void
  */
-// calculateWinrate = function() {
-// 	let ref = firebase.database().ref().child('/match_history/match')
-// 	let won = 0
-// 	ref.once('value', function(snap) {
-// 		snap.forEach(function(item) {
-// 	        let matchResults = item.val();
-// 	        if (matchResults != "default") {
-// 	        	won += 1
-// 	        }
-// 	    });
-// 		firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-// 			"winrate" : (won/snapshot.numChildren())*100,
-// 		});
-// 	})
-// }
+calculateWinrate = function(uniqueID) {
+	let won = 0
+	let total = 0
+	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/')
+	ref.child("match").once('value', function(snap) {
+		snap.forEach(function(item) {
+        	let matchResults = item.val();
+        	total += 1
+        	if (matchResults["status"] === 'Win') {
+        		won += 1
+        	}
+        	ref.update({
+        		"winrate" : won/total
+			})
+   		})
+	})
+}
 
 addNewMatches = function(uniqueID, summonerID, region) {
 
