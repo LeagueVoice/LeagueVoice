@@ -30,10 +30,15 @@ function championAbility(assistant) {
     .then(champs => {
       let champion = assistant.getArgument('champion');
       let ability = assistant.getArgument('ability');
-      return _getChampionAbilities(champion)
-        .then(abilities => abilities[abilitiesIndicies.indexOf(ability)])
-        .then(data => {
-          assistant.tell(`${champion}'s ${ability} is ${data.name}: ${data.description}`);
+
+      let champName = champs.then(json => json.data[champion].name);
+      let champData = _getChampionAbilities(champion)
+        .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
+
+      return Promise.all([ champName, champData ])
+        .then(list => {
+          let [ name, data ] = list;
+          assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
         });
     });
 }
