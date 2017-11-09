@@ -2,12 +2,9 @@ const foo = require('./client.js');
   console.log(foo.getChampionID('ashe'));
   console.log(foo.getChampionName(22));
   
-
-/*
-  foo.getBestMatchupsByLane(18).then(function(matchups) {
-    console.log(matchups);
+  foo.getBestMatchupsByLane(22).then(function(matchups) {
+    console.log(matchups[0]);
   });
-  */
 
 // foo.getGGMatchupsTEST().then(console.log)
   /*

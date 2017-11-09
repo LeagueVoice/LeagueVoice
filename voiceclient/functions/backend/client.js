@@ -75,7 +75,7 @@ getGGChampionsForRole = function (position, rank = 'PLATINUM') {
 
 // Returns an approximate "Sharpe" on winrate versus 50%.
 rateSignificance = function(winrate, n) {
-  return (n * winrate - 0.5) / Math.sqrt(n * 0.5 * 0.5)
+  return (n * (winrate - 0.5)) / Math.sqrt(n * 0.5 * 0.5)
 }
 
 // Returns the numerical champion ID corresponding to the official canonical
@@ -98,14 +98,14 @@ getChampionName = function(championID) {
 getBestMatchupsByLane = function(championID, rank = 'PLATINUM') {
   const options = {
     method: 'GET',
-    uri: `${APIPROXY}/cggapi/matchupsByChamp/${championID}?elo=${rank}&limit=100`,
+    uri: `${APIPROXY}/cggapi/matchupsByChamp/${championID}?elo=${rank}&limit=1000`,
     json: true
   }
   return rp(options).then(function(matchups) {
     let roles = ['DUO_CARRY', 'DUO_SUPPORT', 'MIDDLE', 'TOP', 'JUNGLE'];
     let byRole = roles.map(function(role) {
       let forRole = matchups.filter(function(element) {
-        return element._id.role == role;
+        return element._id.role == role && element.count > 500;
       });
 
       forRole = forRole.map(function(elem) {
