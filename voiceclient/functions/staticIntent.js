@@ -32,8 +32,8 @@ function championAbility(assistant) {
       let ability = assistant.getArgument('ability');
       return _getChampionAbilities(champion)
         .then(abilities => abilities[abilitiesIndicies.indexOf(ability)])
-        .then(ability => {
-          assistant.tell(`${champion}'s ${ability} is ${ability.name}: ${ability.description}`);
+        .then(data => {
+          assistant.tell(`${champion}'s ${ability} is ${data.name}: ${data.description}`);
         });
     });
 }
