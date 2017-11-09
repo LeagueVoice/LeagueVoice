@@ -56,6 +56,18 @@ app.get('/cggapi/matchupsByRole/:id/:role', (req, res) => {
     .catch(error => res.status(500).json({ error }).end());
 });
 
+app.get('/cggapi/matchupsByChamp/:id', (req, res) => {
+  let { id } = req.params;
+  cggapi.matchupsByChamp(id, req.query)
+    .then(data => {
+      if (!data)
+        res.status(204).end();
+      else
+        res.json(JSON.parse(data)).end();
+    })
+    .catch(error => res.status(500).json({ error }).end());
+});
+
 app.get('/cggapi/averagesByChamp/:id/', (req, res) => {
   let { id } = req.params;
   cggapi.averagesByChampion(id, req.query)
