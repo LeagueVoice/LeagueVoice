@@ -32,8 +32,9 @@ createUser = function(uniqueID, summonerName, region) {
 				"winrate" : "default",
 			},
 			"region"     : region,
-			"summonerID" : summonerName,
+			"summonerID" : res.id,
 			"accountID"  : res.accountId,
+      "summonerName": summonerName
 		});
 	})
 }
