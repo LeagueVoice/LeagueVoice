@@ -6,6 +6,8 @@ const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js')
 const firebase = require('firebase');
 
+const staticIntent = require('./staticIntent');
+
 const welcomeIntent = (app) => {
     //Do exist:
     //Don't exist:
@@ -21,8 +23,9 @@ const checkUserRanksIntent = (app) => {
 }
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
-    "WELCOME_INTENT": "input.welcome",
-    "CHECK_USER_RANKS": "CheckUserRanks"
+    WELCOME_INTENT: 'input.welcome',
+    CHECK_USER_RANK: 'CheckUserRank',
+    STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility'
 }
 
 function initialize() {
@@ -41,7 +44,8 @@ function initialize() {
 initialize();
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
-actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent)
+actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
+actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 
 // getUserRanksByQueue("test", firebase).then(function(response){
 // 	console.log(JSON.stringify(response));
