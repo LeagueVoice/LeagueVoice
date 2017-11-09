@@ -2,12 +2,6 @@ const firebase = require('firebase');
 const client = require('./client.js');
 const fbUser = require('../firebase/user')
 
-getUserChampionMasteries = function (uniqueID) {
-  return fbUser.getById(uniqueID).then(user => {
-    return client.getAllChampionMasteriesForSummoner(user['summonerID'], user['region'])
-  })
-}
-
 /*
  * Returns a promise that resolves to the user's summoner level
  */
@@ -181,8 +175,4 @@ calculateIndividualChampWinrate = function (uniqueID) {
       }
     });
   })
-}
-
-module.exports = {
-  "getUserChampionMasteries": getUserChampionMasteries
 }

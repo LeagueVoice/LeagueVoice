@@ -1,7 +1,7 @@
-const tracking = require('./tracking')
 const client = require('./client')
 const helper = require('../helper')
 const fbUser = require('../../firebase/user')
+const aggregate = require('../aggregate')
 
 const championSelect = {
   /**
@@ -12,7 +12,7 @@ const championSelect = {
    */
   suggestChampionToPick: function (uniqueID, userPosition) {
     // get all champions from .gg for the role
-    const userChampionMasteriesPromise = tracking.getUserChampionMasteries(uniqueID)
+    const userChampionMasteriesPromise = aggregate.userChampionMasteries(uniqueID)
     const championsforRoleFromGGPromise = fbUser.getById(uniqueID).then(user => {
       return client.getGGChampionsForRole(userPosition, user['tier']) // TODO: actually store users tier
     })

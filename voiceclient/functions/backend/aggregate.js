@@ -3,10 +3,17 @@ const fbUser = require('../firebase/user')
 
 const aggregate = {
 
+  /** resolves into all championMastery entries for the user with given ID */
+  userChampionMasteries: function (uniqueID) {
+    return fbUser.getById(uniqueID).then(user => {
+      return client.getAllChampionMasteriesForSummoner(user['summonerID'], user['region'])
+    })
+  },
+
 // Returns a promise that resoves to a map from queue type to string rank
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
-  userRanksByQueue : function (uniqueID) { // TODO: remove my_firebase
+  userRanksByQueue: function (uniqueID) { // TODO: remove my_firebase
     return fbUser.getById(uniqueID).then(function (snapshot) {
       console.log(snapshot);
       return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
