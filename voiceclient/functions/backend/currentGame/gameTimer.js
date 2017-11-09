@@ -2,16 +2,18 @@ const client = require('../client')
 const user = require('../../firebase/user')
 const rp = require('request-promise');
 
-timeLogic = function(gameLength) {
+const timeLogic = function(gameLength) {
 	const gameTimerEnum = {
 		MIDGAME : 1200,
 		LATEGAME : 1800
 	}
 
-	if (gametime < gameTimerEnum.MIDGAME){
-		return "It is still early game! Focus on your lane."
+	if (gameLength < gameTimerEnum.MIDGAME){
+		return new Promise((resolve, reject)=>{
+			resolve("It is still early game! Focus on your lane.")
+			});
 	}
-	else if (gametime > gameTimerEnum.MIDGAME && gametime < gameTimerEnum.LATEGAME){
+	else if (gameLength > gameTimerEnum.MIDGAME && gameLength < gameTimerEnum.LATEGAME){
 		return "It is mid game! Look to group with your team and push inner turrets."
 	}
 	else{
@@ -19,13 +21,17 @@ timeLogic = function(gameLength) {
 	}
 }
 
-gameTimeAdvice = function (uniqueID, region) {
-	user.getById(uniqueID).then(function(response){
-		console.log(response.summonerID);
-		client.getCurrentMatch(response.summonerID, region).then(function(response){
-			console.log(response)
-			console.log(response.gameLength)
-			return timeLogic(response.gameLength);
+const gameTimeAdvice = function (uniqueID, region) {
+	return user.getById(uniqueID).then(function(response){
+		console.log("asdf" + JSON.stringify(response))
+		console.log(response["summonerID"]);
+		client.getCurrentMatch(response["summonerID"], region).then(function(response){
+			console.log("REEEEEEEE" + response)
+			console.log("REEEEEEEE2" + response.gameLength)
+			return timeLogic(response.gameLength).then(function(response) {
+				console.log(response)
+				return response;
+			});
 		})
 	})
 }
@@ -33,5 +39,6 @@ gameTimeAdvice = function (uniqueID, region) {
 
 
 module.exports = {
-	"gameTimeAdvice": gameTimeAdvice
+	"gameTimeAdvice": gameTimeAdvice, 
+	"timeLogic" : timeLogic
 }
