@@ -10,8 +10,8 @@ const champselect = require('./backend/championSelect/championSelect.js');
 const firebase = require('firebase');
 
 const staticIntent = require('./staticIntent');
-const trackingIntent = require('./matchIntent');
 const notesIntent = require('./notesIntent');
+const matchIntent = require('./matchIntent');
 
 const welcomeIntent = (app) => {
     //Do exist:
@@ -72,9 +72,11 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANK: 'CheckUserRank',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
+    STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
+    SUMMONER_SPELL_INTENT: 'SummonerSpellTracking',
     SUMMONER: 'Summoner',
     REGION: 'Region',
     ADVICE: 'Advice',
@@ -99,9 +101,11 @@ const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
+actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
-actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent)
+actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
+actionMap.set(Actions.SUMMONER_SPELL_INTENT, matchIntent.SummonerSpellIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 acitonMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
