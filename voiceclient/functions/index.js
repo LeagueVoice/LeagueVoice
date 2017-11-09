@@ -15,6 +15,7 @@ const spell = require('./backend/currentGame/spellTimer.js');
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
+const championNotes = require('./backend/userNotes/championNotes')
 
 const welcomeIntent = (app) => {
     //Do exist:
@@ -132,12 +133,14 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
 // tracking.getWinrateForChamp("test", 70)
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
+
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
   app.handleRequest(actionMap);
 });
+
 //tracking.createUser(99, "Warden Parus", "NA1");
-console.log(gameTimer.gameTimeAdvice(99, "NA1"));
+//console.log(gameTimer.gameTimeAdvice(99, "NA1"));
 
 // client.getBestMatchupsByLane(client.getChampionID("annie"))
 //  .then(function(response){

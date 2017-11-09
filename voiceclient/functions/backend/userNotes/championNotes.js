@@ -16,12 +16,9 @@ const getChampionNotes = function(uniqueID, championID) {
     .once('value')
     .then(function(snapshot) {
         if (snapshot == null) {
-          return [];
+          return 'You do not have a note for ' + championID + ' set.';
         } else {
-          var values = Object.keys(snapshot.val()).map(function(e) {
-            return snapshot.val()[e]
-          })
-          return values
+          return snapshot.val()[note]
       }
     });
 }
@@ -32,7 +29,7 @@ const getChampionNotes = function(uniqueID, championID) {
 const addChampionNote = function(uniqueID, championID, inGameSeconds, note) {
   return firebase.database()
     .ref(championNoteKey(uniqueID, championID))
-    .push({
+    .set({
       seconds: inGameSeconds,
       note: note
     });
