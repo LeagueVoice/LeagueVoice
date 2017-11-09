@@ -38,6 +38,15 @@ createUser = function(uniqueID, summonerName, region) {
 	})
 }
 
+getUserChampionMasteries = function (uniqueID) {
+	return firebase.database()
+		.ref('/' + uniqueID)
+		.once('value')
+		.then(snapshot => {
+			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
+		})
+}
+
 // Returns a promise that resoves to a map from queue type to string rank
 // within that league. The input user uniqueID is assumed to correspond to a
 // user that has already been created.
@@ -48,10 +57,10 @@ getUserRanksByQueue = function(uniqueID) {
       .then(function(snapshot) {
     return client.getAllLeaguePositionsForSummoner(snapshot.val().summonerID);
   }).then(function(positions) {
-    let byQueue = {}; 
+    let byQueue = {};
     positions.forEach(function(pos) {
       byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
-    }); 
+    });
     return byQueue;
   });
 }
@@ -106,7 +115,8 @@ calculateWinrate = function() {
 
 module.exports = {
   "userIsTracked": userIsTracked,
-  "createUser": createUser, 
-  "getUserRanksByQueue": getUserRanksByQueue
+  "createUser": createUser,
+  "getUserRanksByQueue": getUserRanksByQueue,
+  "getUserChampionMasteries": getUserChampionMasteries
 }
 
