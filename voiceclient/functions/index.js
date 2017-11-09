@@ -3,8 +3,10 @@
 const DialogflowApp = require('actions-on-google').DialogflowApp;
 var admin = require("firebase-admin");
 const functions = require('firebase-functions');
-const tracking = require('./backend/tracking.js')
-const client = require('./backend/client.js')
+const tracking = require('./backend/tracking.js');
+const client = require('./backend/client.js');
+const champselect = require('./backend/championSelect/championSelect.js');
+
 const firebase = require('firebase');
 
 const staticIntent = require('./staticIntent');
@@ -16,14 +18,12 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	tracking.getUserRanksByQueue("test", firebase).then(function(res){
+	tracking.getUserRanksByQueue(app.getUser().userId, firebase).then(function(res){
 		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
 
 const WinRateAgainstIntent = (app) => {
-  console.log(app.getArgument('champion'));
-  console.log(client.getChampionID(app.getArgument('champion').toLowerCase()));
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
     console.log(response);
@@ -36,12 +36,20 @@ const WinRateAgainstIntent = (app) => {
   });
 }
 
+const RoleChampSuggestIntent = (app) => {
+  champselect.suggestChampionToPick(app.getUser().userId, app.getArgument('role'))
+  .then(function(response){
+    app.tell("Based on your mastery and current winrate, champs you could play are " + response)
+  });
+}
+
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANK: 'CheckUserRank',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     //WHO_AM_I: 'WhoAmI',
-    WIN_RATE_AGAINST: 'WinRateAgainst'
+    WIN_RATE_AGAINST: 'WinRateAgainst',
+    ROLE_CHAMP_SUGGEST: "RoleChampSuggest"
 }
 
 function initialize() {
@@ -63,12 +71,19 @@ actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
+actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent)
 
 // getUserRanksByQueue("test", firebase).then(function(response){
 // 	console.log(JSON.stringify(response));
 // }).catch(function(e){
 // 	console.log(e);
 // });
+
+champselect.suggestChampionToPick("test", "mid", firebase)
+  .then(function(response){
+     console.log(response);
+    // ("Based on your mastery and current winrate, champs you could play are " + response)
+  });
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
