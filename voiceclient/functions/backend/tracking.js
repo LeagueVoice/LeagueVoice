@@ -6,7 +6,7 @@ const getUser = function (uniqueID) {
     firebase.database()
       .ref('users')
       .once('value', function(snapshot){
-				resolve(snapshot.val())
+				resolve(snapshot.val()[uniqueID])
       }, reject)
 	})
 }
@@ -48,6 +48,7 @@ createUser = function(uniqueID, summonerName, region) {
 
 getUserChampionMasteries = function (uniqueID) {
 	return getUser(uniqueID).then(snapshot => {
+    console.log(snapshot )
 			client.getAllChampionMasteriesForSummoner(snapshot['summonerID'],snapshot['region'])
 		})
 }
