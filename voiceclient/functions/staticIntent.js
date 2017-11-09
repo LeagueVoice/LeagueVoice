@@ -25,7 +25,7 @@ function _getChampionAbilities(championKey) {
     .then(json => json.data[championKey].spells);
 }
 function _getChampionAbility(championKey, ability) {
-  return _getChampionAbilities(champion)
+  return _getChampionAbilities(championKey)
     .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
 }
 
