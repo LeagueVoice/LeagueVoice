@@ -21,7 +21,7 @@ Object.entries(rgapi.config.endpoints).forEach(kv => {
     console.log('Adding route: "' + route + '".')
     app.get(route, (req, res) => {
       let { platform, id } = req.params;
-      rgapi.get(platform, endpointName + '.' + methodName, id)
+      rgapi.get(platform, endpointName + '.' + methodName, id, req.query)
         .then(data => {
           if (!data)
             res.status(404).end();
