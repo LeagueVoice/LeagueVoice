@@ -24,7 +24,7 @@
    */
   "deploy" : {
 	"production" : {
-	  "key"  : "C:/Users/KrispinJonas/.ssh/apiproxy_rsa",
+	  "key"  : "apiproxy_rsa",
 	  "user" : "mingwei",
 	  "host" : ["104.196.43.62"],
 	  "ref"  : "origin/master",

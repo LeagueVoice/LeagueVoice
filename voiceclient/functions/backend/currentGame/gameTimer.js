@@ -1,4 +1,5 @@
 const client = require('../client')
+const user = require('../../firebase/user')
 const rp = require('request-promise');
 
 timeLogic = function(gameLength) {
@@ -19,12 +20,16 @@ timeLogic = function(gameLength) {
 }
 
 gameTimeAdvice = function (uniqueID, region) {
-	const userCurrentGamePromise = client.getCurrentMatch(uniqueID, region).then(function(response){
-		console.log(response)
-		console.log(response.gameLength)
-		return timeLogic(response.gameLength);
+	user.getById(uniqueID).then(function(response){
+		console.log(response.summonerID);
+		client.getCurrentMatch(response.summonerID, region).then(function(response){
+			console.log(response)
+			console.log(response.gameLength)
+			return timeLogic(response.gameLength);
+		})
 	})
 }
+
 
 
 module.exports = {

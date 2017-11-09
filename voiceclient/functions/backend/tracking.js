@@ -1,7 +1,10 @@
+"use strict";
+
 const firebase = require('firebase');
 const client = require('./client.js');
+const fbUser = require('../firebase/user')
 
-const getUser = function (uniqueID, my_firebase) {
+const getUser = function(uniqueID, my_firebase) {
 	return new Promise((resolve, reject)=>{
    	  my_firebase.database()
 	  .ref('users')
@@ -13,10 +16,8 @@ const getUser = function (uniqueID, my_firebase) {
 
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
-userIsTracked = function(uniqueID) {
-  getUser(uniqueID).then(function(snapshot) {
-	return snapshot !== null;
-  })
+function userIsTracked(uniqueID) {
+  return getUser(uniqueID).then(snapshot => snapshot !== null);
 }
 
 /* Create a new user with default values
@@ -25,14 +26,23 @@ userIsTracked = function(uniqueID) {
  * @param {String} region - User's Region
  * @returns void
 */
-createUser = function(uniqueID, summonerName, region) {
+function createUser(uniqueID, summonerName, region) {
 	return client.getBySummonerName(summonerName, region).then(function(res) {
 		return firebase.database().ref('users/' + uniqueID).set({
+			"accountID"  : res.accountId,
 			"champion"   : "default",
-			"item"       : {
-				"0" : "temp",
+			"currentMatch"       : {
+				"objectives" : {
+					"0" : "default",
+				},
+				"players" : {
+					"0" : "default",
+				},
 			},
 			"match_history" : {
+				"champ_winrate" : {
+					"0" : "default",
+				},
 				"match" : {
 					"0" : "default", // win or loss
 				},
@@ -40,115 +50,43 @@ createUser = function(uniqueID, summonerName, region) {
 			},
 			"region"     : region,
 			"summonerID" : res.id,
-			"accountID"  : res.accountId,
-	  "summonerName": summonerName
+	  		"summonerName": summonerName,
+  			"userNotes" : {
+				"champion" : {
+					"0" : "default",
+				},
+			},
 		});
 	})
 }
 
-getUserChampionMasteries = function (uniqueID) {
-	return getUser(uniqueID).then(user => {
-			return client.getAllChampionMasteriesForSummoner(user['summonerID'],user['region'])
-		})
+function getUserChampionMasteries(uniqueID) {
+	return getUser(uniqueID).then(user =>
+		client.getAllChampionMasteriesForSummoner(user['summonerID'],user['region']));
 }
 
 /*
  * Returns a promise that resolves to the user's summoner level
  */
-getUserLevel = function(summonerName, region) {
+function getUserLevel(summonerName, region) {
 	return client.getBySummonerName(summonerName, region)
-		.then(function(res) {
-			return res['summonerLevel'];
-		});
+		.then(res => res['summonerLevel']);
 }
 
 /*
  * Returns a promise that resolves to the date and time when the user was last active
  */
-getUserLastActiveTime = function(summonerName, region) {
+
+function getUserLastActiveTime(summonerName, region) {
 	return client.getBySummonerName(summonerName, region)
-		.then(function(res) {
-			return new Date(res['revisionDate']).toString();
-		});
-}
-
-// Returns a promise that resoves to a map from queue type to string rank
-// within that league. The input user uniqueID is assumed to correspond to a
-// user that has already been created.
-getUserRanksByQueue = function(uniqueID, my_firebase) {
-  return my_firebase.database()
-	  .ref('users/' + uniqueID)
-	  .once('value')
-	  .then(function(snapshot) {
-		return getUser(uniqueID, my_firebase)
-	}).then(function(snapshot) {
-		console.log(snapshot);
-		return client.getAllLeaguePositionsForSummoner(snapshot.summonerID, snapshot.region);
-	}).then(function(positions) {
-		let byQueue = {};
-		positions.forEach(function(pos) {
-		byQueue[pos["queueType"]] = pos["tier"] + " " + pos["rank"];
-	});
-	return byQueue;
-  });
-}
-
-/* Add new matches to user match history
- * @param {String} uniqueID
- * @param {JSON} matchID
- * @returns void
- */
-updateMatchHistory = function(uniqueID, matchID) {
-
-	let finishedRunning = false;
-	let ref = firebase.database().ref("users/" + uniqueID).child('/match_history/match')
-	let currentMatchIDs = []
-	ref.once('value', function(snap) {
-
-		snap.forEach(function(item) {
-			let matchResults = item.val();
-			currentMatchIDs.push(matchResults);
-		});
-
-		for (var i = 0; i < matchID.length; i++) { // << highkey probably not work?
-			for (let ID in currentMatchIDs) {
-				if (!(currentMatchIDs.includes(matchID[i].gameId))) {
-					firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
-			[snap.numChildren().toString()]: allM[i].wordcount
-		  });
-		  }
-			}
-		}
-	});
-}
-
-/* Calculate winrate in current match games logged
- * @param {String} uniqueID
- * @returns void
- */
-calculateWinrate = function(uniqueID) {
-	let won = 0
-	let total = 0
-	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/')
-	ref.child("match").once('value', function(snap) {
-		snap.forEach(function(item) {
-        	let matchResults = item.val();
-        	total += 1
-        	if (matchResults["status"] === 'Win') {
-        		won += 1
-        	}
-        	ref.update({
-        		"winrate" : won/total
-			})
-   		})
-	})
+		.then(res => new Date(res['revisionDate']).toString());
 }
 
 /* Get winrate for specific champion
  * @param {String} uniqueID
  * @param {Int} championID
  */
-getWinrateForChamp = function(uniqueID, championID) {
+function getWinrateForChamp(uniqueID, championID) {
 	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/champ_winrate/' + championID)
 	ref.once('value', function(snap) {
 		console.log((snap.val()["win"]/snap.val()["total"]) * 100)
@@ -162,9 +100,9 @@ getWinrateForChamp = function(uniqueID, championID) {
  * @param {String} region
  * @returns void
  */
-addNewMatches = function(uniqueID, summonerID, region) {
+function addNewMatches(uniqueID, summonerID, region) {
 
-	client.getRecentMatchList(summonerID, region).then(function(res) {
+	client.getRecentMatchList(summonerID, region).then(res => {
 		console.log(res)
 		matchHistory = res
 
@@ -183,11 +121,11 @@ addNewMatches = function(uniqueID, summonerID, region) {
 		let asdf = []
 		for (let game of gameId) { // every game: gameId[index]
 			const index = gameId.indexOf(game) // index for game data
-			loop2: client.getMatch(game, region).then(function(res) {
-
-
-				loop: for (let key of res["participants"]) {
-					if (key["championId"] == championId[index]) {
+			lient.getMatch(game, region)
+				.then(res => {
+					for (let key of res["participants"]) {
+						if (key["championId"] !== championId[index])
+							continue;
 						console.log("TEAM: " + key["teamId"])
 						console.log("halsdfkldsjakljl")
 						if (key["teamId"] == 100) {
@@ -199,78 +137,152 @@ addNewMatches = function(uniqueID, summonerID, region) {
 							console.log("asdfsdfasdfasf")
 						}
 						let ref = firebase.database().ref().child('/users/match_history/match')
-						ref.once('value', function(snap) {
+						ref.once('value', snap => {
 							var count = 0
 							firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
 								"champion" : championId[index],
 								"status" : asdf[index]
 							});
-						})
-						break loop;
+						});
+						break;
 					}
-				}
-			})
+				});
 		}
 	})
 }
 
-calculateIndividualChampWinrate = function(uniqueID) {
+/* Calculate winrate in current match games logged
+ * @param {String} uniqueID
+ * @returns void
+ */
+
+function calculateWinrate(uniqueID) {
+  let won = 0
+  let total = 0
+  let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/')
+  ref.child("match").once('value', function (snap) {
+    snap.forEach(function (item) {
+      let matchResults = item.val();
+      total += 1
+      if (matchResults["status"] === 'Win') {
+        won += 1
+      }
+      ref.update({
+        "winrate": won / total
+      })
+    })
+  })
+}
+
+function addNewMatches(uniqueID, summonerID, region) {
+
+  client.getRecentMatchList(summonerID, region).then(function (res) {
+    console.log(res)
+    matchHistory = res
+
+    let championId = []
+    let gameId = []
+    // console.log(matchHistory["matches"])
+    for (let key of matchHistory["matches"]) {
+      // console.log(key["champion"])
+      // console.log("-------------------------------------")
+      championId.push(key["champion"]) // list of champions for each game
+      gameId.push(key["gameId"])
+    }
+    // console.log(matchHistory)
+    // console.log("reeeeee")
+
+    let asdf = []
+    for (let game of gameId) { // every game: gameId[index]
+      const index = gameId.indexOf(game) // index for game data
+      loop2: client.getMatch(game, region).then(function (res) {
+
+
+        loop: for (let key of res["participants"]) {
+          if (key["championId"] == championId[index]) {
+            console.log("TEAM: " + key["teamId"])
+            console.log("halsdfkldsjakljl")
+            if (key["teamId"] == 100) {
+              asdf.push(res["teams"][0]["win"])
+              console.log("asjdkfljsdklafjklds")
+            }
+            else {
+              asdf.push(res["teams"][1]["win"])
+              console.log("asdfsdfasdfasf")
+            }
+            let ref = firebase.database().ref().child('/users/match_history/match')
+            ref.once('value', function (snap) {
+              var count = 0
+              firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
+                "champion": championId[index],
+                "status": asdf[index]
+              });
+            })
+            break loop;
+          }
+        }
+      })
+    }
+  })
+}
+
+/* Update winrates from match history for each champion
+ * @param {String} uniqueID
+ * @returns void
+ */
+function calculateIndividualChampWinrate(uniqueID) {
 	let championsPlayed = []
 	let ref = firebase.database().ref().child('/users/' + uniqueID + '/match_history/')
 	ref.child('champ_winrate').set({
 		"0" : "default"
-	})
-	ref.child("match").once('value', function(snap) {
-		snap.forEach(function(item) {
-        	let matchResults = item.val();
-        	console.log("sadjkflsjaklf")
-        	console.log(typeof(matchResults["champion"]))
+	});
+	ref.child("match").once('value', snap => {
+		snap.forEach(item => {
+    	let matchResults = item.val();
+    	console.log("sadjkflsjaklf");
+    	console.log(typeof(matchResults["champion"]));
 
-        	// // console.log(championsPlayed.indexOf(matchResults["champion"]))
-        	if (typeof matchResults !== 'undefined') {
-        	// 	console.log("accessed")
-	        	ref.child('champ_winrate/' + matchResults["champion"]).once('value', function(snap) {
-
-	        		if (snap.val() === null) {
-	        			// console.log("samerip")
-	        			if (matchResults["status"] === 'Win') {
-		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
-		        				"win" : 1,
-		        				"total" : 1
-		        			})
-	        			}
-	        			else {
-		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
-		        				"win" : 0,
-		        				"total" : 1
-		        			})
-	        			}
-	        		}
-	        		else {
-	        			console.log("ASDFADFSDAFADSF")
-	        			if (matchResults["status"] === 'Win') {
-		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
-		        				"win" : snap.val()["total"] + 1,
-		        				"total" : snap.val()["total"] + 1,
-		        			})
-	        			}
-	        			else {
-		        			ref.child('champ_winrate/' + matchResults["champion"]).set({
-		        				"win" : snap.val()["total"],
-		        				"total" : snap.val()["total"] + 1,
-		        			})
-	        			}
-	        		}
-	        	})
-        	}
-   		});
-	})
+    	// // console.log(championsPlayed.indexOf(matchResults["champion"]))
+    	if (!matchResults)
+				return;
+    	// 	console.log("accessed")
+    	ref.child('champ_winrate/' + matchResults["champion"])
+				.once('value', snap => {
+	    		if (!snap.val()) {
+	    			// console.log("samerip")
+	    			if (matchResults["status"] === 'Win') {
+	      			ref.child('champ_winrate/' + matchResults["champion"]).set({
+	      				"win" : 1,
+	      				"total" : 1
+	      			});
+	    			}
+	    			else {
+	      			ref.child('champ_winrate/' + matchResults["champion"]).set({
+	      				"win" : 0,
+	      				"total" : 1
+	      			});
+	    			}
+	    		}
+	    		else {
+	    			console.log("ASDFADFSDAFADSF")
+	    			if (matchResults["status"] === 'Win') {
+	      			ref.child('champ_winrate/' + matchResults["champion"]).set({
+	      				"win" : snap.val()["total"] + 1,
+	      				"total" : snap.val()["total"] + 1,
+	      			});
+	    			}
+	    			else {
+	      			ref.child('champ_winrate/' + matchResults["champion"]).set({
+	      				"win" : snap.val()["total"],
+	      				"total" : snap.val()["total"] + 1,
+	      			});
+	    			}
+	    		}
+	    	});
+ 		});
+	});
 }
 
 module.exports = {
-  "userIsTracked": userIsTracked,
-	"getUser": getUser,
-  "createUser": createUser,
-  "getUserRanksByQueue": getUserRanksByQueue,
-  "getUserChampionMasteries": getUserChampionMasteries
+	getWinrateForChamp
 }
