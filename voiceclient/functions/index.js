@@ -98,6 +98,8 @@ actionMap.set(Actions.REGION, RegionIntent);
 // 	console.log(e);
 // });
 
+getWinrateForChamp("test", 70)
+
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});  app.handleRequest(actionMap);
 });

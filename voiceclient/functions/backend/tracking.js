@@ -123,6 +123,7 @@ updateMatchHistory = function(uniqueID, matchID) {
 }
 
 /* Calculate winrate in current match games logged
+ * @param {String} uniqueID
  * @returns void
  */
 calculateWinrate = function(uniqueID) {
@@ -143,6 +144,24 @@ calculateWinrate = function(uniqueID) {
 	})
 }
 
+/* Get winrate for specific champion
+ * @param {String} uniqueID
+ * @param {Int} championID
+ */
+getWinrateForChamp = function(uniqueID, championID) {
+	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/champ_winrate/' + championID)
+	ref.once('value', function(snap) {
+		console.log((snap.val()["win"]/snap.val()["total"]) * 100)
+		return ((snap.val()["win"]/snap.val()["total"]) * 100)
+	})
+}
+
+/* Add new games from recent 20 matches
+ * @param {String} uniqueID
+ * @param {String} summonerID
+ * @param {String} region
+ * @returns void
+ */
 addNewMatches = function(uniqueID, summonerID, region) {
 
 	client.getRecentMatchList(summonerID, region).then(function(res) {
