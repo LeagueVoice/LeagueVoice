@@ -16,7 +16,7 @@ const getUser = function(uniqueID, my_firebase) {
 
 // Returns true if given unique ID is already tracked by us. Returns false
 // if it's a new user.
-function userIsTracked(uniqueID) {
+const userIsTracked = function(uniqueID) {
   return getUser(uniqueID).then(snapshot => snapshot !== null);
 }
 
@@ -26,7 +26,7 @@ function userIsTracked(uniqueID) {
  * @param {String} region - User's Region
  * @returns void
 */
-function createUser(uniqueID, summonerName, region) {
+const createUser = function(uniqueID, summonerName, region) {
 	return client.getBySummonerName(summonerName, region).then(function(res) {
 		return firebase.database().ref('users/' + uniqueID).set({
 			"accountID"  : res.accountId,
@@ -60,7 +60,7 @@ function createUser(uniqueID, summonerName, region) {
 	})
 }
 
-function getUserChampionMasteries(uniqueID) {
+const getUserChampionMasteries = function(uniqueID) {
 	return getUser(uniqueID).then(user =>
 		client.getAllChampionMasteriesForSummoner(user['summonerID'],user['region']));
 }
@@ -68,7 +68,7 @@ function getUserChampionMasteries(uniqueID) {
 /*
  * Returns a promise that resolves to the user's summoner level
  */
-function getUserLevel(summonerName, region) {
+const getUserLevel = function(summonerName, region) {
 	return client.getBySummonerName(summonerName, region)
 		.then(res => res['summonerLevel']);
 }
@@ -77,7 +77,7 @@ function getUserLevel(summonerName, region) {
  * Returns a promise that resolves to the date and time when the user was last active
  */
 
-function getUserLastActiveTime(summonerName, region) {
+const getUserLastActiveTime = function(summonerName, region) {
 	return client.getBySummonerName(summonerName, region)
 		.then(res => new Date(res['revisionDate']).toString());
 }
@@ -86,7 +86,7 @@ function getUserLastActiveTime(summonerName, region) {
  * @param {String} uniqueID
  * @param {Int} championID
  */
-function getWinrateForChamp(uniqueID, championID) {
+const getWinrateForChamp = function(uniqueID, championID) {
 	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/champ_winrate/' + championID)
 	ref.once('value', function(snap) {
 		console.log((snap.val()["win"]/snap.val()["total"]) * 100)
@@ -100,7 +100,7 @@ function getWinrateForChamp(uniqueID, championID) {
  * @param {String} region
  * @returns void
  */
-function addNewMatches(uniqueID, summonerID, region) {
+const addNewMatches = function(uniqueID, summonerID, region) {
 
 	client.getRecentMatchList(summonerID, region).then(res => {
 		console.log(res)
@@ -155,8 +155,7 @@ function addNewMatches(uniqueID, summonerID, region) {
  * @param {String} uniqueID
  * @returns void
  */
-
-function calculateWinrate(uniqueID) {
+const calculateWinrate = function(uniqueID) {
   let won = 0
   let total = 0
   let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/')
@@ -174,7 +173,13 @@ function calculateWinrate(uniqueID) {
   })
 }
 
-function addNewMatches(uniqueID, summonerID, region) {
+/* Add new matches to user match tracking records
+ * @param {String} uniqueID
+ * @param {String} summonerID
+ * @param {String} region
+ * @returns void
+ */
+const addNewMatches = function(uniqueID, summonerID, region) {
 
   client.getRecentMatchList(summonerID, region).then(function (res) {
     console.log(res)
@@ -230,7 +235,7 @@ function addNewMatches(uniqueID, summonerID, region) {
  * @param {String} uniqueID
  * @returns void
  */
-function calculateIndividualChampWinrate(uniqueID) {
+const calculateIndividualChampWinrate = function(uniqueID) {
 	let championsPlayed = []
 	let ref = firebase.database().ref().child('/users/' + uniqueID + '/match_history/')
 	ref.child('champ_winrate').set({
@@ -242,10 +247,8 @@ function calculateIndividualChampWinrate(uniqueID) {
     	console.log("sadjkflsjaklf");
     	console.log(typeof(matchResults["champion"]));
 
-    	// // console.log(championsPlayed.indexOf(matchResults["champion"]))
     	if (!matchResults)
 				return;
-    	// 	console.log("accessed")
     	ref.child('champ_winrate/' + matchResults["champion"])
 				.once('value', snap => {
 	    		if (!snap.val()) {
