@@ -4,6 +4,7 @@ const DialogflowApp = require('actions-on-google').DialogflowApp;
 var admin = require("firebase-admin");
 const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js')
+const client = require('./backend/client.js')
 const firebase = require('firebase');
 
 const staticIntent = require('./staticIntent');
@@ -20,11 +21,26 @@ const checkUserRanksIntent = (app) => {
 	});
 }
 
+const WinRateAgainstIntent = (app) => {
+  console.log(app.getArgument('champion'));
+  console.log(client.getChampionID(app.getArgument('champion').toLowerCase()));
+  client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
+  .then(function(response){
+    console.log(response);
+    if (response[0].count != 0){
+      app.tell("You should play " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
+    }
+    else {
+      app.tell("I don't know. Best of luck, scrub.");
+    }
+  });
+}
+
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANK: 'CheckUserRank',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
-    WHO_AM_I: 'WhoAmI',
+    //WHO_AM_I: 'WhoAmI',
     WIN_RATE_AGAINST: 'WinRateAgainst'
 }
 
@@ -46,6 +62,7 @@ const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
+actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 
 // getUserRanksByQueue("test", firebase).then(function(response){
 // 	console.log(JSON.stringify(response));
@@ -58,7 +75,11 @@ const leagueVoice = functions.https.onRequest((request, response) => {
   app.handleRequest(actionMap);
 });
 
-calculateWinrate("test")
+// client.getBestMatchupsByLane(client.getChampionID("annie"))
+//  .then(function(response){
+//     console.log(response);
+//     console.log("You should play " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
+// });
 
 module.exports = {
   leagueVoice
