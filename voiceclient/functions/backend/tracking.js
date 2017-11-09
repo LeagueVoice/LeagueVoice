@@ -76,7 +76,7 @@ calculateWinrate = function() {
 	ref.once('value', function(snap) {
 		snap.forEach(function(item) {
 	        let matchResults = item.val();
-	        if (matchResults) {
+	        if (matchResults != "default") {
 	        	won += 1
 	        }
 	    });
