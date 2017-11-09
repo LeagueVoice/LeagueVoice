@@ -55,7 +55,7 @@ getUserRanksByQueue = function(uniqueID) {
       .ref('users/' + uniqueID)
       .once('value')
       .then(function(snapshot) {
-    return client.getAllLeaguePositionsForSummoner(snapshot['summonerID']);
+    return client.getAllLeaguePositionsForSummoner(snapshot.val()['summonerID'], snapshot.val()['region']);
   }).then(function(positions) {
     let byQueue = {};
     positions.forEach(function(pos) {
@@ -117,7 +117,7 @@ module.exports = {
   "userIsTracked": userIsTracked,
   "createUser": createUser,
   "getUserRanksByQueue": getUserRanksByQueue,
-	"getUser ": getUser,
+	// "getUser ": getUser,
 	"getUserChampionMasteries": getUserChampionMasteries
 }
 

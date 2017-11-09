@@ -13,10 +13,11 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRankIntent = (app) => {
-	tracking.createUser(10, "waddlechirp", "NA1");
-/*	tracking.getUserRankByQueue(10).then(function(res){
-		app.tell("You're a " + res + " player! Congratulatory statement.")
-	});*/
+	tracking.getUserRankByQueue("test").then(function(res){
+		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
+	}).catch(function(e){
+		app.tell(JSON.stringify(e));
+	});
 }
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
@@ -41,7 +42,12 @@ initialize();
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANK, checkUserRankIntent)
-createUser("test", "TeemoEater", "NA1");
+
+getUserRanksByQueue("test").then(function(response){
+	console.log(JSON.stringify(response));
+}).catch(function(e){
+	console.log(e);
+})
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});

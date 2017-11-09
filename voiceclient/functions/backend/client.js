@@ -44,6 +44,7 @@ getAllLeaguePositionsForSummoner = function(summonerID, region) {
     uri: APIPROXY + '/rgapi/' + region + '/league/getAllLeaguePositionsForSummoner/' + summonerID,
     json: true
   }
+  console.log(options)
   return rp(options)
 }
 
