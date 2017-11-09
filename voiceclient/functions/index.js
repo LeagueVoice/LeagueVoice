@@ -131,7 +131,9 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 //   });
 
 // tracking.getWinrateForChamp("test", 70)
-tracking.createUser("test3", "sarby13", "na1")
+// tracking.createUser("test3", "sarby13", "na1")
+tracking.addNewMatches("test3", "sarby13", "na1")
+
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp( {request, response});
