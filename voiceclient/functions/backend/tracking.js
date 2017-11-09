@@ -139,15 +139,19 @@ addNewMatches = function(uniqueID, summonerID, region) {
 				loop: for (let key of res["participants"]) {
 					if (key["championId"] == championId[index]) {
 						console.log("TEAM: " + key["teamId"])
+						console.log("halsdfkldsjakljl")
 						if (key["teamId"] == 100) {
 							asdf.push(res["teams"][0]["win"])
+							console.log("asjdkfljsdklafjklds")
 						}
 						else {
 							asdf.push(res["teams"][1]["win"])
+							console.log("asdfsdfasdfasf")
 						}
-						let ref = firebase.database().ref().child('/match_history/match')
+						let ref = firebase.database().ref().child('/users/match_history/match')
 						ref.once('value', function(snap) {
-							firebase.database().ref('/' + uniqueID + '/match_history/match/' + snap.numChildren()).update({
+							var count = 0
+							firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
 								"champion" : championId[index],
 								"status" : asdf[index]
 							});
@@ -164,20 +168,18 @@ calculateIndividualChampWinrate = function(uniqueID) {
 	let ref = firebase.database().ref().child('/match_history/match')
 	let won = 0
 	ref.once('value', function(snap) {
-		snap.forEach(function(item) {
-	        let matchResults = item.val();
-	        // if (matchResults != "default") {
-	        // 	won += 1
-	        // }
-	        console.log(matchResults)
-	    });
+		for (let i = 0; i < snap.numChildren(); i++) {
+			snap.forEach(function(item) {
+	        	let matchResults = item.val();
+	        	console.log(matchResults[i]["champion"])
+	   		});
+		}
 		// firebase.database().ref('/' + uniqueID + '/match_history/' + snap.numChildren()).update({
 		// 	"winrate" : (won/snapshot.numChildren())*100,
 		// });
 	})
 }
 
-calculateIndividualChampWinrate("test")
 
 module.exports = {
   "userIsTracked": userIsTracked,
