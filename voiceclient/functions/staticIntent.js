@@ -97,5 +97,6 @@ function championRange()
 
 module.exports = {
   championAbility,
-  championAbilityCooldown
+  championAbilityCooldown,
+  championAttackRange
 };

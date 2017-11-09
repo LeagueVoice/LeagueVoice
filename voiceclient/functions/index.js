@@ -76,6 +76,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     CHECK_USER_RANKS: 'CheckUserRanks',
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
+    STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
@@ -105,6 +106,7 @@ actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
+actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
