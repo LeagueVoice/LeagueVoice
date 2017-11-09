@@ -3,8 +3,8 @@ const expect = chai.expect
 describe('championSelect.js', function () {
   const championSelect = require('./championSelect')
   before(function () {
-    const app = require('../firebase/app')
-    const tracking = require('./tracking');
+    const app = require('../../firebase/app')
+    const tracking = require('../tracking');
     return tracking.createUser("test", "TeemoEater", "NA1").then(data => {
       return tracking.getUser('test')
     });
