@@ -33,7 +33,7 @@ function championAbility(assistant) {
       return _getChampionAbilities(champion)
         .then(abilities => abilities[abilitiesIndicies.indexOf(ability)])
         .then(ability => {
-          assistant.say(`${champion}'s ${ability} is ${ability.name}: ${ability.description}`);
+          assistant.tell(`${champion}'s ${ability} is ${ability.name}: ${ability.description}`);
         });
     });
 }
