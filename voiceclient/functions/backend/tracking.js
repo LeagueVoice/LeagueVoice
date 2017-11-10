@@ -67,6 +67,8 @@ const getUserChampionMasteries = function(uniqueID) {
 
 /*
  * Returns a promise that resolves to the user's summoner level
+ * @param {String} summonerName
+ * @param {String} region
  */
 const getUserLevel = function(summonerName, region) {
 	return client.getBySummonerName(summonerName, region)
@@ -75,6 +77,8 @@ const getUserLevel = function(summonerName, region) {
 
 /*
  * Returns a promise that resolves to the date and time when the user was last active
+ * @param {String} summonerName
+ * @param {String} region
  */
 
 const getUserLastActiveTime = function(summonerName, region) {
