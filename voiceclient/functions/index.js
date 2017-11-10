@@ -23,7 +23,7 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue(32).then(function(res){
+	aggregate.userRanksByQueue(app.getUser()['userId']).then(function(res){
   		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
@@ -32,7 +32,9 @@ const WinRateAgainstIntent = (app) => {
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
     if (response[0].count != 0){
-      app.tell("You should play " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
+      var name = client.getChampionName(response[0].matchups[0].championID)
+      var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+      app.tell("You should play " + nice_name + ". They have a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
       app.tell("I don't know. Best of luck, scrub.");
@@ -41,7 +43,7 @@ const WinRateAgainstIntent = (app) => {
 }
 
 const RoleChampSuggestIntent = (app) => {
-  champselect.suggestChampionToPick(app.getUser().user_id, app.getArgument('role'))
+  champselect.suggestChampionToPick(app.getUser()['userId'], app.getArgument('role'))
     .then(function(response){
       app.tell("Based on your mastery and current winrate, champs you could play are " + response)
     });
@@ -64,7 +66,7 @@ const SummonerIntent = (app) => {
 }
 
 const RegionIntent = (app) => {
-  fbUser.createFromSummonerName(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
+  fbUser.createFromSummonerName(app.getUser()['userId'], app.getArgument('summoner'), app.getArgument('region')).then(function(res){
     app.tell("Your region is set to: " + app.getArgument('region') + ".")
   });
 }
