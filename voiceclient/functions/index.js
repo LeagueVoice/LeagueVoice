@@ -178,19 +178,21 @@ module.exports = {
 //   console.log(response)
 // })
 
-champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
-    .then(function(response){
-      console.log(response)
-      var champString = ""
-      var name;
-      var nice_name;
-      for (var i = 0; i < response.length - 1; i++) {
-        name = client.getChampionName(response[i])
-        nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-        champString += nice_name + ", ";
-      }
-      name = client.getChampionName(response[i])
-      nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      champString += "or " + nice_name
-      console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
-  });
+// champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
+//     .then(function(response){
+//       console.log(response)
+//       var champString = ""
+//       var name;
+//       var nice_name;
+//       for (var i = 0; i < response.length - 1; i++) {
+//         name = client.getChampionName(response[i])
+//         nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+//         champString += nice_name + ", ";
+//       }
+//       name = client.getChampionName(response[i])
+//       nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+//       champString += "or " + nice_name
+//       console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
+//   });
+
+tracking.createUser("snek", "C9 Sneaky", "NA1")

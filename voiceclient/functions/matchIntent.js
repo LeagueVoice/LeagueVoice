@@ -1,9 +1,14 @@
 const spellTimer = require('./backend/currentGame/spellTimer');
 const gameTimer = require('./backend/currentGame/gameTimer');
+const client = require('./backend/client')
 const championRecord = require('./backend/currentGame/championRecord')
 
 const EnemyInfoIntent = (app) => {
-	championRecord.getChampionRecord(app.getUser()["userId"], app.getArgument('champion'))
+	championRecord.getChampionRecord(app.getUser()["userId"], app.getArgument('champion').toLowerCase())
+		.then(function(response){
+			console.log(response)
+			app.tell("The enemy " + app.getArgument('champion') + " has a winrate of " + response['winrate'] + " and champion mastery level " + response['championLevel'])
+		})
 }
 
 const AdviceIntent = (app) => {
