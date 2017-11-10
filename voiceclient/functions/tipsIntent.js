@@ -22,6 +22,13 @@ const EnemyTipsIntent = (app) => {
 				console.log(e)
 			})
 		})
+		.catch(function(e, match){
+			enemyTips.getTipsAgainst(app.getArgument('champion'))
+			.then(function(response){
+				console.log(response)
+				app.tell(response[0])
+			})
+		}
 	})
 }
 
