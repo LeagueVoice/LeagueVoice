@@ -67,7 +67,7 @@ function championAbility(assistant) {
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
-      assistant.ask(`${name}'s ${ability} is ${data.name}: ${data.description}`);
+      assistant.ask(`${name}'s ${ability} is ${data.name}: ${ChampionSpell.stripHtml(data.description)}`);
     });
 }
 
