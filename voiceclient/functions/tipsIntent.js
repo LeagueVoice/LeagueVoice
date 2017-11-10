@@ -12,12 +12,15 @@ const EnemyTipsIntent = (app) => {
 			let participant = match.participants.find(function(elem) {
  	           return elem.summonerId == snapshot.summonerID;
  	        })
- 	        console.log(participant)
- 	        console.log(participant.championId)
-			enemyTips.getTipsAgainst(app.getArgument('champion'), client.getChampionName(participant.championId))
+ 	        console.log(client.getChampionName(participant.championId))
+			// enemyTips.getTipsAgainst(app.getArgument('champion'), client.getChampionName(participant.championId))
+			enemyTips.getTipsAgainst(app.getArgument('champion'))
 			.then(function(response){
 				console.log(response)
 				app.tell(response[0])
+			})
+			.catch(function(e){
+				console.log(e)
 			})
 		})
 	})

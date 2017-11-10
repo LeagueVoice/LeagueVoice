@@ -12,6 +12,8 @@ const firebase = require('firebase');
 const fbUser = require('./firebase/user')
 const aggregate = require('./backend/aggregate')
 const spell = require('./backend/currentGame/spellTimer.js');
+const tipBackend = require('./backend/userNotes/enemyTips.js');
+
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
@@ -187,5 +189,3 @@ const leagueVoice = functions.https.onRequest((request, response) => {
 module.exports = {
   leagueVoice
 };
-
-// enemyTips.getTipsAgainst("ashe", "jhin")

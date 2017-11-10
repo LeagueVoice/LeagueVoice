@@ -8,16 +8,18 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 			return cheerio.load(body);
 		}
 	}
+	console.log(options.uri)
 	var tips = []
 
 	rp(options).then(function($){
+		console.log('loaded')
 		$('.tips').children().each(function(i, elem) {
 			if ($(this).find('.votes').text() > 200){
 				tips[i] = $(this).children('.tip').children('._tip').text()
 				console.log(tips[i])
 			}
 		})
-		if (myChamp != "" && tips.length == 0){
+		if (myChamp !== "" && tips.length === 0){
 			const options = {
 				uri: `http://lolcounter.com/tips/` + enemyChamp,
 				transform: function (body) {
@@ -30,10 +32,15 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 						tips[i] = $(this).children('.tip').children('._tip').text()
 						console.log(tips[i])
 					}
-				})			
+				})
+				return tips			
 			})
 		}
 		return tips
+		
+	})
+	.catch(function(e){
+		console.log(e)
 	});
 }
 
