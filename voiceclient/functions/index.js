@@ -78,6 +78,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
     STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
     STATIC_CHAMPION_ABILITY_COST: 'Static.ChampionAbilityCost',
+    STATIC_CHAMPION_ABILITY_DAMAGE: 'Static.ChampionAbilityDamage',
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
@@ -113,6 +114,7 @@ actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbi
 actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
 actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COST, staticIntent.championAbilityCost);
+actionMap.set(Actions.STATIC_CHAMPION_ABILITY_DAMAGE, staticIntent.championAbilityDamage);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
@@ -140,7 +142,7 @@ actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion)
 //   });
 
 //tracking.createUser(97, "orkosarkar", "na1")
-// tracking.addNewMatches("test3", 229269697, "na1")
+tracking.addNewMatches("test2", 230957428, "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 
