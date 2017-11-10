@@ -8,14 +8,16 @@ timeLogic = function(gameLength) {
 			Messages: ["Try to focus on your lane and CS-ing! This will get you lots of cash money to build items and get stronk!", 
 				"When you take tower, look to roam when other lanes are pushed in! Let's win this as a team!",
 				"Drop a few wards to help track the enemy jungler.",
-				"Keep in mind the enemy summoner spells to know when to engage and when to play safe. Feel free to ask us for help tracking these!"]
+				"Keep in mind the enemy summoner spells to know when to engage and when to play safe. Feel free to ask us for help tracking these!"
+			]
 		},
 		MIDGAME : {
 			Time: 900, 
 			Messages: ["If you're ahead, try to keep waves pushed in and ward the enemy jungle.",
 				"If you're ahead, group up with some teammates and roam around the map! Let's take down this enemy team!",
 				"Look to fight around objectives like Rift Heralf and dragons! These can snowball into late-game advantages.",
-				"Keep farming! You still need items to be a big boye."]
+				"Keep farming! You still need items to be a big boye."
+			]
 		},
 		LATEGAME : {
 			Time: 1500,
@@ -26,14 +28,14 @@ timeLogic = function(gameLength) {
 				"Be aware of your positioning in team fights. Either be tanking front line or safe in the back tearing through the enemy team!",
 				"Vision wins games! Look at pick off enemies with team play and good vision.",
 				"Remember your summoners! If you get caught out, don't be afraid to use flash! (cough, Doublelift)"
-				]
+			]
 		}
 	}
 
 	if (gameLength < gameTimerEnum.MIDGAME.Time){
 		return new Promise((resolve, reject)=>{
 			var randMessage = Math.floor((Math.random() * gameTimerEnum.EARLYGAME.Messages.length))
-			resolve("We are in early game! " + gameTimerEnum.EARLYGAME.Messages[randMessage])
+			resolve("We are in early game. " + gameTimerEnum.EARLYGAME.Messages[randMessage])
 		})
 	}
 	else if (gameLength > gameTimerEnum.MIDGAME && gameLength < gameTimerEnum.LATEGAME){
@@ -45,7 +47,7 @@ timeLogic = function(gameLength) {
 	else {
 		return new Promise((resolve, reject)=>{
 			var randMessage = Math.floor((Math.random() * gameTimerEnum.LATEGAME.Messages.length))
-			resolve("We are likely in late game! " + gameTimerEnum.LATEGAME.Messages[randMessage])
+			resolve("We are likely in late game. " + gameTimerEnum.LATEGAME.Messages[randMessage])
 		})
 	}
 }
