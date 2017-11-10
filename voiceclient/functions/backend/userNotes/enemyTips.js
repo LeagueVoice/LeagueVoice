@@ -8,15 +8,13 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 			return cheerio.load(body);
 		}
 	}
-	console.log(options.uri)
-	var tips = []
 
-	rp(options).then(function($){
-		console.log('loaded')
+	return rp(options).then(function($){
+		console.log(options.uri)
+		var tips = []
 		$('.tips').children().each(function(i, elem) {
 			if ($(this).find('.votes').text() > 200){
 				tips[i] = $(this).children('.tip').children('._tip').text()
-				console.log(tips[i])
 			}
 		})
 		if (myChamp !== "" && tips.length === 0){
@@ -25,19 +23,19 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 				transform: function (body) {
 					return cheerio.load(body);
 				}
+
 			}
-			rp(options).then(function($){
+			return rp(options).then(function($){
+				console.log(options.uri)
 				$('.tips').children().each(function(i, elem) {
 					if ($(this).find('.votes').text() > 200){
 						tips[i] = $(this).children('.tip').children('._tip').text()
-						console.log(tips[i])
 					}
 				})
 				return tips			
 			})
 		}
 		return tips
-		
 	})
 	.catch(function(e){
 		console.log(e)

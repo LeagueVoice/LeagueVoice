@@ -189,3 +189,9 @@ const leagueVoice = functions.https.onRequest((request, response) => {
 module.exports = {
   leagueVoice
 };
+
+// tipBackend.getTipsAgainst("ashe", "jhin").then(function(tips){
+//   console.log(tips)
+// })
+
+
