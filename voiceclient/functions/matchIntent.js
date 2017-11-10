@@ -14,7 +14,7 @@ const EnemyInfoIntent = (app) => {
 }
 
 const AdviceIntent = (app) => {
-	gameTimer.gameTimeAdvice(app.getUser()["userId"], "NA1")
+	gameTimer.gameTimeAdvice(app.getUser()["user_id"], "NA1")
 	.then(function(response){
 		console.log("intent: " + response)
 		app.tell("" + response);
@@ -22,7 +22,7 @@ const AdviceIntent = (app) => {
 }
 
 const SummonerSpellStoreIntent = (app) => {
-	spellTimer.storeSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
+	spellTimer.storeSpellTime(app.getUser()["user_id"], app.getArgument('champion'), app.getArgument('spell'))
 	app.tell("Got it! Noted that " + app.getArgument('champion') + " used " + app.getArgument('spell') + ". Check in whenever to find out the status!")
 }
 
