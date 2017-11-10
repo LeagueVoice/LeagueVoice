@@ -1,9 +1,7 @@
-// const championNotes = require('./backend/userNotes/championNotes')
+const classification = require('./backend/itemization/classification')
 
 const ItemWinLoseEqual = (app) => {
-	championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).then(function(note) {
-		app.tell(note)
-	})
+	console.log(classification.getItemClassification('AD', 'Winning', 'Damage'))
 }
 
 module.exports = {
