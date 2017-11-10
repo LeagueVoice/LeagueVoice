@@ -41,13 +41,14 @@ const WinRateAgainstIntent = (app) => {
 }
 
 const RoleChampSuggestIntent = (app) => {
-  champselect.suggestChampionToPick(app.getUser()['userId'], app.getArgument('role').toUpperCase())
+  champselect.suggestChampionToPick(app.getUser()["userId"], app.getArgument('role').toUpperCase())
     .then(function(response){
       console.log(response)
       var champString = ""
       var name;
       var nice_name;
-      for (var i = 0; i < response.length - 1; i++) {
+      var i;
+      for (i = 0; i < response.length - 1; i++) {
         name = client.getChampionName(response[i])
         nice_name = name.charAt(0).toUpperCase() + name.slice(1)
         champString += nice_name + ", ";
@@ -56,7 +57,7 @@ const RoleChampSuggestIntent = (app) => {
       nice_name = name.charAt(0).toUpperCase() + name.slice(1)
       champString += "or " + nice_name
       app.tell("Based on your mastery and current winrate, some champs you could play are " + champString)
-    });
+  });
 }
 
 const WhoToBanIntent = (app) => {
@@ -142,16 +143,7 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 // 	console.log(e);
 // });
 
-champselect.suggestChampionToPick(97, 'MIDDLE')
-  .then(function(response){
-    console.log(response)
-    var champString = ""
-    for (var i = 0; i < response.length - 1; i++) {
-      champString += client.getChampionName(response[i]) + ", ";
-    }
-    champString += "or " + client.getChampionName(response[i])
-    console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
-  });
+
 
 //tracking.createUser(97, "orkosarkar", "na1")
 // tracking.addNewMatches("test3", 229269697, "na1")
@@ -166,3 +158,21 @@ const leagueVoice = functions.https.onRequest((request, response) => {
 module.exports = {
   leagueVoice
 };
+
+
+champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
+    .then(function(response){
+      console.log(response)
+      var champString = ""
+      var name;
+      var nice_name;
+      for (var i = 0; i < response.length - 1; i++) {
+        name = client.getChampionName(response[i])
+        nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+        champString += nice_name + ", ";
+      }
+      name = client.getChampionName(response[i])
+      nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+      champString += "or " + nice_name
+      console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
+  });

@@ -21,8 +21,6 @@ const championSelect = {
       userChampionMasteriesPromise,
       championsforRoleFromGGPromise
     ]).then(([championMasteries, championGGChampions]) => {
-      //console.log(championMasteries)
-      //console.log(championGGChampions)
       const championMasteriesIDs = championMasteries.map(cmastery => cmastery.championId)
       const championGGIds = championGGChampions.map(champion => champion.championId)
 
