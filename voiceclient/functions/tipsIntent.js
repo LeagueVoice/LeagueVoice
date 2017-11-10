@@ -15,11 +15,18 @@ const EnemyTipsIntent = (app) => {
  	        //console.log(client.getChampionName(participant.championId))
 			enemyTips.getTipsAgainst(app.getArgument('champion'), client.getChampionName(participant.championId))
 			.then(function(response){
-				console.log(response)
-				app.tell(response[0])
+				//console.log(response)
+				app.tell("According to LoL Counter, " + response[0])
 			})
 			.catch(function(e){
 				console.log(e)
+			})
+		})
+		.catch(function(e, match){
+			enemyTips.getTipsAgainst(app.getArgument('champion'))
+			.then(function(response){
+				console.log(response)
+				app.tell("According to LoL Counter, " + response[0])
 			})
 		})
 	})

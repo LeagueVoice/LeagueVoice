@@ -13,7 +13,7 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 		console.log(options.uri)
 		var tips = []
 		$('.tips').children().each(function(i, elem) {
-			if ($(this).find('.votes').text() > 200){
+			if ($(this).find('.votes').text() > 100){
 				tips[i] = $(this).children('.tip').children('._tip').text()
 			}
 		})
