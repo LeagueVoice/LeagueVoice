@@ -16,7 +16,7 @@ getById: function (uniqueID, {getRef} = {getRef:false}) {
       return firebase.database()
         .ref('users')
         .once('value', function (snapshot) {
-          const value = getRef ? snapshot : snapshot.val()[uniqueID]
+          const value = getRef ? snapshot.child(uniqueID).ref : snapshot.val()[uniqueID]
           resolve(value)
         }, reject)
     })
@@ -34,8 +34,8 @@ getById: function (uniqueID, {getRef} = {getRef:false}) {
     }
     return client.getBySummonerName(summonerName, region)
       .then(function (res) {
-        return user.getById(uniqueID, {getRef: true}).then(function(snapshot) {
-          snapshot.ref.set({
+        return user.getById(uniqueID, {getRef: true}).then(function(userRef) {
+          return userRef.set({
           "champion": "default",
           "item": {
             "0": "temp"
