@@ -1,8 +1,18 @@
 const spellTimer = require('./backend/currentGame/spellTimer');
 const gameTimer = require('./backend/currentGame/gameTimer');
+const client = require('./backend/client')
+const championRecord = require('./backend/currentGame/championRecord')
+
+const EnemyInfoIntent = (app) => {
+	championRecord.getChampionRecord(app.getUser()["userId"], app.getArgument('champion').toLowerCase())
+		.then(function(response){
+			console.log(response)
+			app.tell("The enemy " + app.getArgument('champion') + " has a winrate of " + response['winrate'] + " and champion mastery level " + response['championLevel'])
+		})
+}
 
 const AdviceIntent = (app) => {
-	gameTimer.gameTimeAdvice(97, "NA1")
+	gameTimer.gameTimeAdvice(app.getUser()["userId"], "NA1")
 	.then(function(response){
 		console.log("intent: " + response)
 		app.tell("" + response);
@@ -10,12 +20,12 @@ const AdviceIntent = (app) => {
 }
 
 const SummonerSpellStoreIntent = (app) => {
-	spellTimer.storeSpellTime(32, app.getArgument('champion'), app.getArgument('spell'))
+	spellTimer.storeSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
 	app.tell("Got it! Noted that " + app.getArgument('champion') + " used " + app.getArgument('spell') + ". Check in whenever to find out the status!")
 }
 
 const SummonerSpellGetIntent = (app) => {
-	spellTimer.getSpellTime(32, app.getArgument('champion'), app.getArgument('spell'))
+	spellTimer.getSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
 	.then(function(response){
 		var baseString = app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + Math.round(response) + " seconds. "
 		console.log(['Flash', 'Heal', 'Barrier', 'Cleanse'].includes(app.getArgument('spell')))
@@ -45,5 +55,5 @@ const SummonerSpellGetIntent = (app) => {
 }
 
 module.exports = {
-	AdviceIntent, SummonerSpellStoreIntent, SummonerSpellGetIntent
+	AdviceIntent, SummonerSpellStoreIntent, SummonerSpellGetIntent, EnemyInfoIntent
 }

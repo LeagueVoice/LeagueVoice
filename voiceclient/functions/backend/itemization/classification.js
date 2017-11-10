@@ -238,20 +238,20 @@ getItemClassification = function(role, status, itemFunction) {
 			}
 		}
 	}
-
+	console.log(role + " " + status + " " + itemFunction)
 	return itemClassification[role][status][itemFunction]
 }
 
-getItems = function(uniqueID) {
-	championRole.getCurrentChampionRole(uniqueID).then(function(role) {
-		if (role.role == 'tank') {
-			console.log(getItemClassification("TANK", "Winning", "Damage"));
-		} else if (role.role == 'support') {
-			console.log(getItemClassification("UTIL", "Winning", "Damage"));
+getItems = function(uniqueID, status, situation) {
+	return championRole.getCurrentChampionRole(uniqueID).then(function(role) {
+		if (role.role == 'Tank') {
+			return getItemClassification("TANK", status, situation);
+		} else if (role.role == 'Support') {
+			return getItemClassification("UTIL", status, situation);
 		} else if (role.damageType == 'AD') {
-			console.log(getItemClassification('AD', "Winning", "Damage"));
+			return getItemClassification('AD', status, situation);
 		} else {
-			console.log(getItemClassification('AP', 'Winning', 'Damage'));
+			return getItemClassification('AP', status, situation);
 		}
 	})
 }

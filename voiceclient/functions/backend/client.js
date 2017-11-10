@@ -14,6 +14,15 @@ getBySummonerName = function(name, region) {
   return rp(options)
 }
 
+getBySummonerId = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/summoner/getBySummonerId/' + summonerID,
+    json: true
+  }
+  return rp(options)
+}
+
 // Returns a promise for getRecentMatchList that resolves to the returned JSON
 // from the Riot API matchlists/by-account/./recent endpoint.
 getRecentMatchList = function(accountID, region) {
@@ -69,6 +78,24 @@ getAllLeaguePositionsForSummoner = function(summonerID, region) {
   return rp(options)
 }
 
+getMatchlistForQueue = function(accountID, region, champion, queue = 420) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/match/getMatchlist/' + accountID + '?champion=' + champion + '&queue=' + queue,
+    json: true
+  }
+  return rp(options)
+}
+
+getAllChampionMasteries = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/championMastery/getAllChampionMasteries/' + summonerID,
+    json: true
+  }
+  return rp(options)
+}
+
 getAllChampionMasteriesForSummoner = function(summonerID, region) {
 	const options = {
 		method: 'GET',
@@ -116,7 +143,7 @@ getChampionName = function(championID) {
 // order by winrate significance. In other words, the first element of the
 // first element is the highest winrate against the given champion for the most
 // popular role. Winrate is expressed from perspective of the non-queried champion.
-getBestMatchupsByLane = function(championID, rank = 'PLATINUM') {
+getBestMatchupsByLane = function(championID, rank = 'BRONZE') {
   const options = {
     method: 'GET',
     uri: `${APIPROXY}/cggapi/matchupsByChamp/${championID}?elo=${rank}&limit=1000`,
@@ -185,9 +212,12 @@ getBestMatchupsByLane = function(championID, rank = 'PLATINUM') {
 
 module.exports = {
 	"getBySummonerName": getBySummonerName,
+  getBySummonerId,
 	"getRecentMatchList": getRecentMatchList,
 	"getMatch": getMatch,
   "getMatchList" : getMatchList,
+  getMatchlistForQueue,
+  getAllChampionMasteries,
 	"getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner,
 	"getAllChampionMasteriesForSummoner": getAllChampionMasteriesForSummoner,
   "getGGChampionsForRole": getGGChampionsForRole,
