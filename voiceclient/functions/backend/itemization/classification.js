@@ -39,7 +39,7 @@ getItemClassification = function(role, status, itemFunction) {
 					"Ghostblade"
 				], 
 				"Poke" : [
-					"Bloodthirster"
+					"Bloodthirster",
 					"Maw of Malmortius"
 				],
 				"Burst" : [
@@ -149,7 +149,7 @@ getItemClassification = function(role, status, itemFunction) {
 					"Guardian Angel",
 				], 
 				"CC" : [
-					"Mercurial Scimitar"
+					"Mercurial Scimitar",
 					"Gargoyle's Stoneplate"
 				], 
 			}, 
