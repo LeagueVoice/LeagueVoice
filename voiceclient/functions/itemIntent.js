@@ -13,9 +13,9 @@ const ItemSuggestion = (app) => {
 			speak_string+= ". Good luck!"
 			app.tell(speak_string)
 		})
-	.catch(function(e)) {
+	.catch(function(e) {
 		app.tell("I can't suggest an item for you right now. Set up your summoner with me and make sure you're in a game.")
-	}
+	})
 }
 
 module.exports = {

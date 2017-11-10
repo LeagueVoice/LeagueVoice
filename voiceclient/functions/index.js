@@ -78,9 +78,9 @@ const RoleChampSuggestIntent = (app) => {
       champString += "or " + nice_name
       app.tell("Based on your mastery and current winrate, some champs you could play are " + champString)
   })
-    .catch(function(e)) {
+    .catch(function(e) {
       app.tell("We can't suggest champions for you right now. Make sure that you've registered your summoner with me.")
-    }
+    })
 }
 
 const WhoToBanIntent = (app) => {

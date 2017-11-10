@@ -56,9 +56,9 @@ const SummonerSpellGetIntent = (app) => {
 			}
 		}
 	})
-	.catch(function(e)) {
+	.catch(function(e) {
 		app.tell("I can't get that timer for you. Make sure that your summoner is registered with me first.")
-	}
+	})
 }
 
 module.exports = {
