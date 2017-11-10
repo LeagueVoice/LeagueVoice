@@ -1,3 +1,24 @@
+const client = require('../client.js');
+
+// Returns a promise that evaluates to a champion role (see below) for the
+// current tracked player's game.
+getCurrentChampionRole = function(uniqueID) {
+  return firebase.database()
+      .ref("users/" + uniqueID)
+      .once("value", function(snapshot) {
+        let id = snapshot.val().summonerID;
+        let region = snapshot.val().region;
+        return client.getCurrentMatch(id, region).then(function(match) {
+          let participant = match.participants.find(function(elem) {
+            return elem.summonerId == id;
+          });
+          return participant.championId;
+        });
+      }).then(function(championID) {
+        return getChampionRole(championID);
+      });
+}
+
 // Returns { damageType: "AP" or "AD", role: "damage" or "support" or "tank" }
 // for given champion integer ID.
 getChampionRole = function(championID) {
