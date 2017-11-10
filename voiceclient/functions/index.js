@@ -16,6 +16,7 @@ const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 
+
 const welcomeIntent = (app) => {
     app.ask("Welcome to League Voice! How can we help you improve?")
 }
@@ -26,7 +27,7 @@ const checkUserRanksIntent = (app) => {
 	});
 }
 
-const WinRateAgainstIntent = (app) => {
+const WhoToPlayAgainstIntent = (app) => {
   console.log(client.getChampionID(app.getArgument('champion').toLowerCase()))
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
@@ -95,11 +96,12 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
     STATIC_CHAMPION_ABILITY_COST: 'Static.ChampionAbilityCost',
     STATIC_CHAMPION_ABILITY_DAMAGE: 'Static.ChampionAbilityDamage',
-    WIN_RATE_AGAINST: 'WinRateAgainst',
+    WHO_TO_PLAY_AGAINST: 'WhoToPlayAgainstIntent',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
     SS_STORE_INTENT: 'SummonerSpellStore',
     SS_GET_INTENT: 'SummonerSpellGet',
+    ENEMY_INFO: 'EnemyInfo',
     SUMMONER: 'Summoner',
     REGION: 'Region',
     ADVICE: 'Advice',
@@ -130,11 +132,12 @@ actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackR
 actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COST, staticIntent.championAbilityCost);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_DAMAGE, staticIntent.championAbilityDamage);
-actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
+actionMap.set(Actions.WHO_TO_PLAY_AGAINST, WhoToPlayAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
 actionMap.set(Actions.SS_STORE_INTENT, matchIntent.SummonerSpellStoreIntent);
 actionMap.set(Actions.SS_GET_INTENT, matchIntent.SummonerSpellGetIntent);
+actionMap.set(Actions.ENEMY_INFO, matchIntent.EnemyInfoIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
