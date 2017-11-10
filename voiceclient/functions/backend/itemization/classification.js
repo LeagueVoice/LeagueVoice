@@ -111,16 +111,22 @@ getItemClassification = function(role, status, itemFunction) {
 		"TANK" : {
 			"Winning" : {
 				"Damage" : [
-					"asdfasdf"
+					"Infinity Edge",
+					"Statikk Shiv"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Randuin's Omen",
+					"Warmog's Armor",
+					"Righteous Glory"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Hextech Protobelt-01",
+					"Death's Dance",
+					"Guardian Angel"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Quicksilver Sash",
+					"Mercurial Scimitar"
 				], 
 			}, 
 			"Same" : {
@@ -139,32 +145,35 @@ getItemClassification = function(role, status, itemFunction) {
 			},
 			"Losing" : {
 				"Damage" : [
-					"asdfasdf"
+					"Last Whisper"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Righteous Glory",
+					"Spirit Visage"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Hexdrinker",
+					"Death's Dance"
 				], 
 				"CC" : [
 					"asdfasdf"
 				], 
 			}
 		},
-		"UTIL" : {
+		"UTIL" : {fdsa
 			"Winning" : {
 				"Damage" : [
-					"asdfasdf"
+					"Control Ward"
 				], 
 				"Poke" : [
 					"Redemption"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Locket of the Iron Solari",
+					"Banshee's Veil"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Mikael's Crucible"
 				], 
 			}, 
 			"Same" : {
@@ -175,7 +184,7 @@ getItemClassification = function(role, status, itemFunction) {
 					"Redemption"
 				], 
 				"Burst" : [
-					"Locket of the Iron Solari"
+					"asdf"
 				], 
 				"CC" : [
 					"asdfasdf"
