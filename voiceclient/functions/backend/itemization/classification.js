@@ -27,48 +27,60 @@ getChampionRole = function(championID) {
 getItemClassification = function(itemType) {
 	const itemClassification = {
 		"AD" : {
-			"Early" : {
-				"BF Sword",
+			"Damage" : {
+				"asdfasdf",
 			}, 
-			"Mid" : {
-				"Giant Slayer",
+			"Poke" : {
+				"asdf",
 			},
-			"Late" : {
-				"Infinity Edge",
-			},
+			"Burst" : {
+				"asdf",
+			}, 
+			"CC" : {
+				"asdfadsf",
+			}
 		},
 		"AP" : {
-			"Early" : {
-				"fsdf",
+			"Damage" : {
+				"asdfasdf",
 			}, 
-			"Mid" : {
+			"Poke" : {
 				"asdf",
 			},
-			"Late" : {
+			"Burst" : {
 				"asdf",
-			},
+			}, 
+			"CC" : {
+				"asdfadsf",
+			}
 		},
 		"TANK" : {
-			"Early" : {
+			"Damage" : {
+				"asdfasdf",
+			}, 
+			"Poke" : {
+				"asdf",
+			},
+			"Burst" : {
 				"asdf",
 			}, 
-			"Mid" : {
-				"asdf",
-			},
-			"Late" : {
-				"asdf",
-			},
+			"CC" : {
+				"asdfadsf",
+			}
 		},
 		"UTIL" : {
-			"Early" : {
+			"Damage" : {
+				"asdfasdf",
+			}, 
+			"Poke" : {
+				"asdf",
+			},
+			"Burst" : {
 				"asdf",
 			}, 
-			"Mid" : {
-				"asdf",
-			},
-			"Late" : {
-				"asdf",
-			},
+			"CC" : {
+				"asdfadsf",
+			}
 		},
 	}
 }
