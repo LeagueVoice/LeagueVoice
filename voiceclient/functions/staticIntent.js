@@ -46,7 +46,7 @@ function _cooldownToString(arr) {
 
 function championCount(assistant) {
   return champs.then(data =>
-    assistant.tell(`There are ${Object.keys(data).length} champions.`));
+    assistant.ask(`There are ${Object.keys(data).length} champions.`));
 }
 
 function championAttackRange(assistant) {
@@ -54,7 +54,7 @@ function championAttackRange(assistant) {
 
   return champs.then(data => {
     let champ = data[champion];
-    assistant.tell(`${champ.name}'s auto attack range is ${champ.stats.attackrange} units.`);
+    assistant.ask(`${champ.name}'s auto attack range is ${champ.stats.attackrange} units.`);
   });
 }
 
@@ -67,7 +67,7 @@ function championAbility(assistant) {
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
-      assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
+      assistant.ask(`${name}'s ${ability} is ${data.name}: ${data.description}`);
     });
 }
 
@@ -83,7 +83,7 @@ function championAbilityCooldown(assistant) {
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
-      assistant.tell(`${name}'s ${ability} cooldown is ${_cooldownToString(data.cooldown)}.`);
+      assistant.ask(`${name}'s ${ability} cooldown is ${_cooldownToString(data.cooldown)}.`);
     });
 }
 
@@ -101,7 +101,7 @@ function championAbilityDamage(assistant) {
     .then(([ name, data ]) => {
     console.log(data.name);
       let spell = new ChampionSpell(data);
-      assistant.tell(`${name}'s ${ability} deals ${spell.getDamageString()}.`);
+      assistant.ask(`${name}'s ${ability} deals ${spell.getDamageString()}.`);
     });
 }
 
@@ -119,13 +119,13 @@ function championAbilityCost(assistant) {
     .then(([ name, data ]) => {
       let costType = data.costType.trim().toLowerCase();
       if ('no cost' === costType || !costType)
-        assistant.tell(`${name}'s ${ability} has no cost.`);
+        assistant.ask(`${name}'s ${ability} has no cost.`);
       else if (data.costType === data.resource) // '1 seed', null, etc.
-        assistant.tell(`${name}'s ${ability} costs ${data.costType}.`);
+        assistant.ask(`${name}'s ${ability} costs ${data.costType}.`);
       else {
         let costArr = data.cost;
         let costStr = formatValues(costArr, costType);
-        assistant.tell(`${name}'s ${ability} costs ${costStr}.`);
+        assistant.ask(`${name}'s ${ability} costs ${costStr}.`);
       }
     });
 }

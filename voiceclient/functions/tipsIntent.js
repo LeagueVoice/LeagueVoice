@@ -16,7 +16,7 @@ const EnemyTipsIntent = (app) => {
 			enemyTips.getTipsAgainst(app.getArgument('champion'), client.getChampionName(participant.championId))
 			.then(function(response){
 				//console.log(response)
-				app.tell("According to LoL Counter, " + response[0])
+				app.ask("According to LoL Counter, " + response[0])
 			})
 			.catch(function(e){
 				console.log(e)
@@ -26,7 +26,7 @@ const EnemyTipsIntent = (app) => {
 			enemyTips.getTipsAgainst(app.getArgument('champion'))
 			.then(function(response){
 				console.log(response)
-				app.tell("According to LoL Counter, " + response[0])
+				app.ask("According to LoL Counter, " + response[0])
 			})
 		})
 	})
