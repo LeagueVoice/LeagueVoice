@@ -1,5 +1,7 @@
 const firebase = require('firebase');
 
+// For the game that the user ID is in, return the record for the given
+// champion ID in that game.
 getChampionRecord = function(uniqueID, championID) {
   return firebase.database()
       .ref("users/" + uniqueID)
