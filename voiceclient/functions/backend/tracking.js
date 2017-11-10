@@ -114,7 +114,7 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 		let lane = []
 
 		for (let key of res["matches"]) {
-			console.log("YAHLLOOOOO " + JSON.stringify(key))
+			//console.log("YAHLLOOOOO " + JSON.stringify(key))
 			championId.push(key["champion"]) // list of champions for each game
 			gameId.push(key["gameId"])
 			lane.push(key["lane"])

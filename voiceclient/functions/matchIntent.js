@@ -10,12 +10,12 @@ const AdviceIntent = (app) => {
 }
 
 const SummonerSpellStoreIntent = (app) => {
-	spellTimer.storeSpellTime(32, app.getArgument('champion'), app.getArgument('spell'))
+	spellTimer.storeSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
 	app.tell("Got it! Noted that " + app.getArgument('champion') + " used " + app.getArgument('spell') + ". Check in whenever to find out the status!")
 }
 
 const SummonerSpellGetIntent = (app) => {
-	spellTimer.getSpellTime(32, app.getArgument('champion'), app.getArgument('spell'))
+	spellTimer.getSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
 	.then(function(response){
 		var baseString = app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + Math.round(response) + " seconds. "
 		console.log(['Flash', 'Heal', 'Barrier', 'Cleanse'].includes(app.getArgument('spell')))

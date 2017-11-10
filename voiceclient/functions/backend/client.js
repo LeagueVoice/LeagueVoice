@@ -116,7 +116,7 @@ getChampionName = function(championID) {
 // order by winrate significance. In other words, the first element of the
 // first element is the highest winrate against the given champion for the most
 // popular role. Winrate is expressed from perspective of the non-queried champion.
-getBestMatchupsByLane = function(championID, rank = 'PLATINUM') {
+getBestMatchupsByLane = function(championID, rank = 'BRONZE') {
   const options = {
     method: 'GET',
     uri: `${APIPROXY}/cggapi/matchupsByChamp/${championID}?elo=${rank}&limit=1000`,

@@ -27,15 +27,17 @@ const checkUserRanksIntent = (app) => {
 }
 
 const WinRateAgainstIntent = (app) => {
+  console.log(client.getChampionID(app.getArgument('champion').toLowerCase()))
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
+    console.log(response)
     if (response[0].count != 0){
       var name = client.getChampionName(response[0].matchups[0].championID)
       var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
       app.tell("You should play " + nice_name + ". They have a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
-      app.tell("I don't know. Best of luck, scrub.");
+      app.tell("Welp, I have no clue. Play what feels best!");
     }
   });
 }
@@ -63,11 +65,13 @@ const RoleChampSuggestIntent = (app) => {
 const WhoToBanIntent = (app) => {
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
-    if (response[0].count != 0){
-      app.tell("You should ban " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
+if (response[0].count != 0){
+      var name = client.getChampionName(response[0].matchups[0].championID)
+      var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+      app.tell("You should ban " + nice_name + ". They have a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
-      app.tell("I don't know. Best of luck, scrub.");
+      app.tell("Welp, I have no clue. Play what feels best!");
     }
   });
 }
@@ -137,18 +141,8 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
-
-// classification.getItems('test3');
-// checkUserRanksIntent("test").then(function(response){
-// 	console.log(JSON.stringify(response));
-// }).catch(function(e){
-// 	console.log(e);
-// });
-
-
-
 //tracking.createUser(97, "orkosarkar", "na1")
-tracking.addNewMatches("test2", 230957428, "na1")
+//tracking.addNewMatches("test2", 230957428, "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 
@@ -161,20 +155,6 @@ module.exports = {
   leagueVoice
 };
 
-
-champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
-    .then(function(response){
-      console.log(response)
-      var champString = ""
-      var name;
-      var nice_name;
-      for (var i = 0; i < response.length - 1; i++) {
-        name = client.getChampionName(response[i])
-        nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-        champString += nice_name + ", ";
-      }
-      name = client.getChampionName(response[i])
-      nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      champString += "or " + nice_name
-      console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
-  });
+// client.getBestMatchupsByLane(12).then(function(response){
+//   console.log(response)
+// })
