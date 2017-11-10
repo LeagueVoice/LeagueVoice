@@ -65,7 +65,8 @@ const SummonerIntent = (app) => {
 }
 
 const RegionIntent = (app) => {
-  fbUser.createFromSummonerName(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
+  console.log(app.getUser().getId)
+  fbUser.createFromSummonerName(app.getUser()['userId'], app.getArgument('summoner'), app.getArgument('region')).then(function(res){
     app.tell("Your region is set to: " + app.getArgument('region') + ".")
   });
 }

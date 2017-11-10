@@ -9,8 +9,10 @@ getItemClassification = function(role, status, itemFunction) {
 		"AD" : {
 			"Winning" : {
 				"Damage" : [
-					"Last Whisper",
-					"Phantom Dancer"
+					"Infinity Edge",
+					"Statikk Shiv",
+					"Phantom Dancer",
+					"Duskblade of Draktharr"
 				],
 				"Poke" : [
 					"Bloodthirster",
@@ -28,42 +30,54 @@ getItemClassification = function(role, status, itemFunction) {
 			},
 			"Same" : {
 				"Damage" : [
-					"asdfasdf"
+					"Infinity Edge",
+					"Rapid Fire Cannon",
+					"Black Cleaver",
+					"Ghostblade"
 				], 
 				"Poke" : [
-					"asdf"
+					"Bloodthirster"
+					"Maw of Malmortius"
 				],
 				"Burst" : [
 					"Hexdrinker",
-					"Death's Dance"
+					"Death's Dance",
+					"Sterak's Gage",
+					"Guardian's Angel"
 				], 
 				"CC" : [
-					"asdfadsf"
+					"Quicksilver Sash",
+					"Mercurial Scimitar"
 				]
 			},
 			"Losing" : {
 				"Damage" : [
-					"Infinity Edge",
-					"Statikk Shiv"
+					"Statikk Shiv",
+					"Last Whisper"
 				], 
 				"Poke" : [
 					"Bloodthirster"
 				],
 				"Burst" : [
-					"asdf"
+					"Hexdrinker",
+					"Death's Dance",
+					"Sterak's Gage"
 				], 
 				"CC" : [
-					"asdfadsf"
+					"Quicksilver Sash",
+					"Mercurial Scimitar"
 				]
 			}
 		},
 		"AP" : {
 			"Winning" : {
 				"Damage" : [
-					"Rabadon's Deathcap"
+					"Rabadon's Deathcap",
+					"Mejai's Soulstealer"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Zhonya's Hourglass",
+					"Banshee's Veil"
 				], 
 				"Burst" : [
 					"Banshee's Veil",
@@ -78,7 +92,8 @@ getItemClassification = function(role, status, itemFunction) {
 			}, 
 			"Same" : {
 				"Damage" : [
-					"Void Staff"
+					"Void Staff",
+					"Morellonomicon"
 				], 
 				"Poke" : [
 					"Morellonomicon",
@@ -86,81 +101,94 @@ getItemClassification = function(role, status, itemFunction) {
 				], 
 				"Burst" : [
 					"Banshee's Veil",
-					"Rylai's Crystal Scepter"
+					"Rylai's Crystal Scepter",
+					"Rod of Ages"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Quicksilver Sash",
+					"Banshee's Veil"
 				], 
 			},
 			"Losing" : {
 				"Damage" : [
-					"Rylai's Crystal Scepter"
+					"Void Staff"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Banshee's Veil"
 				], 
 				"Burst" : [
 					"Banshee's Veil",
 					"Rylai's Crystal Scepter"
 				], 
 				"CC" : [
-					"asdfasdf"
-				], 
+					"Quicksilver Sash",
+					"Banshee's Veil"
+				]
 			}
 		},
 		"TANK" : {
 			"Winning" : {
 				"Damage" : [
-					"Infinity Edge",
-					"Statikk Shiv"
+					"Sterak's Gage",
+					"Ravenous Hydra",
+					"Dead Man's Plate",
+					"Frozen Mallet"
 				], 
 				"Poke" : [
 					"Randuin's Omen",
 					"Warmog's Armor",
-					"Righteous Glory"
+					"Righteous Glory",
+					"Spirit Visage"
 				], 
 				"Burst" : [
-					"Hextech Protobelt-01",
-					"Death's Dance",
-					"Guardian Angel"
+					"Thornmail",
+					"Gargoyle's Stoneplate",
+					"Guardian Angel",
 				], 
 				"CC" : [
-					"Quicksilver Sash",
 					"Mercurial Scimitar"
+					"Gargoyle's Stoneplate"
 				], 
 			}, 
 			"Same" : {
 				"Damage" : [
-					"asdfasdf"
+					"Sterak's Gage",
+					"Dead Man's Plate"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Warmog's Armor",
+					"Randuin's Omen",
+					"Spirit Visage"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Thornmail",
+					"Gargoyle's Stoneplate",
+					"Guardian Angel",
+					"Abyssal Mask"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Gargoyle's Stoneplate"
 				], 
 			},
 			"Losing" : {
 				"Damage" : [
-					"Last Whisper"
+					"Thornmail",
 				], 
 				"Poke" : [
 					"Righteous Glory",
 					"Spirit Visage"
 				], 
 				"Burst" : [
-					"Hexdrinker",
-					"Death's Dance"
+					"Thornmail",
+					"Gargoyle's Stoneplate",
+					"Guardian Angel"
 				], 
 				"CC" : [
-					"asdfasdf"
-				], 
+					"Gargoyle's Stoneplate"
+				]
 			}
 		},
-		"UTIL" : {fdsa
+		"UTIL" : {
 			"Winning" : {
 				"Damage" : [
 					"Control Ward"
@@ -178,21 +206,22 @@ getItemClassification = function(role, status, itemFunction) {
 			}, 
 			"Same" : {
 				"Damage" : [
-					"asdfasdf"
+					"Control Ward"
 				], 
 				"Poke" : [
-					"Redemption"
+					"Redemption",
+					"Ardent Censor"
 				], 
 				"Burst" : [
-					"asdf"
+					"Locket of the Iron Solari"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Mikael's Crucible"
 				], 
 			},
 			"Losing" : {
 				"Damage" : [
-					"asdfasdf"
+					"Control Ward"
 				], 
 				"Poke" : [
 					"Redemption"
@@ -201,14 +230,13 @@ getItemClassification = function(role, status, itemFunction) {
 					"Locket of the Iron Solari"
 				], 
 				"CC" : [
-					"asdfasdf"
-				], 
+					"Mikael's Crucible"
+				]
 			}
 		}
 	}
 
-	console.log(itemClassification[role][status][itemFunction].toString())
-	return itemClassification[role][status][itemFunction].toString()
+	return itemClassification[role][status][itemFunction]
 }
 
 getItemClassification("AD", "Winning", "Damage")
