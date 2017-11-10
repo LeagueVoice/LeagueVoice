@@ -33,11 +33,15 @@ const checkUserRanksIntent = (app) => {
     "IV": "4",
     "V": "5"
   }
-  aggregate.userRanksByQueue(app.getUser()['user_id']).then(function(res){
+  aggregate.userRanksByQueue(app.getUser()['user_id'])
+    .then(function(res){
       var rankArray = res["RANKED_SOLO_5x5"].split(" ")
       var rankStr = rankArray[0].toLowerCase() + " " + numeralEnum[rankArray[1]]
       app.tell("You're a " + rankStr + " player. Let's work to get you even higher!")
-  });
+  })
+    .catch(function(e) {
+      app.tell("I can't get your rank right now. Set up your summoner with me first.")
+    });
 }
 
 const WhoToPlayAgainstIntent = (app) => {
@@ -73,7 +77,10 @@ const RoleChampSuggestIntent = (app) => {
       nice_name = name.charAt(0).toUpperCase() + name.slice(1)
       champString += "or " + nice_name
       app.tell("Based on your mastery and current winrate, some champs you could play are " + champString)
-  });
+  })
+    .catch(function(e)) {
+      app.tell("We can't suggest champions for you right now. Make sure that you've registered your summoner with me.")
+    }
 }
 
 const WhoToBanIntent = (app) => {

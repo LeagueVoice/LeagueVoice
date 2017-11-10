@@ -6,9 +6,13 @@ const WriteNoteIntent = (app) => {
 }
 
 const ReadNoteIntent = (app) => {
-	championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).then(function(note) {
+	championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion'))
+	.then(function(note) {
 		app.tell(note)
 	})
+	.catch(function(e)) {
+		app.tell("Sorry, we can't read notes for you right now. Make sure that you've registered your summoner with me.")
+	}
 }
 
 module.exports = {

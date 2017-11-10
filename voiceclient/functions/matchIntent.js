@@ -18,6 +18,8 @@ const AdviceIntent = (app) => {
 	.then(function(response){
 		console.log("intent: " + response)
 		app.tell("" + response);
+	}).catch(function(e) {
+		app.tell("I can't give advice right now. Set up your summoner with me and make sure you're in a game.")
 	})
 }
 
@@ -54,6 +56,9 @@ const SummonerSpellGetIntent = (app) => {
 			}
 		}
 	})
+	.catch(function(e)) {
+		app.tell("I can't get that timer for you. Make sure that your summoner is registered with me first.")
+	}
 }
 
 module.exports = {
