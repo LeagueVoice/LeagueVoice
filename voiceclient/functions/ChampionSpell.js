@@ -64,23 +64,24 @@ ChampionSpell.prototype._initDamageString = function(spell) {
       main = spell.effect[mainKey.slice(1)];
     else
       main = this._getVar(spell, mainKey);
+    if (!main) // Zyra Q, E. Plants are in desc. Probably other places.
+      continue;
     growth = !!growthKey && this._getVar(spell, growthKey);
     // `affect` has propery 'link', which is 'spelldamage', 'attackdamage', or 'bonusattackdamage' (?).
     dmgs.push({ main, growth, type });
   }
 
   if (!dmgs.length) {
-    this.damageString = 'deals no damage';
+    this.damageString = 'no damage';
     return;
   }
-  let str = 'deals ';
-  this.damageString = str + dmgs
+  this.damageString = dmgs
     .map(dmg => {
       let s;
       if (dmg.main instanceof Array) {
         s = formatValues(dmg.main, dmg.type + ' damage');
         if (dmg.growth)
-          s += ` plus ${varToString(dmg.growth)}`;
+          s += `, plus ${varToString(dmg.growth)}`;
       }
       else {
         s = varToString(dmg.main);

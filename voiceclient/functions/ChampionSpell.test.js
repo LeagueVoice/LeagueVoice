@@ -5,15 +5,6 @@ const skarnerAbilities = getSkarnerAbilities();
 
 describe('ChampionSpell', function() {
 
-//   it('test skarner e', function() {
-//     let skarnerE = new ChampionSpell(
-// {"id":"SkarnerFracture","name":"Fracture","description":"Skarner summons a blast of crystalline energy which deals damage to enemies struck and slows them. Basic attacking these enemies within a short window will stun them.","tooltip":"<span class=\"colorFF9900\">Passive:</span> Crystallizing enemies with Fracture and Impale grants <span class=\"colorFFF673\">Crystal Charge</span> for the disable duration and reduces the cooldown of Fracture by the same amount.<br /><br /><span class=\"colorFF9900\">Active:</span> Skarner summons a blast of crystalline energy, dealing {{ e1 }} <span class=\"color99FF99\">(+{{ a1 }})</span> magic damage, slowing targets hit by {{ e8 }}% for {{ e7 }} seconds and reducing the blast's speed.<br /><br />Enemies hit by Fracture are afflicted with Crystal Venom for {{ e6 }} seconds, causing Skarner's next basic attack against them to deal {{ e2 }} additional physical damage and stun the target for {{ e3 }} second.","leveltip":{"label":["Blast Damage / Attack Damage","Slow","Cooldown"],"effect":["{{ e1 }} / {{ e2 }} -> {{ e1NL }} / {{ e2NL }}","{{ e8 }}% -> {{ e8NL }}%","{{ cooldown }} -> {{ cooldownNL }}"]},"maxrank":5,"cooldown":[14,13.5,13,12.5,12],"cooldownBurn":"14/13.5/13/12.5/12","cost":[55,55,55,55,55],"costBurn":"55","effect":[null,[40,65,90,115,140],[25,35,45,55,65],[1,1,1,1,1],[50,50,50,50,50],[6,6,6,6,6],[5,5,5,5,5],[2.5,2.5,2.5,2.5,2.5],[30,35,40,45,50],[0,0,0,0,0],[0,0,0,0,0]],"effectBurn":[null,"40/65/90/115/140","25/35/45/55/65","1","50","6","5","2.5","30/35/40/45/50","0","0"],"vars":[{"link":"spelldamage","coeff":0.2,"key":"a1"}],"costType":" Mana","maxammo":"-1","range":[980,980,980,980,980],"rangeBurn":"980","image":{"full":"SkarnerFracture.png","sprite":"spell10.png","group":"spell","x":144,"y":96,"w":48,"h":48},"resource":"{{ cost }} Mana"}
-//     );
-//     let expected = '<span class="colorFF9900">Passive:</span> Crystallizing enemies with Fracture and Impale grants <span class="colorFFF673">Crystal Charge</span> for the disable duration and reduces the cooldown of Fracture by the same amount.<br /><br /><span class="colorFF9900">Active:</span> Skarner summons a blast of crystalline energy, dealing 115 <span class="color99FF99">(+{{ a1 }})</span> magic damage, slowing targets hit by 45% for 2.5 seconds and reducing the blast\'s speed.<br /><br />Enemies hit by Fracture are afflicted with Crystal Venom for 5 seconds, causing Skarner\'s next basic attack against them to deal 55 additional physical damage and stun the target for 1 second.';
-//     skarnerE._getDamage();
-//     expect(skarnerE.tooltipAtLevel(3)).to.equal(expected);
-//   });
-
   it('test skarner all', function() {
     for (let ability of skarnerAbilities) {
       console.log(ability.getDamageString());

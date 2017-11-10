@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 
 const formatValues = require('./formatValues');
+const ChampionSpell = require('./ChampionSpell');
 
 function req(url) {
   return rp(url)
@@ -88,7 +89,21 @@ function championAbilityCooldown(assistant) {
 }
 
 function championAbilityDamage(assistant) {
+  let champion = assistant.getArgument('champion');
+  let ability = assistant.getArgument('ability');
 
+  if ('passive' === ability)
+    return; //TODO
+
+  let champName = champs.then(data => data[champion].name);
+  let champData = _getChampionAbility(champion, ability);
+
+  return Promise.all([ champName, champData ])
+    .then(([ name, data ]) => {
+    console.log(data.name);
+      let spell = new ChampionSpell(data);
+      assistant.tell(`${name}'s ${ability} deals ${spell.getDamageString()}.`);
+    });
 }
 
 function championAbilityCost(assistant) {
@@ -121,5 +136,6 @@ module.exports = {
   championAbilityCooldown,
   championAttackRange,
   championCount,
+  championAbilityDamage,
   championAbilityCost,
 };

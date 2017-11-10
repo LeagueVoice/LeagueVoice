@@ -34,6 +34,19 @@ describe('staticIntent general', function() {
 
 });
 
+describe('staticIntent championAbilityDamage', function() {
+  it('zyra q', function(done) {
+    staticIntent.championAbilityDamage(sim({
+      champion: 'Zyra',
+      ability: 'Q'
+    }, string => {
+      expect(string).to.equal(
+        'Zyra\'s Q deals 60 magic damage at level 1, increasing by 35 magic damage per level, to 200 magic damage at level 5, plus 60% AP.');
+    }))
+    .then(done, done);
+  });
+});
+
 describe('staticIntent championAbilityCost', function() {
 
   it('zyra q', function(done) {
