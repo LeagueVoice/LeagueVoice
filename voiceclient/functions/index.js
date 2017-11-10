@@ -16,13 +16,14 @@ const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 const championNotes = require('./backend/userNotes/championNotes')
+const classification = require('./backend/itemization/classification.js')
 
 const welcomeIntent = (app) => {
     app.ask("Welcome to League Voice! How can we help you improve?")
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue(32).then(function(res){
+	aggregate.userRanksByQueue(app.getUser()['userId']).then(function(res){
   		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
@@ -31,7 +32,9 @@ const WinRateAgainstIntent = (app) => {
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
     if (response[0].count != 0){
-      app.tell("You should play " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
+      var name = client.getChampionName(response[0].matchups[0].championID)
+      var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+      app.tell("You should play " + nice_name + ". They have a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
       app.tell("I don't know. Best of luck, scrub.");
@@ -40,12 +43,20 @@ const WinRateAgainstIntent = (app) => {
 }
 
 const RoleChampSuggestIntent = (app) => {
-  champselect.suggestChampionToPick(97, app.getArgument('role').toUpperCase())
+  champselect.suggestChampionToPick(app.getUser()['userId'], app.getArgument('role').toUpperCase())
     .then(function(response){
+      console.log(response)
       var champString = ""
-      for (champId in response){
-        champString += champclient.getChampionName(champId) + ", "
+      var name;
+      var nice_name;
+      for (var i = 0; i < response.length - 1; i++) {
+        name = client.getChampionName(response[i])
+        nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+        champString += nice_name + ", ";
       }
+      name = client.getChampionName(response[i])
+      nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+      champString += "or " + nice_name
       app.tell("Based on your mastery and current winrate, some champs you could play are " + champString)
     });
 }
@@ -67,7 +78,7 @@ const SummonerIntent = (app) => {
 }
 
 const RegionIntent = (app) => {
-  fbUser.createFromSummonerName(app.getUser().get_id, app.getArgument('summoner'), app.getArgument('region')).then(function(res){
+  fbUser.createFromSummonerName(app.getUser()['userId'], app.getArgument('summoner'), app.getArgument('region')).then(function(res){
     app.tell("Your region is set to: " + app.getArgument('region') + ".")
   });
 }
@@ -126,6 +137,7 @@ actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
 
+// classification.getItems('test3');
 // checkUserRanksIntent("test").then(function(response){
 // 	console.log(JSON.stringify(response));
 // }).catch(function(e){
