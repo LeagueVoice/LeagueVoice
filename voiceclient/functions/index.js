@@ -22,7 +22,7 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue(app.getUser().get_id).then(function(res){
+	aggregate.userRanksByQueue(app.getUser()['userId']).then(function(res){
   		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
@@ -42,7 +42,7 @@ const WinRateAgainstIntent = (app) => {
 }
 
 const RoleChampSuggestIntent = (app) => {
-  champselect.suggestChampionToPick(app.getUser().user_id, app.getArgument('role'))
+  champselect.suggestChampionToPick(app.getUser()['userId'], app.getArgument('role'))
     .then(function(response){
       app.tell("Based on your mastery and current winrate, champs you could play are " + response)
     });
@@ -65,7 +65,6 @@ const SummonerIntent = (app) => {
 }
 
 const RegionIntent = (app) => {
-  console.log(app.getUser().getId)
   fbUser.createFromSummonerName(app.getUser()['userId'], app.getArgument('summoner'), app.getArgument('region')).then(function(res){
     app.tell("Your region is set to: " + app.getArgument('region') + ".")
   });
