@@ -18,17 +18,27 @@ const matchIntent = require('./matchIntent');
 const itemIntent = require('./itemIntent');
 const championRole = require('./backend/itemization/championRole')
 
+
 const welcomeIntent = (app) => {
     app.ask("Welcome to League Voice! How can we help you improve?")
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue(app.getUser()['userId']).then(function(res){
-  		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
-	});
+  const numeralEnum = {
+    "I": "1",
+    "II": "2",
+    "III": "3",
+    "IV": "4",
+    "V": "5"
+  }
+  aggregate.userRanksByQueue(app.getUser()['user_id']).then(function(res){
+      var rankArray = res["RANKED_SOLO_5x5"].split(" ")
+      var rankStr = rankArray[0].toLowerCase() + " " + numeralEnum[rankArray[1]]
+      app.tell("You're a " + rankStr + " player. Let's work to get you even higher!")
+  });
 }
 
-const WinRateAgainstIntent = (app) => {
+const WhoToPlayAgainstIntent = (app) => {
   console.log(client.getChampionID(app.getArgument('champion').toLowerCase()))
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
   .then(function(response){
@@ -97,11 +107,12 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
     STATIC_CHAMPION_ABILITY_COST: 'Static.ChampionAbilityCost',
     STATIC_CHAMPION_ABILITY_DAMAGE: 'Static.ChampionAbilityDamage',
-    WIN_RATE_AGAINST: 'WinRateAgainst',
+    WHO_TO_PLAY_AGAINST: 'WhoToPlayAgainstIntent',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
     SS_STORE_INTENT: 'SummonerSpellStore',
     SS_GET_INTENT: 'SummonerSpellGet',
+    ENEMY_INFO: 'EnemyInfo',
     SUMMONER: 'Summoner',
     REGION: 'Region',
     ADVICE: 'Advice',
@@ -133,11 +144,12 @@ actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackR
 actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COST, staticIntent.championAbilityCost);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_DAMAGE, staticIntent.championAbilityDamage);
-actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
+actionMap.set(Actions.WHO_TO_PLAY_AGAINST, WhoToPlayAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
 actionMap.set(Actions.SS_STORE_INTENT, matchIntent.SummonerSpellStoreIntent);
 actionMap.set(Actions.SS_GET_INTENT, matchIntent.SummonerSpellGetIntent);
+actionMap.set(Actions.ENEMY_INFO, matchIntent.EnemyInfoIntent);
 actionMap.set(Actions.SUMMONER, SummonerIntent);
 actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
@@ -178,19 +190,19 @@ module.exports = {
 //   console.log(response)
 // })
 
-champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
-    .then(function(response){
-      console.log(response)
-      var champString = ""
-      var name;
-      var nice_name;
-      for (var i = 0; i < response.length - 1; i++) {
-        name = client.getChampionName(response[i])
-        nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-        champString += nice_name + ", ";
-      }
-      name = client.getChampionName(response[i])
-      nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      champString += "or " + nice_name
-      console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
-  });
+// champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
+//     .then(function(response){
+//       console.log(response)
+//       var champString = ""
+//       var name;
+//       var nice_name;
+//       for (var i = 0; i < response.length - 1; i++) {
+//         name = client.getChampionName(response[i])
+//         nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+//         champString += nice_name + ", ";
+//       }
+//       name = client.getChampionName(response[i])
+//       nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+//       champString += "or " + nice_name
+//       console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
+//   });
