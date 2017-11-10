@@ -215,5 +215,4 @@ getItemClassification("AD", "Winning", "Damage")
 
 module.exports = {
 	getItemClassification,
-	getChampionRole
 }
