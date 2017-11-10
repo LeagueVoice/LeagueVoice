@@ -36,21 +36,34 @@ getById: function (uniqueID, {getRef} = {getRef:false}) {
       .then(function (res) {
         return user.getById(uniqueID, {getRef: true}).then(function(userRef) {
           return userRef.set({
-          "champion": "default",
-          "item": {
-            "0": "temp"
-          },
-          "match_history": {
-            "match": {
-              "0": "default" // win or loss
+            "accountID"  : res.accountId,
+            "champion"   : "default",
+            "currentMatch"       : {
+              "objectives" : {
+                "0" : "default",
+              },
+              "players" : {
+                "0" : "default",
+              },
             },
-            "winrate": "default"
-          },
-          "region": region,
-          "summonerID": res.id,
-          "accountID": res.accountId,
-          "summonerName": summonerName
-        });
+            "match_history" : {
+              "champ_winrate" : {
+                "0" : "default",
+              },
+              "match" : {
+                "0" : "default", // win or loss
+              },
+              "winrate" : "default",
+            },
+            "region"     : region,
+            "summonerID" : res.id,
+            "summonerName": summonerName,
+            "userNotes" : {
+              "champion" : {
+                "0" : "default",
+              },
+            },
+          });
       })
     })
   },

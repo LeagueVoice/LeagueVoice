@@ -22,7 +22,7 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue(app.getUser().userId).then(function(res){
+	aggregate.userRanksByQueue(32).then(function(res){
   		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
 	});
 }
@@ -119,6 +119,7 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
+
 // checkUserRanksIntent("test").then(function(response){
 // 	console.log(JSON.stringify(response));
 // }).catch(function(e){
@@ -131,7 +132,6 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 //     // ("Based on your mastery and current winrate, champs you could play are " + response)
 //   });
 
-// tracking.getWinrateForChamp("test", 70)
 // tracking.createUser("test3", "sarby13", "na1")
 // tracking.addNewMatches("test3", 229269697, "na1")
 
@@ -141,17 +141,6 @@ const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp({request, response});
   app.handleRequest(actionMap);
 });
-
-//tracking.createUser(99, "Warden Parus", "NA1");
-// gameTimer.gameTimeAdvice('test3', "NA1").then(function(response) {
-//   console.log(response)
-// });
-
-// client.getBestMatchupsByLane(client.getChampionID("annie"))
-//  .then(function(response){
-//     console.log(response);
-//     console.log("You should play " + client.getChampionName(response[0].matchups[0].championID) + ". They have a " + response[0].matchups[0].winrate + " winrate in this matchup.");
-// });
 
 module.exports = {
   leagueVoice
