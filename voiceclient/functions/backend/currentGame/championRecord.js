@@ -67,6 +67,7 @@ getChampionRecord = function(uniqueID, championID) {
           });
           return {
             winrate: isWin.reduce((a, b) => a + b, 0) / isWin.length,
+            numGames: isWin.length,
             championLevel: mastery.championLevel
           };
         });
