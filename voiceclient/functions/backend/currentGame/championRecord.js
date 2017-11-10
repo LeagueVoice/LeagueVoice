@@ -7,6 +7,9 @@ getChampionRecord = function(uniqueID, championID) {
   return firebase.database()
       .ref("users/" + uniqueID)
       .once("value").then(function(snapshot) {
+        if (!snapshot.val()) {
+          throw new ReferenceError(`summonerName or region missing - summonerName: ${summonerName}, region: ${region}`)
+        }
         let id = snapshot.val().summonerID;
         let region = snapshot.val().region;
         return client.getCurrentMatch(id, region).then(function(match) {
