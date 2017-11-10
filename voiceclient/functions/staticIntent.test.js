@@ -10,8 +10,10 @@ function sim(args, callback) {
   };
 }
 
-describe('staticIntent.js', function() {
-  const staticIntent = require('./staticIntent');
+const staticIntent = require('./staticIntent');
+
+describe('staticIntent general', function() {
+
   it('test championAttackRange', function(done) {
     staticIntent.championAttackRange(sim({
       champion: 'Zyra'
@@ -20,11 +22,46 @@ describe('staticIntent.js', function() {
     }))
     .then(done, done);
   });
+
   it('test championCount', function(done) {
     staticIntent.championCount(sim({
       champion: 'Zyra'
     }, string => {
       expect(string).to.match(/\d{3,} champions\./);
+    }))
+    .then(done, done);
+  });
+
+});
+
+describe('staticIntent championAbilityCost', function() {
+
+  it('zyra q', function(done) {
+    staticIntent.championAbilityCost(sim({
+      champion: 'Zyra',
+      ability: 'Q'
+    }, string => {
+      expect(string).to.equal("Zyra's Q costs 70 mana at all levels.");
+    }))
+    .then(done, done);
+  });
+
+  it('zyra w', function(done) {
+    staticIntent.championAbilityCost(sim({
+      champion: 'Zyra',
+      ability: 'W'
+    }, string => {
+      expect(string).to.equal("Zyra's W costs 1 Seed.");
+    }))
+    .then(done, done);
+  });
+
+  it('talon e', function(done) {
+    staticIntent.championAbilityCost(sim({
+      champion: 'Talon',
+      ability: 'E'
+    }, string => {
+      expect(string).to.equal("Talon's E has no cost.");
     }))
     .then(done, done);
   });

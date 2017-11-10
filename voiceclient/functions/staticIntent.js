@@ -37,20 +37,31 @@ function _getChampionAbility(championKey, ability) {
   }
 }
 
-function _cooldownToString(arr) {
-  // Constant cooldown.
+// Formats an array of values.
+// Used for ability cooldowns, damage, costs,
+// things which may change per level.
+function _formatValues(arr, units) {
+  // Constant.
   if ((new Set(arr)).size === 1)
-    return `${arr[0]} seconds at all levels`;
-  // Linear cooldown.
+    return `${arr[0]} ${units} at all levels`;
+  // Linear.
   let deltas = [];
   for (let i = 1; i < arr.length; i++)
     deltas.push(arr[i] - arr[i - 1]);
-  if ((new Set(deltas)).size === 1)
-    return `${arr[0]} seconds at level 1, decreasing by ${-deltas[0]} seconds per level, to `
-      + `${arr[arr.length - 1]} seconds at level ${arr.length}`;
-  let strs = arr.map((x, i) => `${x} seconds at level ${i + 1}`);
+  if ((new Set(deltas)).size === 1) {
+    let delta = deltas[0];
+    let order = delta < 0 ? 'decreasing' : 'increasing';
+
+    return `${arr[0]} ${units} at level 1, ${order} by ${Math.abs(delta)} ${units} per level, to `
+      + `${arr[arr.length - 1]} ${units} at level ${arr.length}`;
+  }
+  let strs = arr.map((x, i) => `${x} ${units} at level ${i + 1}`);
   strs[strs.length - 1] = 'and ' + strs[strs.length - 1];
   return strs.join(', ');
+}
+
+function _cooldownToString(arr) {
+  return _formatValues(arr, 'seconds');
 }
 
 function championCount(assistant) {
@@ -86,15 +97,39 @@ function championAbilityCooldown(assistant) {
   let ability = assistant.getArgument('ability');
 
   if ('passive' === ability)
-    return;
+    return; //TODO
 
   let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
 
   return Promise.all([ champName, champData ])
-    .then(list => {
-      let [ name, data ] = list;
+    .then(([ name, data ]) => {
       assistant.tell(`${name}'s ${ability} cooldown is ${_cooldownToString(data.cooldown)}.`);
+    });
+}
+
+function championAbilityCost(assistant) {
+  let champion = assistant.getArgument('champion');
+  let ability = assistant.getArgument('ability');
+
+  if ('passive' === ability)
+    return; //TODO
+
+  let champName = champs.then(data => data[champion].name);
+  let champData = _getChampionAbility(champion, ability);
+
+  return Promise.all([ champName, champData ])
+    .then(([ name, data ]) => {
+      let costType = data.costType.trim().toLowerCase();
+      if ('no cost' === costType)
+        assistant.tell(`${name}'s ${ability} has no cost.`);
+      else if (data.costType === data.resource) // '1 seed'
+        assistant.tell(`${name}'s ${ability} costs ${data.costType}.`);
+      else {
+        let costArr = data.cost;
+        let costStr = _formatValues(costArr, costType);
+        assistant.tell(`${name}'s ${ability} costs ${costStr}.`);
+      }
     });
 }
 
@@ -102,5 +137,8 @@ module.exports = {
   championAbility,
   championAbilityCooldown,
   championAttackRange,
-  championCount
+  championCount,
+  championAbilityCost,
+
+  _formatValues
 };
