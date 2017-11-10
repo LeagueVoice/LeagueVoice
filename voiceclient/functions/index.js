@@ -122,6 +122,8 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
+
+// classification.getItems('test3');
 // checkUserRanksIntent("test").then(function(response){
 // 	console.log(JSON.stringify(response));
 // }).catch(function(e){

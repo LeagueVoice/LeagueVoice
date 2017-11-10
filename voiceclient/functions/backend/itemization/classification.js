@@ -1,3 +1,6 @@
+const championRole = require('./championRole.js');
+const firebase = require('firebase');
+
 /* Get items for situation
  * @param {String} role - ad, ap, util, tank
  * @param {String} status - winning, losing, same 
@@ -239,8 +242,21 @@ getItemClassification = function(role, status, itemFunction) {
 	return itemClassification[role][status][itemFunction]
 }
 
-getItemClassification("AD", "Winning", "Damage")
+getItems = function(uniqueID) {
+	championRole.getCurrentChampionRole(uniqueID).then(function(role) {
+		if (role.role == 'tank') {
+			console.log(getItemClassification("TANK", "Winning", "Damage"));
+		} else if (role.role == 'support') {
+			console.log(getItemClassification("UTIL", "Winning", "Damage"));
+		} else if (role.damageType == 'AD') {
+			console.log(getItemClassification('AD', "Winning", "Damage"));
+		} else {
+			console.log(getItemClassification('AP', 'Winning', 'Damage'));
+		}
+	})
+}
 
 module.exports = {
 	getItemClassification,
+	getItems
 }
