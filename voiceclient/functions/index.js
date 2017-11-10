@@ -17,7 +17,7 @@ const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 const itemIntent = require('./itemIntent');
 const championRole = require('./backend/itemization/championRole')
-
+const tipsIntent = require('./tipsIntent')
 
 const welcomeIntent = (app) => {
     app.ask("Welcome to League Voice! How can we help you improve?")
@@ -118,7 +118,8 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     ADVICE: 'Advice',
     WRITE_NOTE: 'WriteNote',
     READ_NOTE: 'ReadNote',
-    ITEM_SUGGESTION: 'ItemWinLoseEqual'
+    ITEM_SUGGESTION: 'ItemWinLoseEqual',
+    ENEMY_TIPS: 'EnemyTips'
 }
 
 function initialize() {
@@ -156,6 +157,7 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion)
+actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent)
 
 /* 
 fbUser.createFromSummonerName("testfang", "45620", "na1").then(function(res) {
@@ -186,23 +188,4 @@ module.exports = {
   leagueVoice
 };
 
-// client.getBestMatchupsByLane(12).then(function(response){
-//   console.log(response)
-// })
-
-// champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
-//     .then(function(response){
-//       console.log(response)
-//       var champString = ""
-//       var name;
-//       var nice_name;
-//       for (var i = 0; i < response.length - 1; i++) {
-//         name = client.getChampionName(response[i])
-//         nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-//         champString += nice_name + ", ";
-//       }
-//       name = client.getChampionName(response[i])
-//       nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-//       champString += "or " + nice_name
-//       console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
-//   });
+// enemyTips.getTipsAgainst("ashe", "jhin")

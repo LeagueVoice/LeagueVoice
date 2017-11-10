@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "actions-on-google": "*",
+    "cheerio": "^1.0.0-rc.2",
     "firebase": "^4.6.1",
     "firebase-admin": "*",
     "firebase-functions": "^0.7.2",
+    "jsonframe-cheerio": "^3.0.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   },

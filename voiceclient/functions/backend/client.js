@@ -57,7 +57,7 @@ getMatch = function(matchID, region) {
   return rp(options)
 }
 
-getCurrentMatch = function(summonerID, region) {
+getCurrentMatch = function(summonerID, region = "NA1") {
   const options = {
     method: 'GET',
     uri: APIPROXY + '/rgapi/' + region + '/spectator/getCurrentGameInfoBySummoner/' + summonerID,
