@@ -2,7 +2,7 @@ const spellTimer = require('./backend/currentGame/spellTimer');
 const gameTimer = require('./backend/currentGame/gameTimer');
 
 const AdviceIntent = (app) => {
-	gameTimer.gameTimeAdvice(32, "NA1")
+	gameTimer.gameTimeAdvice(97, "NA1")
 	.then(function(response){
 		console.log("intent: " + response)
 		app.tell("" + response);

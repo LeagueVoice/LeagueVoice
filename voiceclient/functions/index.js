@@ -132,7 +132,7 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 //     // ("Based on your mastery and current winrate, champs you could play are " + response)
 //   });
 
-// tracking.createUser("test3", "sarby13", "na1")
+//tracking.createUser(97, "orkosarkar", "na1")
 // tracking.addNewMatches("test3", 229269697, "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
