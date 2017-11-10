@@ -15,6 +15,7 @@ const spell = require('./backend/currentGame/spellTimer.js');
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
+const championRecord = require('./backend/currentGame/championRecord.js');
 
 
 const welcomeIntent = (app) => {
@@ -144,6 +145,21 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
+/* 
+fbUser.createFromSummonerName("testfang", "45620", "na1").then(function(res) {
+  championRecord.getChampionRecord("testfang", client.getChampionID("jinx")).then(console.log);
+});
+*/
+
+// classification.getItems('test3');
+// checkUserRanksIntent("test").then(function(response){
+// 	console.log(JSON.stringify(response));
+// }).catch(function(e){
+// 	console.log(e);
+// });
+
+
+
 //tracking.createUser(97, "orkosarkar", "na1")
 //tracking.addNewMatches("test2", 230957428, "na1")
 
@@ -161,3 +177,20 @@ module.exports = {
 // client.getBestMatchupsByLane(12).then(function(response){
 //   console.log(response)
 // })
+
+champselect.suggestChampionToPick('ABwppHG_nOQ1n5Uijt34B5AKOmB3a3TaLRbtWQbnEw-xpnKHvHjMDNPjq7a1JURDpAlUo7CCca8tyfbfZcglAX06', 'DUO_CARRY')
+    .then(function(response){
+      console.log(response)
+      var champString = ""
+      var name;
+      var nice_name;
+      for (var i = 0; i < response.length - 1; i++) {
+        name = client.getChampionName(response[i])
+        nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+        champString += nice_name + ", ";
+      }
+      name = client.getChampionName(response[i])
+      nice_name = name.charAt(0).toUpperCase() + name.slice(1)
+      champString += "or " + nice_name
+      console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
+  });
