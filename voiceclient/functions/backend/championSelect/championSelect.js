@@ -15,9 +15,8 @@ const championSelect = {
     // get all champions from .gg for the role
     const userChampionMasteriesPromise = aggregate.userChampionMasteries(uniqueID)
     const championsforRoleFromGGPromise = fbUser.getById(uniqueID).then(user => {
-      return client.getGGChampionsForRole(userPosition, user['tier']) // TODO: actually store users tier
+      return client.getGGChampionsForRole(userPosition, 'BRONZE') // TODO: actually store users tier
     })
-
     return Promise.all([
       userChampionMasteriesPromise,
       championsforRoleFromGGPromise
