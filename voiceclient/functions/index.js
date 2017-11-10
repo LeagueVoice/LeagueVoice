@@ -40,9 +40,13 @@ const WinRateAgainstIntent = (app) => {
 }
 
 const RoleChampSuggestIntent = (app) => {
-  champselect.suggestChampionToPick(app.getUser().user_id, app.getArgument('role'))
+  champselect.suggestChampionToPick(97, app.getArgument('role').toUpperCase())
     .then(function(response){
-      app.tell("Based on your mastery and current winrate, champs you could play are " + response)
+      var champString = ""
+      for (champId in response){
+        champString += champclient.getChampionName(champId) + ", "
+      }
+      app.tell("Based on your mastery and current winrate, some champs you could play are " + champString)
     });
 }
 
@@ -128,11 +132,16 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 // 	console.log(e);
 // });
 
-// champselect.suggestChampionToPick("test", "mid")
-//   .then(function(response){
-//      console.log(response);
-//     // ("Based on your mastery and current winrate, champs you could play are " + response)
-//   });
+champselect.suggestChampionToPick(97, 'MIDDLE')
+  .then(function(response){
+    console.log(response)
+    var champString = ""
+    for (var i = 0; i < response.length - 1; i++) {
+      champString += client.getChampionName(response[i]) + ", ";
+    }
+    champString += "or " + client.getChampionName(response[i])
+    console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
+  });
 
 //tracking.createUser(97, "orkosarkar", "na1")
 // tracking.addNewMatches("test3", 229269697, "na1")
