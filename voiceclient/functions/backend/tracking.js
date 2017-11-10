@@ -67,6 +67,8 @@ const getUserChampionMasteries = function(uniqueID) {
 
 /*
  * Returns a promise that resolves to the user's summoner level
+ * @param {String} summonerName
+ * @param {String} region
  */
 const getUserLevel = function(summonerName, region) {
 	return client.getBySummonerName(summonerName, region)
@@ -75,6 +77,8 @@ const getUserLevel = function(summonerName, region) {
 
 /*
  * Returns a promise that resolves to the date and time when the user was last active
+ * @param {String} summonerName
+ * @param {String} region
  */
 
 const getUserLastActiveTime = function(summonerName, region) {
@@ -146,14 +150,54 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 	})
 }
 
-/**
- * Gets user's most played lane based on most recent matches
+/* Gets user's most played lane and update lane played statistics
+ * @param {String} uniqueID
+ * @param {String} summonerID
+ * @param {String} region
+ * @returns {String}
  */
-/*const getUsersMostPlayedLane = function(uniqueID, summonerID, region) {
-	addNewMatches(uniqueID, summonerID, region);
-	firebase.database().ref('/users/' + uniqueID + '/match_history')
-		.once('value', function(matches))
-}*/
+const getUsersMostPlayedLane = function(uniqueID, summonerID, region) {
+
+	let top = 0
+	let mid = 0
+	let jung = 0
+	let bot = 0
+	let total = 0
+	let ref = firebase.database().ref().child('users/' + uniqueID + '/match_history/')
+	ref.child("match").once('value', function (snap) {
+	snap.forEach(function (item) {
+			let matchResults = item.val();
+			total += 1
+			switch (matchResults["lane"]) {
+				case 'TOP':
+					top += 1
+					break;
+				case 'MID':
+					mid += 1
+					break;
+				case 'JUNGLE':
+					jung += 1
+					break;
+				case 'BOTTOM':
+					bot += 1
+					break;
+				default:
+			}
+
+			ref.child("lane_played").update({
+				"top": top / total,
+				"mid" : mid / total,
+				"jungle" : jung / total,
+				"bot" : bot / total
+			})
+
+			const lane_played = {"top" : top, "mid" : mid, "jung" : jung, "bot" : bot}
+			let most_played_champ = Object.keys(lane_played).reduce(function(a, b){
+				return lane_played[a] > lane_played[b] ? a : b
+			});
+		})
+	})
+}
 
 /* Calculate winrate in current match games logged
  * @param {String} uniqueID
@@ -176,64 +220,6 @@ const calculateWinrate = function(uniqueID) {
     })
   })
 }
-
-// /* Add new matches to user match tracking records
-//  * @param {String} uniqueID
-//  * @param {String} summonerID
-//  * @param {String} region
-//  * @returns void
-//  */
-// const addNewMatches = function(uniqueID, summonerID, region) {
-
-//   client.getRecentMatchList(summonerID, region).then(function (res) {
-//     console.log(res)
-//     matchHistory = res
-
-//     let championId = []
-//     let gameId = []
-//     // console.log(matchHistory["matches"])
-//     for (let key of matchHistory["matches"]) {
-//       // console.log(key["champion"])
-//       // console.log("-------------------------------------")
-//       championId.push(key["champion"]) // list of champions for each game
-//       gameId.push(key["gameId"])
-//     }
-//     // console.log(matchHistory)
-//     // console.log("reeeeee")
-
-//     let asdf = []
-//     for (let game of gameId) { // every game: gameId[index]
-//       const index = gameId.indexOf(game) // index for game data
-//       loop2: client.getMatch(game, region).then(function (res) {
-
-
-//         loop: for (let key of res["participants"]) {
-//           if (key["championId"] == championId[index]) {
-//             console.log("TEAM: " + key["teamId"])
-//             console.log("halsdfkldsjakljl")
-//             if (key["teamId"] == 100) {
-//               asdf.push(res["teams"][0]["win"])
-//               console.log("asjdkfljsdklafjklds")
-//             }
-//             else {
-//               asdf.push(res["teams"][1]["win"])
-//               console.log("asdfsdfasdfasf")
-//             }
-//             let ref = firebase.database().ref().child('/users/match_history/match')
-//             ref.once('value', function (snap) {
-//               var count = 0
-//               firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
-//                 "champion": championId[index],
-//                 "status": asdf[index]
-//               });
-//             })
-//             break loop;
-//           }
-//         }
-//       })
-//     }
-//   })
-// }
 
 /* Update winrates from match history for each champion
  * @param {String} uniqueID
@@ -292,5 +278,6 @@ const calculateIndividualChampWinrate = function(uniqueID) {
 module.exports = {
 	getWinrateForChamp,
 	createUser,
-	addNewMatches
+	addNewMatches,
+	getUsersMostPlayedLane
 }

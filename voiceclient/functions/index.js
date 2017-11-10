@@ -123,6 +123,22 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
+
+// checkUserRanksIntent("test").then(function(response){
+// 	console.log(JSON.stringify(response));
+// }).catch(function(e){
+// 	console.log(e);
+// });
+
+// champselect.suggestChampionToPick("test", "mid")
+//   .then(function(response){
+//      console.log(response);
+//     // ("Based on your mastery and current winrate, champs you could play are " + response)
+//   });
+
+// tracking.createUser("test3", "sarby13", "na1")
+// tracking.addNewMatches("test3", 229269697, "na1")
+
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 
 const leagueVoice = functions.https.onRequest((request, response) => {
