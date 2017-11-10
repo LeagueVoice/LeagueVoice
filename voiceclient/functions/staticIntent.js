@@ -53,6 +53,11 @@ function _cooldownToString(arr) {
   return strs.join(', ');
 }
 
+function championCount(assistant) {
+  return champs.then(data =>
+    assistant.tell(`There are ${Object.keys(data).length} champions.`));
+}
+
 function championAttackRange(assistant) {
   let champion = assistant.getArgument('champion');
 
@@ -96,5 +101,6 @@ function championAbilityCooldown(assistant) {
 module.exports = {
   championAbility,
   championAbilityCooldown,
-  championAttackRange
+  championAttackRange,
+  championCount
 };

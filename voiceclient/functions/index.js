@@ -78,6 +78,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
     STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
+    STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
@@ -110,6 +111,7 @@ actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
 actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
+actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
@@ -134,8 +136,8 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 //   });
 
 // tracking.getWinrateForChamp("test", 70)
-fbUser.createFromSummonerName("ABwppHFL4YUsVaxIsqE2NPHoANlegQCoYES_XzykUITMJp196aZzTOS-LpBOePJE0ifK0-lkgSo-JInitlj5sSWx", "sarby13", "na1")
-// tracking.addNewMatches("test3", "sarby13", "na1")
+// tracking.createUser("test3", "sarby13", "na1")
+// tracking.addNewMatches("test3", 229269697, "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 

@@ -6,8 +6,8 @@ const WriteNoteIntent = (app) => {
 }
 
 const ReadNoteIntent = (app) => {
-	championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).then(function(list) {
-		app.tell(list)
+	championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).then(function(note) {
+		app.tell(note)
 	})
 }
 

@@ -103,20 +103,20 @@ const getWinrateForChamp = function(uniqueID, championID) {
 const addNewMatches = function(uniqueID, summonerID, region) {
 
 	client.getRecentMatchList(summonerID, region).then(res => {
-		matchHistory = res
+		console.log(res)
 
 		let championId = []
 		let gameId = []
 		let lane = []
 
-		for (let key of matchHistory["matches"]) {
-			console.log(key)
+		for (let key of res["matches"]) {
+			console.log("YAHLLOOOOO " + key)
 			championId.push(key["champion"]) // list of champions for each game
 			gameId.push(key["gameId"])
 			lane.push(key["lane"])
 		}
 
-		let asdf = []
+		let status = []
 		for (let game of gameId) { // every game: gameId[index]
 			const index = gameId.indexOf(game) // index for game data
 			client.getMatch(game, region)
@@ -124,20 +124,18 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 					for (let key of res["participants"]) {
 						if (key["championId"] !== championId[index])
 							continue;
-						console.log("TEAM: " + key["teamId"])
-						console.log("halsdfkldsjakljl")
 						if (key["teamId"] == 100) {
-							asdf.push(res["teams"][0]["win"])
+							status.push(res["teams"][0]["win"])
 						}
 						else {
-							asdf.push(res["teams"][1]["win"])
+							status.push(res["teams"][1]["win"])
 						}
 						let ref = firebase.database().ref().child('/users/match_history/match')
 						ref.once('value', snap => {
 							var count = 0
 							firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
 								"champion" : championId[index],
-								"status" : asdf[index],
+								"status" : status[index],
 								"lane" : lane[index]
 							});
 						});
@@ -273,7 +271,6 @@ const calculateIndividualChampWinrate = function(uniqueID) {
 	    			}
 	    		}
 	    		else {
-	    			console.log("ASDFADFSDAFADSF")
 	    			if (matchResults["status"] === 'Win') {
 	      			ref.child('champ_winrate/' + matchResults["champion"]).set({
 	      				"win" : snap.val()["total"] + 1,
