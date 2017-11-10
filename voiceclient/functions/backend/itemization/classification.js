@@ -1,25 +1,3 @@
-
-/* Classify champion role by champion
- * @param {Int} championID
- * @returns {String}
- */
-getChampionRole = function(championID) {
-	if (championID == 1 ||
-		championID == 2 || 
-		championID == 3 ) {
-		return "AD"
-	}
-	else if (championID == 4) {
-		return "TANK"
-	}
-	else if (championID == 5) {
-		return "UTIL"
-	}
-	else {
-		return "AP"
-	}
-}
-
 /* Get items for situation
  * @param {String} role - ad, ap, util, tank
  * @param {String} status - winning, losing, same 
@@ -31,14 +9,17 @@ getItemClassification = function(role, status, itemFunction) {
 		"AD" : {
 			"Winning" : {
 				"Damage" : [
-					"Last Whisper"
+					"Last Whisper",
+					"Phantom Dancer"
 				],
 				"Poke" : [
-					"Bloodthirster"
+					"Bloodthirster",
+					"Blade of the Ruined King"
 				],
 				"Burst" : [
 					"Hexdrinker",
-					"Death's Dance"
+					"Death's Dance",
+					"Guardian Angel"
 				],
 				"CC" : [
 					"Quicksilver Sash",
@@ -79,27 +60,33 @@ getItemClassification = function(role, status, itemFunction) {
 		"AP" : {
 			"Winning" : {
 				"Damage" : [
-					"asdfasdf"
+					"Rabadon's Deathcap"
 				], 
 				"Poke" : [
 					"asdfasdf"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Banshee's Veil",
+					"Hextech Protobelt-01",
+					"Zhonya's Hourglass",
+					"Rod of Ages"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Quicksilver Sash",
+					"Banshee's Veil"
 				], 
 			}, 
 			"Same" : {
 				"Damage" : [
-					"asdfasdf"
+					"Void Staff"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Morellonomicon",
+					"Archangel's Staff"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Banshee's Veil",
+					"Rylai's Crystal Scepter"
 				], 
 				"CC" : [
 					"asdfasdf"
@@ -107,13 +94,14 @@ getItemClassification = function(role, status, itemFunction) {
 			},
 			"Losing" : {
 				"Damage" : [
-					"asdfasdf"
+					"Rylai's Crystal Scepter"
 				], 
 				"Poke" : [
 					"asdfasdf"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Banshee's Veil",
+					"Rylai's Crystal Scepter"
 				], 
 				"CC" : [
 					"asdfasdf"
@@ -123,16 +111,22 @@ getItemClassification = function(role, status, itemFunction) {
 		"TANK" : {
 			"Winning" : {
 				"Damage" : [
-					"asdfasdf"
+					"Infinity Edge",
+					"Statikk Shiv"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Randuin's Omen",
+					"Warmog's Armor",
+					"Righteous Glory"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Hextech Protobelt-01",
+					"Death's Dance",
+					"Guardian Angel"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Quicksilver Sash",
+					"Mercurial Scimitar"
 				], 
 			}, 
 			"Same" : {
@@ -151,32 +145,35 @@ getItemClassification = function(role, status, itemFunction) {
 			},
 			"Losing" : {
 				"Damage" : [
-					"asdfasdf"
+					"Last Whisper"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Righteous Glory",
+					"Spirit Visage"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Hexdrinker",
+					"Death's Dance"
 				], 
 				"CC" : [
 					"asdfasdf"
 				], 
 			}
 		},
-		"UTIL" : {
+		"UTIL" : {fdsa
 			"Winning" : {
 				"Damage" : [
-					"asdfasdf"
+					"Control Ward"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Redemption"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Locket of the Iron Solari",
+					"Banshee's Veil"
 				], 
 				"CC" : [
-					"asdfasdf"
+					"Mikael's Crucible"
 				], 
 			}, 
 			"Same" : {
@@ -184,10 +181,10 @@ getItemClassification = function(role, status, itemFunction) {
 					"asdfasdf"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Redemption"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"asdf"
 				], 
 				"CC" : [
 					"asdfasdf"
@@ -198,10 +195,10 @@ getItemClassification = function(role, status, itemFunction) {
 					"asdfasdf"
 				], 
 				"Poke" : [
-					"asdfasdf"
+					"Redemption"
 				], 
 				"Burst" : [
-					"asdfasdf"
+					"Locket of the Iron Solari"
 				], 
 				"CC" : [
 					"asdfasdf"
@@ -215,3 +212,7 @@ getItemClassification = function(role, status, itemFunction) {
 }
 
 getItemClassification("AD", "Winning", "Damage")
+
+module.exports = {
+	getItemClassification,
+}
