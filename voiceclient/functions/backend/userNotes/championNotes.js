@@ -15,10 +15,10 @@ const getChampionNotes = function(uniqueID, championID) {
     .ref(championNoteKey(uniqueID, championID))
     .once('value')
     .then(function(snapshot) {
-        if (snapshot == null) {
+        if (snapshot.val() == null) {
           return 'You do not have a note for ' + championID + ' set.';
         } else {
-          return snapshot.val()[note]
+          return "Here's your note for " + championID + ": " + snapshot.val()['note']
       }
     });
 }

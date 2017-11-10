@@ -134,8 +134,8 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 //   });
 
 // tracking.getWinrateForChamp("test", 70)
-// tracking.createUser("test3", "sarby13", "na1")
-tracking.addNewMatches("test3", "sarby13", "na1")
+fbUser.createFromSummonerName("ABwppHFL4YUsVaxIsqE2NPHoANlegQCoYES_XzykUITMJp196aZzTOS-LpBOePJE0ifK0-lkgSo-JInitlj5sSWx", "sarby13", "na1")
+// tracking.addNewMatches("test3", "sarby13", "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 
