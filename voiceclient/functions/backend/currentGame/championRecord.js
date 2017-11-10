@@ -22,6 +22,7 @@ getChampionRecord = function(uniqueID, championID) {
         return client.getBySummonerId(participant.id, participant.region)
           .then(function(res) {
             return {
+              summonerID: participant.id,
               id: res.accountId,
               region: participant.region
             };
@@ -40,9 +41,11 @@ getChampionRecord = function(uniqueID, championID) {
           });
       }).then(function(matches) {
         let isWin = matches.matches.map(function(match) {
-          let participantID = match.participantIdentities.find(function(i) {
+          let identity = match.participantIdentities.find(function(i) {
             return i.player.accountId == matches.participant.id;
-          }).participantId;
+          });
+
+          let participantID = identity.participantId;
 
           let participant = match.participants.find(function(i) {
             return i.participantId == participantID;
@@ -55,7 +58,15 @@ getChampionRecord = function(uniqueID, championID) {
           return team.win == 'Win';
         });
 
-        return isWin.reduce((a, b) => a + b, 0) / isWin.length;
+        return client.getAllChampionMasteries(matches.participant.summonerID, matches.participant.region).then(function(masteries) {
+          let mastery = masteries.find(function(m) {
+            return m.championId == championID;
+          });
+          return {
+            winrate: isWin.reduce((a, b) => a + b, 0) / isWin.length,
+            championLevel: mastery.championLevel
+          };
+        });
       });
 };
 

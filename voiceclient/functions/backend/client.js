@@ -87,6 +87,15 @@ getMatchlistForQueue = function(accountID, region, champion, queue = 420) {
   return rp(options)
 }
 
+getAllChampionMasteries = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/championMastery/getAllChampionMasteries/' + summonerID,
+    json: true
+  }
+  return rp(options)
+}
+
 getAllChampionMasteriesForSummoner = function(summonerID, region) {
 	const options = {
 		method: 'GET',
@@ -208,6 +217,7 @@ module.exports = {
 	"getMatch": getMatch,
   "getMatchList" : getMatchList,
   getMatchlistForQueue,
+  getAllChampionMasteries,
 	"getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner,
 	"getAllChampionMasteriesForSummoner": getAllChampionMasteriesForSummoner,
   "getGGChampionsForRole": getGGChampionsForRole,
