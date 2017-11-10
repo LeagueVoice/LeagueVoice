@@ -15,6 +15,7 @@ const spell = require('./backend/currentGame/spellTimer.js');
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
+const championNotes = require('./backend/userNotes/championNotes')
 
 const welcomeIntent = (app) => {
     //Do exist:
@@ -77,6 +78,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
     STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
+    STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
     WIN_RATE_AGAINST: 'WinRateAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
@@ -109,6 +111,7 @@ actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
 actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
+actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
 actionMap.set(Actions.WIN_RATE_AGAINST, WinRateAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
@@ -121,6 +124,7 @@ actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
+
 const leagueVoice = functions.https.onRequest((request, response) => {
   const app = new DialogflowApp({request, response});
   app.handleRequest(actionMap);

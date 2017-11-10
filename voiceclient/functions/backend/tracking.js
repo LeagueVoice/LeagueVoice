@@ -104,21 +104,19 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 
 	client.getRecentMatchList(summonerID, region).then(res => {
 		console.log(res)
-		matchHistory = res
 
 		let championId = []
 		let gameId = []
-		// console.log(matchHistory["matches"])
-		for (let key of matchHistory["matches"]) {
-			// console.log(key["champion"])
-			// console.log("-------------------------------------")
+		let lane = []
+
+		for (let key of res["matches"]) {
+			console.log("YAHLLOOOOO " + key)
 			championId.push(key["champion"]) // list of champions for each game
 			gameId.push(key["gameId"])
+			lane.push(key["lane"])
 		}
-		// console.log(matchHistory)
-		// console.log("reeeeee")
 
-		let asdf = []
+		let status = []
 		for (let game of gameId) { // every game: gameId[index]
 			const index = gameId.indexOf(game) // index for game data
 			client.getMatch(game, region)
@@ -126,22 +124,19 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 					for (let key of res["participants"]) {
 						if (key["championId"] !== championId[index])
 							continue;
-						console.log("TEAM: " + key["teamId"])
-						console.log("halsdfkldsjakljl")
 						if (key["teamId"] == 100) {
-							asdf.push(res["teams"][0]["win"])
-							console.log("asjdkfljsdklafjklds")
+							status.push(res["teams"][0]["win"])
 						}
 						else {
-							asdf.push(res["teams"][1]["win"])
-							console.log("asdfsdfasdfasf")
+							status.push(res["teams"][1]["win"])
 						}
 						let ref = firebase.database().ref().child('/users/match_history/match')
 						ref.once('value', snap => {
 							var count = 0
 							firebase.database().ref('/users/' + uniqueID + '/match_history/match/' + gameId[index]).set({
 								"champion" : championId[index],
-								"status" : asdf[index]
+								"status" : status[index],
+								"lane" : lane[index]
 							});
 						});
 						break;
@@ -150,6 +145,15 @@ const addNewMatches = function(uniqueID, summonerID, region) {
 		}
 	})
 }
+
+/**
+ * Gets user's most played lane based on most recent matches
+ */
+/*const getUsersMostPlayedLane = function(uniqueID, summonerID, region) {
+	addNewMatches(uniqueID, summonerID, region);
+	firebase.database().ref('/users/' + uniqueID + '/match_history')
+		.once('value', function(matches))
+}*/
 
 /* Calculate winrate in current match games logged
  * @param {String} uniqueID
@@ -267,7 +271,6 @@ const calculateIndividualChampWinrate = function(uniqueID) {
 	    			}
 	    		}
 	    		else {
-	    			console.log("ASDFADFSDAFADSF")
 	    			if (matchResults["status"] === 'Win') {
 	      			ref.child('champ_winrate/' + matchResults["champion"]).set({
 	      				"win" : snap.val()["total"] + 1,
@@ -288,5 +291,6 @@ const calculateIndividualChampWinrate = function(uniqueID) {
 
 module.exports = {
 	getWinrateForChamp,
-	createUser
+	createUser,
+	addNewMatches
 }

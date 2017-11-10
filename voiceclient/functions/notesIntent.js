@@ -6,11 +6,9 @@ const WriteNoteIntent = (app) => {
 }
 
 const ReadNoteIntent = (app) => {
-	// big_string = ""
-	// championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).forEach(function (note) {
-	// 	big_string+= note + "."
-	// })
-	app.tell(championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')))
+	championNotes.getChampionNotes(app.getUser().userId, app.getArgument('champion')).then(function(note) {
+		app.tell(note)
+	})
 }
 
 module.exports = {
