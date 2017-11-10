@@ -8,6 +8,8 @@ const EnemyInfoIntent = (app) => {
 		.then(function(response){
 			console.log(response)
 			app.tell("The enemy " + app.getArgument('champion') + " has a winrate of " + Math.round(response['winrate'] * 100) + " percent and champion mastery level " + response['championLevel'])
+		}).catch(function(e) {
+			app.tell("I can't help you look up the enemy right now. Set up your summoner with me and make sure you're in a game.")
 		})
 }
 
@@ -28,7 +30,7 @@ const SummonerSpellGetIntent = (app) => {
 	spellTimer.getSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
 	.then(function(response){
 		var baseString = app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + Math.round(response) + " seconds. "
-		console.log(['Flash', 'Heal', 'Barrier', 'Cleanse'].includes(app.getArgument('spell')))
+		console.log(['Flash', 'Heal', 'Barriestopr', 'Cleanse'].includes(app.getArgument('spell')))
 		if (['Flash', 'Heal', 'Barrier', 'Cleanse'].includes(app.getArgument('spell'))){
 			if (response == 0){
 			app.tell(app.getArgument('champion') + " has " + app.getArgument('spell') + " up! They may " + app.getArgument('spell') + " if you engage.")
