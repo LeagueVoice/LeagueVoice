@@ -7,7 +7,7 @@ const EnemyInfoIntent = (app) => {
 	championRecord.getChampionRecord(app.getUser()["user_id"], client.getChampionID(app.getArgument('champion').toLowerCase()))
 		.then(function(response){
 			console.log(response)
-			app.tell("The enemy " + app.getArgument('champion') + " has a winrate of " + Math.round(response['winrate'] * 100) + " percent and champion mastery level " + response['championLevel'])
+			app.tell("The " + app.getArgument('champion') + " has a winrate of " + Math.round(response['winrate'] * 100) + " percent and champion mastery level " + response['championLevel'])
 		}).catch(function(e) {
 			app.tell("I can't help you look up the enemy right now. Set up your summoner with me and make sure you're in a game.")
 		})
