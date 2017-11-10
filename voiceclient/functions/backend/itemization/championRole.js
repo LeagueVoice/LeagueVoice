@@ -1,11 +1,12 @@
 const client = require('../client.js');
+const firebase = require('firebase');
 
 // Returns a promise that evaluates to a champion role (see below) for the
 // current tracked player's game.
 getCurrentChampionRole = function(uniqueID) {
   return firebase.database()
       .ref("users/" + uniqueID)
-      .once("value", function(snapshot) {
+      .once("value").then(function(snapshot) {
         let id = snapshot.val().summonerID;
         let region = snapshot.val().region;
         return client.getCurrentMatch(id, region).then(function(match) {
@@ -47,5 +48,6 @@ getChampionRole = function(championID) {
 }
 
 module.exports = {
-  getChampionRole
+  getChampionRole,
+  getCurrentChampionRole
 }

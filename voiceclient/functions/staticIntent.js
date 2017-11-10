@@ -121,9 +121,9 @@ function championAbilityCost(assistant) {
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
       let costType = data.costType.trim().toLowerCase();
-      if ('no cost' === costType)
+      if ('no cost' === costType || !costType)
         assistant.tell(`${name}'s ${ability} has no cost.`);
-      else if (data.costType === data.resource) // '1 seed'
+      else if (data.costType === data.resource) // '1 seed', null, etc.
         assistant.tell(`${name}'s ${ability} costs ${data.costType}.`);
       else {
         let costArr = data.cost;

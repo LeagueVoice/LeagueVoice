@@ -65,4 +65,14 @@ describe('staticIntent championAbilityCost', function() {
     }))
     .then(done, done);
   });
+
+  it('yasuo e', function(done) {
+    staticIntent.championAbilityCost(sim({
+      champion: 'Yasuo',
+      ability: 'E'
+    }, string => {
+      expect(string).to.equal("Yasuo's E has no cost.");
+    }))
+    .then(done, done);
+  });
 });
