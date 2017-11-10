@@ -21,7 +21,7 @@ const SummonerSpellGetIntent = (app) => {
 	spellTimer.getSpellTime(32, app.getArgument('champion'), app.getArgument('spell'))
 	.then(function(response){
 		console.log(response)
-		app.tell(app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + Math.round(response / 1000) + " seconds")
+		app.tell(app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + response + " seconds")
 	})
 }
 
