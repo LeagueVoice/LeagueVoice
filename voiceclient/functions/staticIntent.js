@@ -66,8 +66,7 @@ function championAbility(assistant) {
   let champData = _getChampionAbility(champion, ability);
 
   return Promise.all([ champName, champData ])
-    .then(list => {
-      let [ name, data ] = list;
+    .then([ name, data ] => {
       assistant.tell(`${name}'s ${ability} is ${data.name}: ${data.description}`);
     });
 }
