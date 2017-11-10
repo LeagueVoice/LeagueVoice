@@ -1,5 +1,7 @@
 const firebase = require('firebase');
 
+var summonerMap = {"barrier": 180, "clarity": 180, "cleanse": 210, "exhaust": 210, "flash": 300, "ghost": 180, "heal": 240, "ignite": 210, "smite": 15, "teleport": 300}
+
 /* Store the time when spell expires in Firebase
  * @param {String} uniqueID - Google Home ID
  * @param {Int} champion - champion number identifier
@@ -34,7 +36,7 @@ const checkSpellTime = function(uniqueID, champion, spell) {
 	});
 }
 
-/* Return difference in spell time (ref: checkSpellTime)
+/* Returns the remaining cooldown for spell in seconds
  * @param {String} uniqueID - Google Home ID
  * @param {Int} champion - champion number identifier
  * @param {String} spell - spell used to store time for
@@ -43,11 +45,14 @@ const getSpellTime = function(uniqueID, champion, spell) {
 	console.log("in get spell time")
 	return checkSpellTime(uniqueID, champion, spell).then(function(snapshot){
 		console.log(snapshot)
-		var diff = Date.now()-snapshot
-		if (diff >= 300000) {
+		var diff = Date.now() - snapshot
+		var cooldown = summonerMap[spell.toLowerCase()];
+		console.log("cooldown" + cooldown);
+		if (diff >= cooldown * 1000) {
 			return 0;
 		}
-		return diff;
+		// in seconds!
+		return cooldown - diff / 1000;
 	});
 }
 
