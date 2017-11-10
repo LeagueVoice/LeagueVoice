@@ -21,186 +21,197 @@ getChampionRole = function(championID) {
 }
 
 /* Get items for situation
- * @param {String} itemType - classification for item function 
+ * @param {String} role - ad, ap, util, tank
+ * @param {String} status - winning, losing, same 
+ * @param {String} itemFunction - damage, poke, burst, cc
  * @returns {String}
  */
-getItemClassification = function(itemType) {
+getItemClassification = function(role, status, itemFunction) {
 	const itemClassification = {
 		"AD" : {
 			"Winning" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
-			}, 
+				"Damage" : [
+					"Last Whisper"
+				],
+				"Poke" : [
+					"Bloodthirster"
+				],
+				"Burst" : [
+					"Hexdrinker",
+					"Death's Dance"
+				],
+				"CC" : [
+					"Quicksilver Sash",
+					"Mercurial Scimitar"
+				]
+			},
 			"Same" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdf"
+				],
+				"Burst" : [
+					"Hexdrinker",
+					"Death's Dance"
+				], 
+				"CC" : [
+					"asdfadsf"
+				]
 			},
 			"Losing" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
-			},
+				"Damage" : [
+					"Infinity Edge",
+					"Statikk Shiv"
+				], 
+				"Poke" : [
+					"Bloodthirster"
+				],
+				"Burst" : [
+					"asdf"
+				], 
+				"CC" : [
+					"asdfadsf"
+				]
+			}
 		},
 		"AP" : {
 			"Winning" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
 			}, 
 			"Same" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
 			},
 			"Losing" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
-			},
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
+			}
 		},
 		"TANK" : {
 			"Winning" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
 			}, 
 			"Same" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
 			},
 			"Losing" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
-			},
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
+			}
 		},
 		"UTIL" : {
 			"Winning" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
 			}, 
 			"Same" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
 			},
 			"Losing" : {
-				"Damage" : {
-					"asdfasdf",
-				}, 
-				"Poke" : {
-					"asdf",
-				},
-				"Burst" : {
-					"asdf",
-				}, 
-				"CC" : {
-					"asdfadsf",
-				}
-			},
-		},
+				"Damage" : [
+					"asdfasdf"
+				], 
+				"Poke" : [
+					"asdfasdf"
+				], 
+				"Burst" : [
+					"asdfasdf"
+				], 
+				"CC" : [
+					"asdfasdf"
+				], 
+			}
+		}
 	}
+
+	console.log(itemClassification[role][status][itemFunction].toString())
+	return itemClassification[role][status][itemFunction].toString()
 }
+
+getItemClassification("AD", "Winning", "Damage")
