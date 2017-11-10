@@ -18,9 +18,7 @@ const matchIntent = require('./matchIntent');
 const championNotes = require('./backend/userNotes/championNotes')
 
 const welcomeIntent = (app) => {
-    //Do exist:
-    //Don't exist:
-    app.tell("Hello World!")
+    app.ask("Welcome to League Voice! How can we help you improve?")
 }
 
 const checkUserRanksIntent = (app) => {
@@ -41,14 +39,12 @@ const WinRateAgainstIntent = (app) => {
   });
 }
 
-
 const RoleChampSuggestIntent = (app) => {
-  champselect.suggestChampionToPick(app.getUser().userId, app.getArgument('role'))
-  .then(function(response){
-    app.tell("Based on your mastery and current winrate, champs you could play are " + response)
-  });
+  champselect.suggestChampionToPick(app.getUser().user_id, app.getArgument('role'))
+    .then(function(response){
+      app.tell("Based on your mastery and current winrate, champs you could play are " + response)
+    });
 }
-
 
 const WhoToBanIntent = (app) => {
   client.getBestMatchupsByLane(client.getChampionID(app.getArgument('champion').toLowerCase()))
