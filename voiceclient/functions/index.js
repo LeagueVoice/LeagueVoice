@@ -24,9 +24,18 @@ const welcomeIntent = (app) => {
 }
 
 const checkUserRanksIntent = (app) => {
-	aggregate.userRanksByQueue(app.getUser()['userId']).then(function(res){
-  		app.tell("You're a " + res["RANKED_SOLO_5x5"] + " player! Congratulatory statement.")
-	});
+  const numeralEnum = {
+    "I": "1",
+    "II": "2",
+    "III": "3",
+    "IV": "4",
+    "V": "5"
+  }
+  aggregate.userRanksByQueue(app.getUser()['user_id']).then(function(res){
+      var rankArray = res["RANKED_SOLO_5x5"].split(" ")
+      var rankStr = rankArray[0].toLowerCase() + " " + numeralEnum[rankArray[1]]
+      app.tell("You're a " + rankStr + " player. Let's work to get you even higher!")
+  });
 }
 
 const WhoToPlayAgainstIntent = (app) => {
@@ -197,5 +206,3 @@ module.exports = {
 //       champString += "or " + nice_name
 //       console.log("Based on your mastery and current winrate, some champs you could play are " + champString)
 //   });
-
-tracking.createUser("snek", "C9 Sneaky", "NA1")
