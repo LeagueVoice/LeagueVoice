@@ -15,7 +15,8 @@ const spell = require('./backend/currentGame/spellTimer.js');
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
-const championRecord = require('./backend/currentGame/championRecord.js');
+const itemIntent = require('./itemIntent');
+const championRole = require('./backend/itemization/championRole')
 
 
 const welcomeIntent = (app) => {
@@ -107,7 +108,8 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     REGION: 'Region',
     ADVICE: 'Advice',
     WRITE_NOTE: 'WriteNote',
-    READ_NOTE: 'ReadNote'
+    READ_NOTE: 'ReadNote',
+    ITEM_SUGGESTION: 'ItemWinLoseEqual'
 }
 
 function initialize() {
@@ -144,6 +146,7 @@ actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
+actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion)
 
 /* 
 fbUser.createFromSummonerName("testfang", "45620", "na1").then(function(res) {
