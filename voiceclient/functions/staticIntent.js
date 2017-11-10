@@ -52,6 +52,8 @@ function championCount(assistant) {
 function championAttackRange(assistant) {
   let champion = assistant.getArgument('champion');
 
+  if (!champion) { assistant.tell("I'm sorry, I don't know what champion that is."); return; }
+
   return champs.then(data => {
     let champ = data[champion];
     assistant.ask(`${champ.name}'s auto attack range is ${champ.stats.attackrange} units.`);
@@ -61,6 +63,9 @@ function championAttackRange(assistant) {
 function championAbility(assistant) {
   let champion = assistant.getArgument('champion');
   let ability = assistant.getArgument('ability');
+
+  if (!champion) { assistant.tell("I'm sorry, I don't know what champion that is."); return; }
+  if (!ability) { assistant.tell("I'm sorry, I don't know what ability that is."); return; }
 
   let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
@@ -75,8 +80,11 @@ function championAbilityCooldown(assistant) {
   let champion = assistant.getArgument('champion');
   let ability = assistant.getArgument('ability');
 
+  if (!champion) { assistant.tell("I'm sorry, I don't know what champion that is."); return; }
+  if (!ability) { assistant.tell("I'm sorry, I don't know what ability that is."); return; }
+
   if ('passive' === ability)
-    return; //TODO
+    return assistant.tell("No cooldown."); //TODO
 
   let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
@@ -91,8 +99,11 @@ function championAbilityDamage(assistant) {
   let champion = assistant.getArgument('champion');
   let ability = assistant.getArgument('ability');
 
+  if (!champion) { assistant.tell("I'm sorry, I don't know what champion that is."); return; }
+  if (!ability) { assistant.tell("I'm sorry, I don't know what ability that is."); return; }
+
   if ('passive' === ability)
-    return; //TODO
+    return assistant.tell("Passive damage currently not supported, sorry."); //TODO
 
   let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
@@ -109,8 +120,11 @@ function championAbilityCost(assistant) {
   let champion = assistant.getArgument('champion');
   let ability = assistant.getArgument('ability');
 
+  if (!champion) { assistant.tell("I'm sorry, I don't know what champion that is."); return; }
+  if (!ability) { assistant.tell("I'm sorry, I don't know what ability that is."); return; }
+
   if ('passive' === ability)
-    return; //TODO
+    return assistant.tell("No cost."); //TODO
 
   let champName = champs.then(data => data[champion].name);
   let champData = _getChampionAbility(champion, ability);
