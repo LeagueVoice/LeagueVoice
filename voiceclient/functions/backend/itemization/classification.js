@@ -27,60 +27,180 @@ getChampionRole = function(championID) {
 getItemClassification = function(itemType) {
 	const itemClassification = {
 		"AD" : {
-			"Damage" : {
-				"asdfasdf",
+			"Winning" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			}, 
-			"Poke" : {
-				"asdf",
+			"Same" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			},
-			"Burst" : {
-				"asdf",
-			}, 
-			"CC" : {
-				"asdfadsf",
-			}
+			"Losing" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
+			},
 		},
 		"AP" : {
-			"Damage" : {
-				"asdfasdf",
+			"Winning" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			}, 
-			"Poke" : {
-				"asdf",
+			"Same" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			},
-			"Burst" : {
-				"asdf",
-			}, 
-			"CC" : {
-				"asdfadsf",
-			}
+			"Losing" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
+			},
 		},
 		"TANK" : {
-			"Damage" : {
-				"asdfasdf",
+			"Winning" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			}, 
-			"Poke" : {
-				"asdf",
+			"Same" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			},
-			"Burst" : {
-				"asdf",
-			}, 
-			"CC" : {
-				"asdfadsf",
-			}
+			"Losing" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
+			},
 		},
 		"UTIL" : {
-			"Damage" : {
-				"asdfasdf",
+			"Winning" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			}, 
-			"Poke" : {
-				"asdf",
+			"Same" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
 			},
-			"Burst" : {
-				"asdf",
-			}, 
-			"CC" : {
-				"asdfadsf",
-			}
+			"Losing" : {
+				"Damage" : {
+					"asdfasdf",
+				}, 
+				"Poke" : {
+					"asdf",
+				},
+				"Burst" : {
+					"asdf",
+				}, 
+				"CC" : {
+					"asdfadsf",
+				}
+			},
 		},
 	}
 }
