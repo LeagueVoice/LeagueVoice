@@ -12,6 +12,7 @@ const firebase = require('firebase');
 const fbUser = require('./firebase/user')
 const aggregate = require('./backend/aggregate')
 const spell = require('./backend/currentGame/spellTimer.js');
+const surrender = require('./backend/surrender/prediction.js');
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
@@ -137,7 +138,8 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 //   });
 
 //tracking.createUser(97, "orkosarkar", "na1")
-tracking.addNewMatches("test2", 230957428, "na1")
+// tracking.addNewMatches("test2", 230957428, "na1")
+// surrender.getSurrender(230957428, "na1")
 
 //spell.getSpellTime('test', 'annie', 'flash').then(snap=>console.log(snap));
 
