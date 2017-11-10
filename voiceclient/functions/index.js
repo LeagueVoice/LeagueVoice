@@ -46,7 +46,7 @@ const WhoToPlayAgainstIntent = (app) => {
     if (response[0].count != 0){
       var name = client.getChampionName(response[0].matchups[0].championID)
       var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      app.tell("You should play " + nice_name + ". They have a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
+      app.tell("You should play " + nice_name + ". " + nice_name + " has a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
       app.tell("Welp, I have no clue. Play what feels best!");
@@ -80,7 +80,7 @@ const WhoToBanIntent = (app) => {
 if (response[0].count != 0){
       var name = client.getChampionName(response[0].matchups[0].championID)
       var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      app.tell("You should ban " + nice_name + ". They have a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
+      app.tell("You should ban " + nice_name + ". " + nice_name + " has a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
       app.tell("Welp, I have no clue. Play what feels best!");
