@@ -14,6 +14,15 @@ getBySummonerName = function(name, region) {
   return rp(options)
 }
 
+getBySummonerId = function(summonerID, region) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/summoner/getBySummonerId/' + summonerID,
+    json: true
+  }
+  return rp(options)
+}
+
 // Returns a promise for getRecentMatchList that resolves to the returned JSON
 // from the Riot API matchlists/by-account/./recent endpoint.
 getRecentMatchList = function(accountID, region) {
@@ -66,6 +75,15 @@ getAllLeaguePositionsForSummoner = function(summonerID, region) {
     json: true
   }
   console.log(options)
+  return rp(options)
+}
+
+getMatchlistForQueue = function(accountID, region, champion, queue = 420) {
+  const options = {
+    method: 'GET',
+    uri: APIPROXY + '/rgapi/' + region + '/match/getMatchlist/' + accountID + '?champion=' + champion + '&queue=' + queue,
+    json: true
+  }
   return rp(options)
 }
 
@@ -185,9 +203,11 @@ getBestMatchupsByLane = function(championID, rank = 'BRONZE') {
 
 module.exports = {
 	"getBySummonerName": getBySummonerName,
+  getBySummonerId,
 	"getRecentMatchList": getRecentMatchList,
 	"getMatch": getMatch,
   "getMatchList" : getMatchList,
+  getMatchlistForQueue,
 	"getAllLeaguePositionsForSummoner": getAllLeaguePositionsForSummoner,
 	"getAllChampionMasteriesForSummoner": getAllChampionMasteriesForSummoner,
   "getGGChampionsForRole": getGGChampionsForRole,
