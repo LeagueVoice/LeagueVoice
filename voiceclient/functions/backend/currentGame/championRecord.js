@@ -27,7 +27,7 @@ getChampionRecord = function(uniqueID, championID) {
             };
           });
       }).then(function(participant) {
-        return client.getMatchlist(participant.id, participant.region, championID)
+        return client.getMatchlistForQueue(participant.id, participant.region, championID)
           .then(function(res) {
             return Promise.all(res.matches.map(function(e) {
               return client.getMatch(e.gameId, participant.region);

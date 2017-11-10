@@ -106,15 +106,15 @@ const getWinrateForChamp = function(uniqueID, championID) {
  */
 const addNewMatches = function(uniqueID, summonerID, region) {
 
-	client.getRecentMatchList(summonerID, region).then(res => {
-		console.log(res)
+	client.getMatchList(summonerID, region).then(res => {
+		// console.log(res)
 
 		let championId = []
 		let gameId = []
 		let lane = []
 
 		for (let key of res["matches"]) {
-			console.log("YAHLLOOOOO " + key)
+			console.log("YAHLLOOOOO " + JSON.stringify(key))
 			championId.push(key["champion"]) // list of champions for each game
 			gameId.push(key["gameId"])
 			lane.push(key["lane"])
