@@ -2,11 +2,10 @@ const classification = require('./backend/itemization/classification')
 const championRole = require('./backend/itemization/championRole')
 
 const ItemSuggestion = (app) => {
-	championRole.getCurrentChampionRole(app.getUser()['user_id']).then(function(role) {
-		var i = 0
-		var speak_string = "Think about buying these items: "
-		var item_list = classification.getItemClassification(role, app.getArgument('status'), app.getArgument('situation'))
-		for (; i < item_list.length-1; i++) {
+	classification.getItems(app.getUser()['user_id'], app.getArgument('status'), app.getArgument('situation')).then(function(item_list) {
+	var i = 0
+	var speak_string = "Think about buying these items: "
+	for (; i < item_list.length-1; i++) {
 			speak_string+= item_list[i] + ','
 		}
 		speak_string+= item_list[i] + ". Good luck!"

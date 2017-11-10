@@ -16,6 +16,8 @@ const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 const itemIntent = require('./itemIntent');
+const championRole = require('./backend/itemization/championRole')
+
 
 const welcomeIntent = (app) => {
     app.ask("Welcome to League Voice! How can we help you improve?")
@@ -126,7 +128,6 @@ actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion)
-
 
 // classification.getItems('test3');
 // checkUserRanksIntent("test").then(function(response){

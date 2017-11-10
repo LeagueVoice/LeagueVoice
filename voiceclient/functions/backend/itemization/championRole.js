@@ -28,26 +28,29 @@ getChampionRole = function(championID) {
   // let champion = Object.values(champions.data).filter(function(elem) {
   //   return elem.key == championID;
   // })[0];
-  var champion = Object.keys(champions.data).map(function(e) {
-    return championID === champions.data[e]
-  })[0]
+  let isAp;
+  let role;
 
-  // AP vs AD  |   Damage vs Tank vs Support
-  let isAP = champion.info.magic > champion.info.attack;
-  let role = "damage";
+  Object.keys(champions.data).forEach(function(champion) {
+    if (champions.data[champion]['key'] == championID.toString()) {
+        var champion = champions.data[champion]
+        // AP vs AD  |   Damage vs Tank vs Support
+        isAP = champion.info.magic > champion.info.attack;
+        role = "Damage";
 
-  if (champion.tags.includes("Tank")) {
-    role = "tank";
-  } 
+        if (champion.tags.includes("Tank")) {
+          role = "Tank";
+        } 
 
-  if (champion.tags.includes("Support")) {
-    role = "support";
-  }
-
-  return {
-    damageType: isAP ? "AP" : "AD",
-    role
-  };
+        if (champion.tags.includes("Support")) {
+          role = "Support";
+        }
+    }
+  })
+   return {
+      damageType: isAP ? "AP" : "AD",
+      role
+    };
 }
 
 module.exports = {
