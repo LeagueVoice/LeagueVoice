@@ -33,6 +33,11 @@ getChampionRecord = function(uniqueID, championID) {
       }).then(function(participant) {
         return client.getMatchlistForQueue(participant.id, participant.region, championID)
           .then(function(res) {
+            if (!res) {
+              res = {
+                matches: []
+              }
+            }
             return Promise.all(res.matches.map(function(e) {
               return client.getMatch(e.gameId, participant.region);
             })).then(function(matches) {
@@ -66,7 +71,8 @@ getChampionRecord = function(uniqueID, championID) {
             return m.championId == championID;
           });
           return {
-            winrate: isWin.reduce((a, b) => a + b, 0) / isWin.length,
+            winrate: isWin.length ? isWin.reduce((a, b) => a + b, 0) / isWin.length : 0,
+            numGames: isWin.length,
             championLevel: mastery.championLevel
           };
         });

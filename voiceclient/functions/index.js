@@ -33,7 +33,8 @@ const checkUserRanksIntent = (app) => {
     "IV": "4",
     "V": "5"
   }
-  aggregate.userRanksByQueue(app.getUser()['user_id']).then(function(res){
+  aggregate.userRanksByQueue(app.getUser()['user_id'])
+    .then(function(res){
       var rankArray = res["RANKED_SOLO_5x5"].split(" ")
       var rankStr = rankArray[0].toLowerCase() + " " + numeralEnum[rankArray[1]]
       if (rankArray[0] !== "CHALLENGER"){
@@ -42,7 +43,10 @@ const checkUserRanksIntent = (app) => {
       else {
         app.tell("You're a " + rankStr + " player. Please teach me how to play, senpai.")
       }
-  });
+  })
+    .catch(function(e) {
+      app.tell("I can't get your rank right now. Set up your summoner with me first.")
+    });
 }
 
 const WhoToPlayAgainstIntent = (app) => {
@@ -53,7 +57,7 @@ const WhoToPlayAgainstIntent = (app) => {
     if (response[0].count != 0){
       var name = client.getChampionName(response[0].matchups[0].championID)
       var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      app.tell("You should play " + nice_name + ". " + nice_name + " has a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
+      app.ask("You should play " + nice_name + ". " + nice_name + " has a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
       app.tell("Welp, I have no clue. Play what feels best!");
@@ -77,8 +81,11 @@ const RoleChampSuggestIntent = (app) => {
       name = client.getChampionName(response[i])
       nice_name = name.charAt(0).toUpperCase() + name.slice(1)
       champString += "or " + nice_name
-      app.tell("Based on your mastery and current winrate, some champs you could play are " + champString)
-  });
+      app.ask("Based on your mastery and current winrate, some champs you could play are " + champString)
+  })
+    .catch(function(e) {
+      app.tell("We can't suggest champions for you right now. Make sure that you've registered your summoner with me.")
+    })
 }
 
 const WhoToBanIntent = (app) => {
@@ -87,7 +94,7 @@ const WhoToBanIntent = (app) => {
 if (response[0].count != 0){
       var name = client.getChampionName(response[0].matchups[0].championID)
       var nice_name = name.charAt(0).toUpperCase() + name.slice(1)
-      app.tell("You should ban " + nice_name + ". " + nice_name + " has a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
+      app.ask("You should ban " + nice_name + ". " + nice_name + " has a " + Math.round(response[0].matchups[0].winrate*100) + " percent winrate in this matchup.");
     }
     else {
       app.tell("Welp, I have no clue. Play what feels best!");
@@ -101,7 +108,7 @@ const SummonerIntent = (app) => {
 
 const RegionIntent = (app) => {
   fbUser.createFromSummonerName(app.getUser()['userId'], app.getArgument('summoner'), app.getArgument('region')).then(function(res){
-    app.tell("Your region is set to: " + app.getArgument('region') + ".")
+    app.ask("Your region is set to: " + app.getArgument('region') + ".")
   });
 }
 

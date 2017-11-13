@@ -17,7 +17,7 @@ const EnemyTipsIntent = (app) => {
 			.then(function(response){
 				//console.log(response)
 				if (response.length !== 0) {
-					app.tell("According to LoL Counter, " + response[0])
+					app.ask("According to LoL Counter, " + response[0])
 				}
 				else {
 					app.tell("I could not find reliable tips from LoL Counter for this champ! Ripperoni.")
@@ -32,7 +32,7 @@ const EnemyTipsIntent = (app) => {
 			.then(function(response){
 				console.log(response)
 				if (response.length !== 0) {
-					app.tell("According to LoL Counter, " + response[0])
+					app.ask("According to LoL Counter, " + response[0])
 				}
 				else {
 					app.tell("I could not find reliable tips from LoL Counter for this champ! Ripperoni.")
