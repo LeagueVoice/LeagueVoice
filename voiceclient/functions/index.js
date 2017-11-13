@@ -36,7 +36,12 @@ const checkUserRanksIntent = (app) => {
   aggregate.userRanksByQueue(app.getUser()['user_id']).then(function(res){
       var rankArray = res["RANKED_SOLO_5x5"].split(" ")
       var rankStr = rankArray[0].toLowerCase() + " " + numeralEnum[rankArray[1]]
-      app.tell("You're a " + rankStr + " player. Let's work to get you even higher!")
+      if (rankArray[0] !== "CHALLENGER"){
+        app.tell("You're a " + rankStr + " player. Let's work to get you even higher!")
+      }
+      else {
+        app.tell("You're a " + rankStr + " player. Please teach me how to play, senpai.")
+      }
   });
 }
 
@@ -109,7 +114,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
     STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
     STATIC_CHAMPION_ABILITY_COST: 'Static.ChampionAbilityCost',
     STATIC_CHAMPION_ABILITY_DAMAGE: 'Static.ChampionAbilityDamage',
-    WHO_TO_PLAY_AGAINST: 'WhoToPlayAgainstIntent',
+    WHO_TO_PLAY_AGAINST: 'WhoToPlayAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
     SS_STORE_INTENT: 'SummonerSpellStore',

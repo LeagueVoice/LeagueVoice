@@ -16,7 +16,12 @@ const EnemyTipsIntent = (app) => {
 			enemyTips.getTipsAgainst(app.getArgument('champion'), client.getChampionName(participant.championId))
 			.then(function(response){
 				//console.log(response)
-				app.tell("According to LoL Counter, " + response[0])
+				if (response.length !== 0) {
+					app.tell("According to LoL Counter, " + response[0])
+				}
+				else {
+					app.tell("I could not find reliable tips from LoL Counter for this champ! Ripperoni.")
+				}
 			})
 			.catch(function(e){
 				console.log(e)
@@ -26,7 +31,12 @@ const EnemyTipsIntent = (app) => {
 			enemyTips.getTipsAgainst(app.getArgument('champion'))
 			.then(function(response){
 				console.log(response)
-				app.tell("According to LoL Counter, " + response[0])
+				if (response.length !== 0) {
+					app.tell("According to LoL Counter, " + response[0])
+				}
+				else {
+					app.tell("I could not find reliable tips from LoL Counter for this champ! Ripperoni.")
+				}			
 			})
 		})
 	})
