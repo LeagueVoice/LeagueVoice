@@ -26,34 +26,34 @@ const SummonerSpellStoreIntent = (app) => {
 };
 
 const SummonerSpellGetIntent = (app) => {
-	spellTimer.getSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'));
-	.then(response => {
-		var baseString = app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + Math.round(response) + " seconds. ";
-		console.log(['Flash', 'Heal', 'Barriestopr', 'Cleanse'].includes(app.getArgument('spell')));
-		if (['Flash', 'Heal', 'Barrier', 'Cleanse'].includes(app.getArgument('spell'))) {
-			if (response == 0) {
-				app.ask(app.getArgument('champion') + " has " + app.getArgument('spell') + " up! They may " + app.getArgument('spell') + " if you engage.");
-			}
-			else if (response < 10) {
-				app.ask(baseString + ". Get ready!");
-			}
-			else if (response < 100) {
-				app.ask(baseString + " Let your team know and if you want to coordinate a gank!");
-			}
-			else {
-				app.ask(baseString + " Take your time to find the right moment to engage!");
-			}
-		}
-		else {
-			if (response == 0){
-				app.ask(app.getArgument('champion') + " has " + app.getArgument('spell') + " up!");
+	spellTimer.getSpellTime(app.getUser()["userId"], app.getArgument('champion'), app.getArgument('spell'))
+		.then(response => {
+			var baseString = app.getArgument('champion') + " will have " + app.getArgument('spell') + " in " + Math.round(response) + " seconds. ";
+			console.log(['Flash', 'Heal', 'Barriestopr', 'Cleanse'].includes(app.getArgument('spell')));
+			if (['Flash', 'Heal', 'Barrier', 'Cleanse'].includes(app.getArgument('spell'))) {
+				if (response == 0) {
+					app.ask(app.getArgument('champion') + " has " + app.getArgument('spell') + " up! They may " + app.getArgument('spell') + " if you engage.");
+				}
+				else if (response < 10) {
+					app.ask(baseString + ". Get ready!");
+				}
+				else if (response < 100) {
+					app.ask(baseString + " Let your team know and if you want to coordinate a gank!");
+				}
+				else {
+					app.ask(baseString + " Take your time to find the right moment to engage!");
+				}
 			}
 			else {
-				app.ask(baseString);
+				if (response == 0){
+					app.ask(app.getArgument('champion') + " has " + app.getArgument('spell') + " up!");
+				}
+				else {
+					app.ask(baseString);
+				}
 			}
-		}
-	})
-	.catch(e => app.tell("I can't get that timer for you. Make sure that your summoner is registered with me first."));
+		})
+		.catch(e => app.tell("I can't get that timer for you. Make sure that your summoner is registered with me first."));
 };
 
 module.exports = {
