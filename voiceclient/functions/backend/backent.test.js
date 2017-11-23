@@ -1,10 +1,10 @@
 const foo = require('./client.js');
-  console.log(foo.getChampionID('ashe'));
-  console.log(foo.getChampionName(22));
-  
-  foo.getBestMatchupsByLane(22).then(function(matchups) {
-    console.log(matchups[0]);
-  });
+console.log(foo.getChampionID('ashe'));
+console.log(foo.getChampionName(22));
+
+foo.getBestMatchupsByLane(22).then(function(matchups) {
+  console.log(matchups[0]);
+});
 
 // foo.getGGMatchupsTEST().then(console.log)
   /*
@@ -25,4 +25,3 @@ foo.getRecentMatchList(237254272, "na1").then(function(res) {
 // foo.getMatch(2638457089, "na1").then(function(res) {
 // 	console.log(res)
 // })
-
