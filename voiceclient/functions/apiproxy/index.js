@@ -1,6 +1,10 @@
-const functions = require('firebase-functions');
+"use strict";
 
+const functions = require('firebase-functions');
 const express = require('express');
+
+if (!Object.entries) require('object.entries').shim();
+
 const app = express();
 
 const { rgkey: RGAPI_KEY, cggkey: CGGAPI_KEY } = functions.config().apiproxy;
