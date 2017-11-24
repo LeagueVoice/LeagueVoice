@@ -4,7 +4,7 @@ describe('championSelect.js', function () {
   const championSelect = require('./championSelect')
 
   before(function () {
-    const app = require('../../firebase/app')
+    require('../../../initFirebase');
     const fbUser = require('../../firebase/user')
     return fbUser.createFromSummonerName("test", "TeemoEater", "NA1").then(data => {
       return fbUser.getById('test')
