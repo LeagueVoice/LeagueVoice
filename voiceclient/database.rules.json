@@ -5,10 +5,10 @@
       ".write": "auth != null && auth.token.isAdmin == true"
     },
     "users": {
-      ".read": "true",
-      ".write": "true"
-      //".read": "auth != null",
-      //".write": "auth != null"
+      "$uid": {
+        ".read": "auth != null && ($uid === auth.uid || auth.token.isAdmin == true)",
+        ".write": "auth != null && ($uid === auth.uid || auth.token.isAdmin == true)"
+      }
     }
   }
 }
