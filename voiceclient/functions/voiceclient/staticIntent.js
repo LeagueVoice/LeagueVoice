@@ -1,4 +1,4 @@
-const rp = require('request-promise');
+const rp = require('request-promise-native');
 
 const formatValues = require('./formatValues');
 const ChampionSpell = require('./ChampionSpell');

@@ -1,18 +1,18 @@
 const client = require('../client')
 const user = require('../../firebase/user')
-const rp = require('request-promise');
+const rp = require('request-promise-native');
 
 timeLogic = function(gameLength) {
 	const gameTimerEnum = {
 		EARLYGAME : {
-			Messages: ["Try to focus on your lane and CS-ing! This will get you lots of cash money to build items and get stronk!", 
+			Messages: ["Try to focus on your lane and CS-ing! This will get you lots of cash money to build items and get stronk!",
 				"When you take tower, look to roam when other lanes are pushed in! Let's win this as a team!",
 				"Drop a few wards to help track the enemy jungler.",
 				"Keep in mind the enemy summoner spells to know when to engage and when to play safe. Feel free to ask us for help tracking these!"
 			]
 		},
 		MIDGAME : {
-			Time: 900, 
+			Time: 900,
 			Messages: ["If you're ahead, try to keep waves pushed in and ward the enemy jungle.",
 				"If you're ahead, group up with some teammates and roam around the map! Let's take down this enemy team!",
 				"Look to fight around objectives like Rift Heralf and dragons! These can snowball into late-game advantages.",
@@ -69,6 +69,6 @@ const gameTimeAdvice = function (uniqueID, region) {
 
 
 module.exports = {
-	"gameTimeAdvice": gameTimeAdvice, 
+	"gameTimeAdvice": gameTimeAdvice,
 	"timeLogic" : timeLogic
 }

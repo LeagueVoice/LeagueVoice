@@ -1,7 +1,7 @@
-const rp = require('request-promise');
+const rp = require('request-promise-native');
 
 // Location of express service serving apiproxy.
-var APIPROXY = 'http://104.196.43.62:3000';
+var APIPROXY = 'https://us-central1-league-voice-7fa50.cloudfunctions.net/apiproxy';
 
 // Returns a promise for getBySummonerName that resolves to the returned JSON
 // from the Riot API.

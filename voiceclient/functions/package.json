@@ -10,14 +10,17 @@
     "test": "./node_modules/.bin/mocha *.test.js firebase/**/*.test.js backend/**/*.test.js"
   },
   "dependencies": {
-    "actions-on-google": "*",
+    "actions-on-google": "^1.6.1",
+    "cgg": "^1.1.0",
     "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
     "firebase": "^4.6.1",
     "firebase-admin": "*",
     "firebase-functions": "^0.7.2",
     "jsonframe-cheerio": "^3.0.1",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise-native": "^1.0.5",
+    "teemojs": "^1.1.0-alpha0"
   },
   "private": true,
   "devDependencies": {

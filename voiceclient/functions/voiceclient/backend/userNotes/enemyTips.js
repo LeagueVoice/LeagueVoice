@@ -1,4 +1,4 @@
-const rp = require('request-promise');
+const rp = require('request-promise-native');
 const cheerio = require('cheerio');
 
 const getTipsAgainst = function(enemyChamp, myChamp = "") {
@@ -32,7 +32,7 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 						tips[i] = $(this).children('.tip').children('._tip').text()
 					}
 				})
-				return tips			
+				return tips
 			})
 		}
 		return tips
@@ -45,4 +45,3 @@ const getTipsAgainst = function(enemyChamp, myChamp = "") {
 module.exports = {
 	getTipsAgainst
 }
-
