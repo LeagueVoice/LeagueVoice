@@ -14,6 +14,7 @@ const aggregate = require('./backend/aggregate');
 const spell = require('./backend/currentGame/spellTimer.js');
 const tipBackend = require('./backend/userNotes/enemyTips.js');
 
+const debugIntent = require('./debugIntent');
 const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
@@ -149,8 +150,10 @@ actionMap.set(Actions.REGION, RegionIntent);
 actionMap.set(Actions.ADVICE, matchIntent.AdviceIntent);
 actionMap.set(Actions.WRITE_NOTE, notesIntent.WriteNoteIntent);
 actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
-actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion)
-actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent)
+actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion);
+actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent);
+
+actionMap.set('Debug.UserId', debugIntent.getUserId);
 
 
 const leagueVoice = functions.https.onRequest((request, response) => {
