@@ -132,7 +132,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
 function initialize() {
   // Initialize Firebase
   let config = {
-    apiKey: "AIzaSyB9sQFV5h8cK3kDGkMtKy4-6RK3x7Aados", // uh
+    apiKey: "AIzaSyB9sQFV5h8cK3kDGkMtKy4-6RK3x7Aados",
     authDomain: "league-voice-7fa50.firebaseapp.com",
     databaseURL: "https://league-voice-7fa50.firebaseio.com",
     projectId: "league-voice-7fa50",

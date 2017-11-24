@@ -3,7 +3,7 @@ const functions = require('firebase-functions');
 const express = require('express');
 const app = express();
 
-const { RGAPI_KEY, CGGAPI_KEY } = process.env;
+const { rgkey: RGAPI_KEY, cggkey: CGGAPI_KEY } = functions.config().apiproxy;
 console.log("RGAPI_KEY: " + (RGAPI_KEY && RGAPI_KEY.replace(/[a-f0-9]/g, '*')));
 console.log("CGGAPI_KEY: " + (CGGAPI_KEY && CGGAPI_KEY.replace(/[a-f0-9]/g, '*')));
 
