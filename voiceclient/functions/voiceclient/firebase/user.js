@@ -1,6 +1,6 @@
 'use strict';
 
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 const client = require('../backend/client.js');
 
 const user = {

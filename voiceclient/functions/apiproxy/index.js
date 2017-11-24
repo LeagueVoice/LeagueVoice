@@ -1,6 +1,6 @@
 "use strict";
 
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 const functions = require('firebase-functions');
 
 const { app, setDistFactor } = require('./app');
@@ -11,7 +11,7 @@ const isOnlineRef = instancesRef.push();
 const myId = isOnlineRef.toString().split('/').pop();
 
 isOnlineRef.onDisconnect().remove();
-isOnlineRef.set(true)
+isOnlineRef.set((new Date).toISOString())
   .then(() => instancesRef.on('value', snapshot => {
     let factor = 1 / snapshot.numChildren();
     console.log(`apiproxy[${myId}]: detected instances change, setting distFactor to ${factor}.`);

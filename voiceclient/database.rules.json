@@ -1,6 +1,14 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "apiproxy": {
+      ".read": "auth != null && auth.token.isAdmin == true",
+      ".write": "auth != null && auth.token.isAdmin == true"
+    },
+    "users": {
+      ".read": "true",
+      ".write": "true"
+      //".read": "auth != null",
+      //".write": "auth != null"
+    }
   }
 }

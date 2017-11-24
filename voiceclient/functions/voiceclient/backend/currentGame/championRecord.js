@@ -1,4 +1,4 @@
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 const client = require('../client.js');
 
 // For the game that the user ID is in, return the record for the given

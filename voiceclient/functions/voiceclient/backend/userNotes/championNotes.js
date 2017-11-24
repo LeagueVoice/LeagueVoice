@@ -1,4 +1,4 @@
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 
 // Returns the database key for the user and champion ID.
 const championNoteKey = function(uniqueID, championID) {

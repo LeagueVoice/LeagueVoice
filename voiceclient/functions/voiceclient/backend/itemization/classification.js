@@ -1,5 +1,5 @@
 const championRole = require('./championRole.js');
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 
 /* Get items for situation
  * @param {String} role - ad, ap, util, tank

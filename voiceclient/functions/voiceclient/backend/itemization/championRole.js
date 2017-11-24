@@ -1,5 +1,5 @@
 const client = require('../client.js');
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 
 // Returns a promise that evaluates to a champion role (see below) for the
 // current tracked player's game.

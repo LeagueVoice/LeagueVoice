@@ -8,7 +8,7 @@ const client = require('./backend/client.js');
 const champselect = require('./backend/championSelect/championSelect.js');
 
 const gameTimer = require('./backend/currentGame/gameTimer.js');
-const firebase = require('firebase');
+const firebase = require('firebase-admin');
 const fbUser = require('./firebase/user');
 const aggregate = require('./backend/aggregate');
 const spell = require('./backend/currentGame/spellTimer.js');
