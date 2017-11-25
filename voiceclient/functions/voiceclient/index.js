@@ -153,7 +153,12 @@ actionMap.set(Actions.READ_NOTE, notesIntent.ReadNoteIntent);
 actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion);
 actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent);
 
-actionMap.set('Debug.UserId', debugIntent.getUserId);
+
+// DEBUG FUNCTIONS
+if (true) {
+  actionMap.set('Debug.UserInfo', debugIntent.getUserInfo);
+  actionMap.set('Debug.FirebaseInfo', debugIntent.getFirebaseInfo);
+}
 
 
 const leagueVoice = functions.https.onRequest((request, response) => {
