@@ -10,10 +10,9 @@ Object.entries = Object.entries || function(obj) {
 
 // Initialize firebase globally.
 require('./initFirebase');
-const voiceclient = require('./voiceclient/');
-const apiproxy = require('./apiproxy/');
 
 // Export firebase functions
 module.exports = {};
-Object.assign(module.exports, voiceclient);
-Object.assign(module.exports, apiproxy);
+Object.assign(module.exports, require('./voiceclient/'));
+Object.assign(module.exports, require('./apiproxy/'));
+Object.assign(module.exports, require('./oauth2/'));
