@@ -11,8 +11,11 @@ Object.entries = Object.entries || function(obj) {
 // Initialize firebase globally.
 require('./initFirebase');
 
-// Export firebase functions
+// Export firebase function(s).
+// Only exported needed based on env.FUNCTION_NAME.
 module.exports = {};
-Object.assign(module.exports, require('./voiceclient/'));
-Object.assign(module.exports, require('./apiproxy/'));
-Object.assign(module.exports, require('./oauth2/'));
+const functions = [ 'voiceclient', 'apiproxy', 'oauth2' ];
+const funcName = process.env.FUNCTION_NAME;
+console.log(`FUNCTION_NAME: ${JSON.stringify(funcName)}.`);
+functions.filter(f => !funcName || f === funcName)
+  .forEach(f => Object.assign(module.exports, require(`./${f}/`)));
