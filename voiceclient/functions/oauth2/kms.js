@@ -6,7 +6,7 @@ const locationId = 'global';
 const keyRingId = 'firebase-oauth2';
 
 // Encoding used for buffers.
-const encoding = 'utf8';
+const encoding = 'ascii';
 
 // cloudkms promise.
 const cloudkms = new Promise((resolve, reject) => {
@@ -59,6 +59,8 @@ function encrypt(plaintext, cryptoKeyId) {
 }
 
 function decrypt(ciphertext64, cryptoKeyId) {
+  if (!/^[A-Za-z0-9+/]+=*$/.test(ciphertext64) || (ciphertext64.length % 4))
+    throw new Error(`Invalid ciphertext64: "${ciphertext64}".`);
   // Get Cloud KMS client
   return cloudkms.then(cloudkms => {
     const request = {

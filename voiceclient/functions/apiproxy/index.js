@@ -13,7 +13,12 @@ const myId = isOnlineRef.toString().split('/').pop();
 isOnlineRef.onDisconnect().remove();
 isOnlineRef.set((new Date).toISOString())
   .then(() => instancesRef.on('value', snapshot => {
-    let factor = 1 / snapshot.numChildren();
+    let children = snapshot.numChildren();
+    if (!children) {
+      console.log(`apiproxy[${myId}]: zero instances detected. Did a deploy just happen?`);
+      return;
+    }
+    let factor = 1 / children;
     console.log(`apiproxy[${myId}]: detected instances change, setting distFactor to ${factor}.`);
     setDistFactor(factor);
   }))
