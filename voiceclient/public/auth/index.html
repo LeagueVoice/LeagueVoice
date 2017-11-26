@@ -115,9 +115,12 @@
               }))
               .then(response => response.json())
               .then(json => json.token)
-              .then(code => window.location
-                .replace(`${redirectUri}?code=${code}&state=${state}`)
-              )
+              .then(code => {
+                let params = new URLSearchParams();
+                params.set('code', code);
+                params.set('state', state);
+                window.location.replace(redirectUri + '?' + params.toString());
+              })
               .catch(e => {
                 console.error('ITS A FUCKING ERROR MATE', e);
               });
@@ -125,9 +128,13 @@
           }
           if ('token' === responseType) {
             user.getIdToken()
-              .then(token => window.location
-                .replace(`${redirectUri}#access_token=${token}&state=${state}&token_type=bearer`)
-              )
+              .then(token => {
+                let params = new URLSearchParams();
+                params.set('token_type', 'bearer');
+                params.set('access_token', token);
+                params.set('state', state);
+                window.location.replace(redirectUri + '#' + params.toString());
+              })
               .catch(e => {
                 console.error(e);
               });
