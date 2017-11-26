@@ -46,7 +46,8 @@
     <script>
       const validRedirectUris = [
         'https://oauth-redirect.googleusercontent.com/r/league-voice-7fa50',
-        'https://developers.google.com/oauthplayground/'
+        'https://developers.google.com/oauthplayground/',
+        'https://developers.google.com/oauthplayground'
       ];
       function goback() {
         if (window.history.length === 1)
@@ -73,22 +74,25 @@
         // http://localhost:5000/auth/?client_id=google&redirect_uri=https://oauth-redirect.googleusercontent.com/r/league-voice-7fa50&response_type=token
         let searchParams = new URLSearchParams(window.location.search);
         let failed = false;
+
+        let redirectUri = searchParams.get('redirect_uri');
+        let responseType = searchParams.get('response_type');
+        let state = searchParams.get('state');
+
         if (searchParams.get('client_id') !== 'google') {
           fail(`Incorrect client_id: ${JSON.stringify(searchParams.get('client_id'))}, expected: "google".`);
           failed = true;
         }
-        if (validRedirectUris.indexOf(searchParams.get('redirect_uri')) < 0) {
-          fail(`Incorect redirect_uri: ${JSON.stringify(searchParams.get('redirect_uri'))}, expected one of ${JSON.stringify(validRedirectUris)}`);
+        if (validRedirectUris.indexOf(redirectUri) < 0) {
+          fail(`Incorect redirect_uri: ${JSON.stringify(redirectUri)}, expected one of ${JSON.stringify(validRedirectUris)}`);
           failed = true;
         }
-        if (searchParams.get('response_type') !== 'token') {
-          fail(`Incorrect response_type: ${JSON.stringify(searchParams.get('response_type'))}, expected: "token".`);
+        if ([ 'token', 'code' ].indexOf(responseType) < 0) {
+          fail(`Incorrect response_type: ${JSON.stringify(responseType)}.`);
           failed = true;
         }
         if (failed)
           return;
-        let redirectUri = searchParams.get('redirect_uri');
-        let state = searchParams.get('state');
 
 
         // AUTHETNICATION PROCESS
@@ -99,14 +103,36 @@
             auth();
             return;
           }
-          user.getIdToken()
-            .then(token => window.location
-              .replace(`${redirectUri}#access_token=${token}&state=${state}&token_type=bearer`)
-            )
-            .catch(e => {
-              console.error(e);
-              auth();
-            });
+          if ('code' === responseType) {
+            user.getIdToken()
+              .then(token => fetch("https://us-central1-league-voice-7fa50.cloudfunctions.net/oauth2/auth", {
+                  method: "POST",
+                  headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ id_token: token })
+              }))
+              .then(response => response.json())
+              .then(json => json.token)
+              .then(code => window.location
+                .replace(`${redirectUri}?code=${code}&state=${state}`)
+              )
+              .catch(e => {
+                console.error('ITS A FUCKING ERROR MATE', e);
+              });
+            return;
+          }
+          if ('token' === responseType) {
+            user.getIdToken()
+              .then(token => window.location
+                .replace(`${redirectUri}#access_token=${token}&state=${state}&token_type=bearer`)
+              )
+              .catch(e => {
+                console.error(e);
+              });
+            return;
+          }
         });
         function auth() {
           let provider = new firebase.auth.GoogleAuthProvider();

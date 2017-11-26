@@ -17,10 +17,10 @@ read -p "Are you sure you want to change the secret? [yN] " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  ENC="$(echo "$1" | gcloud kms encrypt --location=global --keyring=firebase-oauth2 \
+  ENC="$(echo -n "$1" | gcloud kms encrypt --location=global --keyring=firebase-oauth2 \
     --key=google-secret-key --plaintext-file=- --ciphertext-file=- | base64 -w 0)"
-  echo -e "\nEncrypted: $ENC\n"
+  echo -e "\nEncrypted: \"$ENC\"\n"
   firebase functions:config:set oauth2.google_secret="$ENC"
-  echo "done"
+  echo "Done. Remember to set Cloud KMS Encrypter/Decrypter permissions for the default IAM or set up permissions manually."
 fi
 exit 1

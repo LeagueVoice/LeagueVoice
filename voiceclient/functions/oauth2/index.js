@@ -5,20 +5,27 @@ const functions = require('firebase-functions');
 const kms = require('./kms');
 
 const express = require('express');
+const cors = require('cors')
 const bodyParser = require('body-parser');
+
 const app = express();
+app.use(cors());
+app.use(express.json()); // to support JSON-encoded bodies (not needed for google).
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded.
 
 
 //// CONFIGURATION ////
 
 const CLIENT_ID = 'google';
-let CLIENT_SECRET;
+let CLIENT_SECRET_PROMISE;
 try {
-  CLIENT_SECRET = functions.config().oauth2.google_secret;
+  CLIENT_SECRET_PROMISE = kms.decrypt(functions.config().oauth2.google_secret, 'google-secret-key');
 }
 catch(e) {
-  ({ CLIENT_SECRET } = process.env);
+  CLIENT_SECRET_PROMISE = Promise.resolve(process.env.CLIENT_SECRET);
 }
+
+CLIENT_SECRET_PROMISE.catch(console.error);
 
 
 //// CONSTANTS ////
@@ -65,7 +72,7 @@ function createToken(type, clientId, userId) {
     // We generate them directly with firebase admin.
     return admin.auth().createCustomToken(userId, { origin: 'google_auth_code' })
       .then(token => ({
-        sceondsToLive,
+        secondsToLive,
         token
       }));
   }
@@ -87,8 +94,10 @@ function createToken(type, clientId, userId) {
 // AKA `createToken(...).then(data => validateToken(data.token, ...))`
 // Returns a Promise of the `userId`, or rejects with error.
 function checkToken(token, type, clientId) {
+  // Special for access. Also `clientId` not checked.
   if (type == TOKEN_TYPE.ACCESS)
-    throw new Error('Checking ACCESS tokens not supported.');
+    return admin.auth().verifyIdToken(token)
+      .then(decodedToken => decodedToken.uid);
 
   let cryptoKeyId = TYPE_TO_CRYPTO_KEY[type];
   if (!cryptoKeyId)
@@ -113,12 +122,18 @@ function checkToken(token, type, clientId) {
 
 //// EXPRESS APP ////
 
-app.use(express.json()); // to support JSON-encoded bodies (not needed for google).
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded.
-
 // For use by our client to generate AUTHORIZATION_CODEs.
-app.post('/auth', (req, res) => {
-
+app.post('/auth', (req, res, next) => {
+  let { id_token } = req.body;
+  return checkToken(id_token, TOKEN_TYPE.ACCESS, null)
+    .then(userId => createToken(TOKEN_TYPE.AUTH, CLIENT_ID, userId))
+    .then(authCode => /* SUCCESS */ res.status(200).json(authCode))
+    .catch(e => {
+      console.error(e);
+      res.status(401).json({
+        error: 'bad id_token',
+      });
+    });
 });
 
 // For use by google.
@@ -126,60 +141,67 @@ app.post('/auth', (req, res) => {
 app.post('/token', (req, res) => {
   // client_id=GOOGLE_CLIENT_ID&client_secret=GOOGLE_CLIENT_SECRET
   let { client_id, client_secret, grant_type } = req.body;
-  if (client_secret !== CLIENT_SECRET) {
-    res.status(401).json({ error: 'unauthorized' });
-    return;
-  }
+  client_secret = client_secret.trim();
+  return CLIENT_SECRET_PROMISE.then(CLIENT_SECRET => {
+    if (client_secret !== CLIENT_SECRET) {
+      res.status(401).json({ error: 'unauthorized' });
+      return;
+    }
 
-  if ('authorization_code' === grant_type) {
-    // REFRESH_TOKEN (and ACCESS_TOKEN) from AUTHORIZATION_CODE
-    // grant_type=authorization_code&code=AUTHORIZATION_CODE
-    let authCode = req.body.code;
-    return checkToken(authCode, TOKEN_TYPE.AUTH, client_id)
-      .then(userId => {
-        let refreshTokenPromise = createToken(TOKEN_TYPE.REFRESH, client_id, userId);
-        let accessTokenPromise = createToken(TOKEN_TYPE.ACCESS, client_id, userId);
-        return Promise.all([ refreshTokenPromise, accessTokenPromise ]);
-      })
-      .then([ refreshToken, accessToken ] => {
-        // SUCCESS.
-        res.status(200).json({
-          token_type: 'bearer',
-          access_token: accessToken.token,
-          expires_in: accessToken.secondsToLive
-          refresh_token: refreshToken.token,
+    if ('authorization_code' === grant_type) {
+      // REFRESH_TOKEN (and ACCESS_TOKEN) from AUTHORIZATION_CODE
+      // grant_type=authorization_code&code=AUTHORIZATION_CODE
+      let authCode = req.body.code;
+      return checkToken(authCode, TOKEN_TYPE.AUTH, client_id)
+        .then(userId => {
+          let refreshTokenPromise = createToken(TOKEN_TYPE.REFRESH, client_id, userId);
+          let accessTokenPromise = createToken(TOKEN_TYPE.ACCESS, client_id, userId);
+          return Promise.all([ refreshTokenPromise, accessTokenPromise ]);
+        })
+        .then(([ refreshToken, accessToken ]) => {
+          // SUCCESS.
+          res.status(200).json({
+            token_type: 'bearer',
+            access_token: accessToken.token,
+            expires_in: accessToken.secondsToLive,
+            refresh_token: refreshToken.token
+          });
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(400).json({ error: 'invalid_grant' });
         });
-      })
-      .catch(e => {
-        console.error(e);
-        res.status(400).json({ error: 'invalid_grant' });
-      });
-  }
-  else if ('refresh_token' === grant_type) {
-    // ACCESS_TOKEN from REFRESH_TOKEN
-    // grant_type=refresh_token&refresh_token=REFRESH_TOKEN
-    let refreshToken = req.body.refresh_token;
-    return checkToken(refreshToken, TOKEN_TYPE.REFRESH, client_id)
-      .then(userId => createToken(TOKEN_TYPE.ACCESS, client_id, userId))
-      .then(accessToken => {
-        // SUCCESS.
-        res.status(200).json({
-          token_type: "bearer",
-          access_token: "ACCESS_TOKEN",
-          expires_in: SECONDS_TO_EXPIRATION
+    }
+    else if ('refresh_token' === grant_type) {
+      // ACCESS_TOKEN from REFRESH_TOKEN
+      // grant_type=refresh_token&refresh_token=REFRESH_TOKEN
+      let refreshToken = req.body.refresh_token;
+      return checkToken(refreshToken, TOKEN_TYPE.REFRESH, client_id)
+        .then(userId => createToken(TOKEN_TYPE.ACCESS, client_id, userId))
+        .then(accessToken => {
+          // SUCCESS.
+          res.status(200).json({
+            token_type: 'bearer',
+            access_token: accessToken.token,
+            expires_in: accessToken.secondsToLive
+          });
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(400).json({ error: 'invalid_grant' });
         });
-      })
-      .catch(e => {
-        console.error(e);
-        res.status(400).json({ error: 'invalid_grant' });
+    }
+    else {
+      res.status(400).json({
+        error: 'wrong grant_type',
+        msg: JSON.stingify(grant_type)
       });
-  }
-  else {
-    res.status(400).json({
-      error: 'wrong grant_type',
-      msg: JSON.stingify(grant_type)
-    });
-  }
+    }
+  })
+  .catch(e => {
+    console.error(e);
+    res.status(500).json({ error: 'internal server error' });
+  });
 });
 
 const oauth2 = functions.https.onRequest(app);
