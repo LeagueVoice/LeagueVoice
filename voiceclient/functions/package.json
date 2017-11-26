@@ -7,10 +7,12 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "./node_modules/.bin/mocha *.test.js firebase/**/*.test.js backend/**/*.test.js"
+    "test": "./node_modules/.bin/mocha -r initFirebase.js *.test.js firebase/**/*.test.js backend/**/*.test.js",
+    "oauth2": "node -i -e \"require('./initFirebase.js'); let oauth2 = require('./oauth2/');\""
   },
   "dependencies": {
     "actions-on-google": "^1.6.1",
+    "body-parser": "^1.18.2",
     "cgg": "^1.1.0",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",

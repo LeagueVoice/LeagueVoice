@@ -6,7 +6,7 @@ KEYRING=firebase-oauth2
 gcloud kms keyrings create $KEYRING --location $LOCATION \
   || echo "Failed to create keyring."
 
-for NAME in access-token-key auth-code-key refresh-token-key
+for NAME in auth-code-key refresh-token-key google-secret-key
 do
   gcloud kms keys create $NAME --location $LOCATION \
     --keyring $KEYRING \
