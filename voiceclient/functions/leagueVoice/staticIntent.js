@@ -15,26 +15,46 @@ const versions = req('https://ddragon.leagueoflegends.com/api/versions.json')
   .then(JSON.parse);
 const latest = versions.then(versions => versions[0]);
 
-const champs = latest
+const _defaultLocales = {
+  en: 'en_US',
+  jp: 'jp_JA'
+}
+function _convertLang(lang) {
+  if (!lang)
+    return 'en_US';
+  if (2 === lang.length) {
+    return _defaultLocales[lang];
+  }
+  return lang.replace('-', '_');
+}
+
+const _champs = latest
   .then(version => rp(`${CDN}${version}/data/en_US/champion.json`))
   .then(JSON.parse)
   .then(json => json.data);
 
+function _getAllChamps(locale="en_US") {
+  return _champs[locale] = _champs[locale] || latest
+    .then(version => rp(`${CDN}${version}/data/${locale}/champion.json`))
+    .then(JSON.parse)
+    .then(json => json.data);
+}
+
 const abilitiesIndicies = [ 'Q', 'W', 'E', 'R' ];
 
-function _getChampion(championKey) {
+function _getChampion(championKey, locale="en_US") {
   return latest
-    .then(version => req(`${CDN}${version}/data/en_US/champion/${championKey}.json`))
+    .then(version => req(`${CDN}${version}/data/${locale}/champion/${championKey}.json`))
     .then(JSON.parse)
     .then(json => json.data[championKey]);
 }
-function _getChampionAbility(championKey, ability) {
+function _getChampionAbility(championKey, ability, locale) {
   if ('passive' === ability) {
-    return _getChampion(championKey)
+    return _getChampion(championKey, locale)
       .then(champ => champ.passive);
   }
   else {
-    return _getChampion(championKey)
+    return _getChampion(championKey, locale)
       .then(champ => champ.spells)
       .then(abilities => abilities[abilitiesIndicies.indexOf(ability)]);
   }
@@ -45,7 +65,7 @@ function _cooldownToString(arr) {
 }
 
 function championCount(assistant) {
-  return champs.then(data =>
+  return _getAllChamps(_convertLang(assistant.getUserLocale())).then(data =>
     assistant.ask(`There are ${Object.keys(data).length} champions.`));
 }
 
@@ -54,7 +74,7 @@ function championAttackRange(assistant) {
 
   if (!champion) { assistant.ask("I'm sorry, I don't know what champion that is."); return; }
 
-  return champs.then(data => {
+  return _getAllChamps(_convertLang(assistant.getUserLocale())).then(data => {
     let champ = data[champion];
     assistant.ask(`${champ.name}'s auto attack range is ${champ.stats.attackrange} units.`);
   });
@@ -67,8 +87,8 @@ function championAbility(assistant) {
   if (!champion) { assistant.ask("I'm sorry, I don't know what champion that is."); return; }
   if (!ability) { assistant.ask("I'm sorry, I don't know what ability that is."); return; }
 
-  let champName = champs.then(data => data[champion].name);
-  let champData = _getChampionAbility(champion, ability);
+  let champName = _getAllChamps(_convertLang(assistant.getUserLocale())).then(data => data[champion].name);
+  let champData = _getChampionAbility(champion, ability, _convertLang(assistant.getUserLocale()));
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
@@ -86,8 +106,8 @@ function championAbilityCooldown(assistant) {
   if ('passive' === ability)
     return assistant.ask("No cooldown."); //TODO
 
-  let champName = champs.then(data => data[champion].name);
-  let champData = _getChampionAbility(champion, ability);
+  let champName = _getAllChamps(_convertLang(assistant.getUserLocale())).then(data => data[champion].name);
+  let champData = _getChampionAbility(champion, ability, _convertLang(assistant.getUserLocale()));
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
@@ -105,8 +125,8 @@ function championAbilityDamage(assistant) {
   if ('passive' === ability)
     return assistant.ask("Passive damage currently not supported, sorry."); //TODO
 
-  let champName = champs.then(data => data[champion].name);
-  let champData = _getChampionAbility(champion, ability);
+  let champName = _getAllChamps(_convertLang(assistant.getUserLocale())).then(data => data[champion].name);
+  let champData = _getChampionAbility(champion, ability, _convertLang(assistant.getUserLocale()));
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
@@ -126,8 +146,8 @@ function championAbilityCost(assistant) {
   if ('passive' === ability)
     return assistant.ask("No cost."); //TODO
 
-  let champName = champs.then(data => data[champion].name);
-  let champData = _getChampionAbility(champion, ability);
+  let champName = _getAllChamps(_convertLang(assistant.getUserLocale())).then(data => data[champion].name);
+  let champData = _getChampionAbility(champion, ability, _convertLang(assistant.getUserLocale()));
 
   return Promise.all([ champName, champData ])
     .then(([ name, data ]) => {
