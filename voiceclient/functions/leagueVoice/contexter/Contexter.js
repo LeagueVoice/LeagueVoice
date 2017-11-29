@@ -5,7 +5,7 @@ const DepGraph = require('dependency-graph').DepGraph;
  * Like dependency injection but done per-request.
  * With new inputs every time.
  *
- * See *.text.js for eample usage.
+ * See *.text.js for example usage.
  */
 function Contexter() {
   this.graph = new DepGraph();
@@ -27,8 +27,9 @@ Contexter.prototype.register = function(name) {
   return {
     asInput: () => this.graph.setNodeData(name, { type: 'input' }),
     asConstant: value => this.graph.setNodeData(name, { type: 'constant', value }),
-    asFunction: ({ deps, func }) => {
-      this.graph.setNodeData(name, { type: 'function', func });
+    asFunction: ({ deps, func, params={}, cached=false }) => {
+      let nodeData = { type: 'function', func, params, cached };
+      this.graph.setNodeData(name, nodeData);
       for (dep of deps) {
         this.graph.addNode(dep, null); // Allow out-of-order registration.
         this.graph.addDependency(name, dep);
@@ -42,7 +43,7 @@ Contexter.prototype.register = function(name) {
  *
  * Can also get inputs or constants (also as a promise).
  */
-Contexter.prototype.execute = function(target, inputs = {}) {
+Contexter.prototype.execute = function(target, inputs={}) {
   let order = this.graph.dependenciesOf(target).concat(target);
   let context = {};
   for (let name of order) {
@@ -60,8 +61,10 @@ Contexter.prototype.execute = function(target, inputs = {}) {
         break;
       case 'function':
         let subDeps = this.graph.outgoingEdges[name];
-        context[name] = Contexter.selectPromises(subDeps, context)
+        context[name] = Contexter.selectPromises(subDeps, context, dep.params)
           .then(dep.func);
+        if (dep.cached) // If cached function, convert to constant.
+          this.graph.setNodeData(name, { type: 'constant', value: context[name] });
         break;
     }
   }
@@ -75,22 +78,28 @@ Contexter.prototype.hasTarget = function(target) {
 /**
  * Select promises from an map into a new, resolved map.
  *
- * let names = [ 'foo', 'bar' ];
+ * let names = [ 'foo', 'bar' ]; // Names to include from promiseMap
  * let promiseMap = {
  *   foo: Promise.resolve(100),
  *   bar: Promise.resolve(200),
  *   baz: Promise.resolve(300)
  * };
- * selectPromises(names, promiseMap).then(result => {
- *   // result is { foo: 100, bar: 200 }
+ * let params = { // Additional values to include (all).
+ *   pop: Promise.resolve(400)
+ * };
+ * selectPromises(names, promiseMap, params).then(result => {
+ *   // result is { foo: 100, bar: 200, pop: 400 }
  * })
  */
-Contexter.selectPromises = function(names, promiseMap) {
-  return Promise.all(names.map(name => promiseMap[name]))
-    .then(values => {
-      let result = {};
-      values.forEach((value, i) => result[names[i]] = value);
-      return result;
+Contexter.selectPromises = function(names, promiseMap, params) {
+  return Promise
+    .all([
+      Promise.all(names.map(name => promiseMap[name])),
+      Promise.props(params)
+    ])
+    .then(([ values, params ]) => {
+      values.forEach((value, i) => params[names[i]] = value);
+      return params;
     });
 };
 

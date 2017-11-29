@@ -1,15 +1,7 @@
 'use strict';
 
-// SHIM
-Object.values = Object.values || function(obj) {
-  return Object.keys(obj).map(k => obj[k]);
-};
-Object.entries = Object.entries || function(obj) {
-  return Object.keys(obj).map(k => [ k, obj[k] ]);
-};
-
-// Initialize firebase globally.
-require('./initFirebase');
+// Initialize polyfill and firebase globally.
+require('./init');
 
 // Export firebase function(s).
 // Only exported needed based on env.FUNCTION_NAME.

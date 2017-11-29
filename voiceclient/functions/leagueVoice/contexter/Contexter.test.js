@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const Contexter = require('./index');
+const Contexter = require('./Contexter');
 const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
 
 describe('Contexter', function() {
@@ -16,8 +16,11 @@ describe('Contexter', function() {
     context.register('rootVal').asConstant('hello');
     context.register('left').asFunction({
       deps: [ 'rootVal' ],
-      func({ rootVal }) {
-        return rootVal + ' world';
+      func({ rootVal, suffix }) {
+        return rootVal + ' ' + suffix;
+      },
+      params: {
+        suffix: 'world'
       }
     });
     context.register('right').asFunction({
@@ -45,8 +48,11 @@ describe('Contexter', function() {
     context.register('rootVal').asConstant(delay(10).then(() => 'hello'));
     context.register('left').asFunction({
       deps: [ 'rootVal' ],
-      func({ rootVal }) {
-        return rootVal + ' world';
+      func({ rootVal, suffix }) {
+        return rootVal + ' ' + suffix;
+      },
+      params: {
+        suffix: 'world'
       }
     });
     context.register('right').asFunction({
@@ -61,5 +67,39 @@ describe('Contexter', function() {
         expect(vals[1]).to.equal('hello darkness my old friend');
       })
       .then(done, done);
+  });
+
+  it('test params', function(done) {
+    let context = new Contexter();
+    context.register('params').asFunction({
+      deps: [],
+      func({ vals }) {
+        return vals.pop();
+      },
+      params: {
+        vals: [ 5, 4, 3, 2, 1 ]
+      }
+    });
+    context.execute('params').then(v => expect(v).to.equal(1))
+      .then(() => context.execute('params')).then(v => expect(v).to.equal(2))
+      .then(() => context.execute('params')).then(v => expect(v).to.equal(3))
+      .then(() => done(), done);
+  });
+
+  it('test cached', function(done) {
+    let context = new Contexter();
+    context.register('cached').asFunction({
+      cached: true,
+      deps: [],
+      func({ vals }) {
+        return vals.pop();
+      },
+      params: {
+        vals: [ 5, 4, 3, 2, 1 ]
+      }
+    });
+    context.execute('cached').then(v => expect(v).to.equal(1))
+      .then(() => context.execute('cached')).then(v => expect(v).to.equal(1))
+      .then(() => done(), done);
   });
 });

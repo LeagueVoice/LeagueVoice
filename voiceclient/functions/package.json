@@ -7,8 +7,8 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "./node_modules/.bin/mocha -r initFirebase.js apiproxy/**/*.test.js leagueVoice/**/*.test.js oauth2/**/*.test.js",
-    "oauth2": "node -i -e \"require('./initFirebase.js'); let oauth2 = require('./oauth2/');\""
+    "test": "./node_modules/.bin/mocha -r init.js apiproxy/**/*.test.js leagueVoice/**/*.test.js oauth2/**/*.test.js",
+    "oauth2": "node -i -e \"require('./init.js'); let oauth2 = require('./oauth2/');\""
   },
   "dependencies": {
     "actions-on-google": "^1.6.1",

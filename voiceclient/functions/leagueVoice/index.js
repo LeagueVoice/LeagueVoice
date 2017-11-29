@@ -167,7 +167,11 @@ if (true) {
 let context = new Contexter();
 context.register('assistant').asInput();
 context.register('get').asConstant(url => rp(url).catch(e => rp(url)));
-require('./staticIntents/')(context);
+context.register('locale').asFunction({
+  deps: [ 'assistant' ],
+  func: ({ assistant }) => assistant.getUserLocale() || 'en'
+});
+require('./staticIntents/staticIntent')(context);
 
 
 
@@ -176,7 +180,12 @@ const leagueVoice = functions.https.onRequest((request, response) => {
   let target = '$' + assistant.getIntent();
   if (context.hasTarget(target)) {
     context.execute(target, { assistant })
-      .catch(e => e && console.error(e));
+      .catch(e => {
+        if (!e)
+          return;
+        console.error(e);
+        assistant.ask('Sorry, I wasn\'t able to understand that.');
+      });
   }
   else {
     assistant.handleRequest(actionMap);
