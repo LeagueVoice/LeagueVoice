@@ -54,8 +54,8 @@ ChampionSpell.prototype._getVar = function(spell, key) {
 
 ChampionSpell.prototype._initDamageString = function(spell) {
   let tooltipPlain = stripHtml(spell.tooltip);
-  // https://regex101.com/r/jrF0hK/1
-  let regex = /deal(?:ing|s)? {{ (\S\d) }}( \(\+{{ (\S\d) }}\))?(?: additional| bonus)? (magic|physical) damage/gi;
+  // https://regex101.com/r/jrF0hK/3
+  let regex = /(?:take|deal(?:ing|s)?) {{ (\S\d) }}( \(\+{{ (\S\d) }}\))?(?: additional| bonus)? (magic|physical) damage/gi;
   let match;
   let dmgs = [];
   while ((match = regex.exec(tooltipPlain))) {
