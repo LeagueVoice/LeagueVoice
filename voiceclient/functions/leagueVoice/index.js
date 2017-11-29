@@ -1,12 +1,15 @@
 'use strict';
 
 const DialogflowApp = require('actions-on-google').DialogflowApp;
+const Contexter = require('./contexter/Contexter');
+const rp = require('request-promise-native');
+
 const admin = require("firebase-admin");
 const functions = require('firebase-functions');
 const tracking = require('./backend/tracking.js');
 const client = require('./backend/client.js');
-const champselect = require('./backend/championSelect/championSelect.js');
 
+const champselect = require('./backend/championSelect/championSelect.js');
 const gameTimer = require('./backend/currentGame/gameTimer.js');
 const firebase = require('firebase-admin');
 const fbUser = require('./firebase/user');
@@ -15,7 +18,6 @@ const spell = require('./backend/currentGame/spellTimer.js');
 const tipBackend = require('./backend/userNotes/enemyTips.js');
 
 const debugIntent = require('./debugIntent');
-const staticIntent = require('./staticIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 const itemIntent = require('./itemIntent');
@@ -109,12 +111,12 @@ const RegionIntent = (app) => {
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANKS: 'CheckUserRanks',
-    STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
-    STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
-    STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
-    STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
-    STATIC_CHAMPION_ABILITY_COST: 'Static.ChampionAbilityCost',
-    STATIC_CHAMPION_ABILITY_DAMAGE: 'Static.ChampionAbilityDamage',
+    // STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
+    // STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
+    // STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
+    // STATIC_CHAMPION_COUNT: 'Static.ChampionCount',
+    // STATIC_CHAMPION_ABILITY_COST: 'Static.ChampionAbilityCost',
+    // STATIC_CHAMPION_ABILITY_DAMAGE: 'Static.ChampionAbilityDamage',
     WHO_TO_PLAY_AGAINST: 'WhoToPlayAgainst',
     ROLE_CHAMP_SUGGEST: "RoleChampSuggest",
     WHO_TO_BAN: 'WhoToBan',
@@ -133,12 +135,6 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
 const actionMap = new Map();
 actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
-actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
-actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
-actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
-actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
-actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COST, staticIntent.championAbilityCost);
-actionMap.set(Actions.STATIC_CHAMPION_ABILITY_DAMAGE, staticIntent.championAbilityDamage);
 actionMap.set(Actions.WHO_TO_PLAY_AGAINST, WhoToPlayAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
@@ -160,10 +156,31 @@ if (true) {
   actionMap.set('Debug.FirebaseInfo', debugIntent.getFirebaseInfo);
 }
 
+// actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
+// actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
+// actionMap.set(Actions.STATIC_CHAMPION_ATTACK_RANGE, staticIntent.championAttackRange);
+// actionMap.set(Actions.STATIC_CHAMPION_COUNT, staticIntent.championCount);
+// actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COST, staticIntent.championAbilityCost);
+// actionMap.set(Actions.STATIC_CHAMPION_ABILITY_DAMAGE, staticIntent.championAbilityDamage);
+
+//// NEW WAY OF DOING THINGS ////
+let context = new Contexter();
+context.register('assistant').asInput();
+context.register('get').asConstant(url => rp(url).catch(e => rp(url)));
+require('./staticIntents/')(context);
+
+
 
 const leagueVoice = functions.https.onRequest((request, response) => {
-  const app = new DialogflowApp({request, response});
-  app.handleRequest(actionMap);
+  const assistant = new DialogflowApp({ request, response });
+  let target = '$' + assistant.getIntent();
+  if (context.hasTarget(target)) {
+    context.execute(target, { assistant })
+      .catch(e => e && console.error(e));
+  }
+  else {
+    assistant.handleRequest(actionMap);
+  }
 });
 
 module.exports = {
