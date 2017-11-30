@@ -15,7 +15,6 @@ module.exports = function(context) {
       return champion;
     }
   });
-
   context.register('ability').asFunction({
     deps: [ 'assistant' ],
     func({ assistant }) {
@@ -27,8 +26,6 @@ module.exports = function(context) {
       return ability;
     }
   });
-
-  const CDN = 'http://ddragon.leagueoflegends.com/cdn/';
 
   context.register('ddragonVersion').asFunction({
     cached: true,
@@ -78,6 +75,8 @@ module.exports = function(context) {
       return championBasicData.name;
     }
   });
+
+  const CDN = 'http://ddragon.leagueoflegends.com/cdn/';
   context.register('championData').asFunction({
     deps: [ 'get', 'ddragonLocale', 'ddragonVersion', 'champion' ],
     func({ get, ddragonLocale: locale, ddragonVersion: version, champion }) {

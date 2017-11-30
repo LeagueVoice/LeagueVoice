@@ -4,24 +4,24 @@ const DialogflowApp = require('actions-on-google').DialogflowApp;
 const Contexter = require('./contexter/Contexter');
 const rp = require('request-promise-native');
 
-const admin = require("firebase-admin");
+// const admin = require("firebase-admin");
+// const firebase = require('firebase-admin');
+
 const functions = require('firebase-functions');
-const tracking = require('./backend/tracking.js');
-const client = require('./backend/client.js');
+// const tracking = require('./backend/tracking.js');
+const client = require('./backend/client');
 
 const champselect = require('./backend/championSelect/championSelect.js');
-const gameTimer = require('./backend/currentGame/gameTimer.js');
-const firebase = require('firebase-admin');
+// const gameTimer = require('./backend/currentGame/gameTimer');
 const fbUser = require('./firebase/user');
 const aggregate = require('./backend/aggregate');
-const spell = require('./backend/currentGame/spellTimer.js');
-const tipBackend = require('./backend/userNotes/enemyTips.js');
+// const spell = require('./backend/currentGame/spellTimer');
+// const tipBackend = require('./backend/userNotes/enemyTips');
 
-const debugIntent = require('./debugIntent');
 const notesIntent = require('./notesIntent');
 const matchIntent = require('./matchIntent');
 const itemIntent = require('./itemIntent');
-const championRole = require('./backend/itemization/championRole');
+// const championRole = require('./backend/itemization/championRole');
 const tipsIntent = require('./tipsIntent');
 
 function capitalize(name) {
@@ -29,7 +29,7 @@ function capitalize(name) {
 }
 
 const welcomeIntent = (app) => {
-    app.ask("Welcome to League Voice! How can we help you improve?");
+    app.ask("Welcome to League Voice! How can I help you improve?");
 };
 
 const checkUserRanksIntent = (app) => {
@@ -150,11 +150,6 @@ actionMap.set(Actions.ITEM_SUGGESTION, itemIntent.ItemSuggestion);
 actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent);
 
 
-// DEBUG FUNCTIONS
-if (true) {
-  actionMap.set('Debug.UserInfo', debugIntent.getUserInfo);
-  actionMap.set('Debug.FirebaseInfo', debugIntent.getFirebaseInfo);
-}
 
 // actionMap.set(Actions.STATIC_CHAMPION_ABILITY, staticIntent.championAbility);
 // actionMap.set(Actions.STATIC_CHAMPION_ABILITY_COOLDOWN, staticIntent.championAbilityCooldown);
@@ -171,7 +166,15 @@ context.register('locale').asFunction({
   deps: [ 'assistant' ],
   func: ({ assistant }) => assistant.getUserLocale() || 'en'
 });
+//// REGISTER INTENTS ////
 require('./staticIntents/staticIntent')(context);
+
+
+// DEBUG FUNCTIONS
+let debug = true;
+if (debug) {
+  require('./debugIntent')(context);
+}
 
 
 
