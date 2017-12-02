@@ -14,22 +14,31 @@ module.exports = function(context) {
   });
 
   context.register('$Debug.FirebaseInfo').asFunction({
-    deps: [ 'assistant' ],
-    func({ assistant }) {
-      let user = assistant.getUser();
-      if (!user) {
-        assistant.ask("Your user is null.");
+    deps: [ 'assistant', 'firebaseApp' ],
+    func({ assistant, firebaseApp: app }) {
+      if (!app) {
+        assistant.ask("Your app is null.");
         return;
       }
 
-      admin.auth().verifyIdToken(user.accessToken)
-        .then(token => {
-          //var uid = decodedToken.uid;
-          assistant.ask(JSON.stringify(token, null, 2));
-        })
-        .catch(e => {
-          assistant.ask("Token verification check passed: " + e);
-        });
+      var user = app.auth().currentUser;
+      if (user) {
+        // User is signed in.
+        assistant.ask(`Signed in as ${JSON.stringify(user)}.`);
+      } else {
+        // No user is signed in.
+        assistant.ask("Your app is not null, but you are not signed in.");
+      }
+
+      // // https://stackoverflow.com/a/37492640/2398020
+      // admin.auth().verifyIdToken(user.accessToken)
+      //   .then(token => {
+      //     //var uid = decodedToken.uid;
+      //     assistant.ask(JSON.stringify(token, null, 2));
+      //   })
+      //   .catch(e => {
+      //     assistant.ask("Token verification check failed: " + e);
+      //   });
     }
   });
 }

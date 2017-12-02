@@ -102,4 +102,34 @@ describe('Contexter', function() {
       .then(() => context.execute('cached')).then(v => expect(v).to.equal(1))
       .then(() => done(), done);
   });
+
+  it('test cleanup', function(done) {
+    let context = new Contexter();
+    // fake stack
+    context.register('val').asFunction({
+      deps: [],
+      func({ vals }) {
+        return vals.pop();
+      },
+      cleanup({ val, vals }) {
+        vals.push(val);
+      },
+      params: {
+        vals: [ 5, 4, 3, 2, 1 ]
+      }
+    });
+    context.register('result').asFunction({
+      deps: [ 'val' ],
+      func({ val }) {
+        return delay(50).then(() => val);
+      }
+    });
+    let a = context.execute('result').then(v => expect(v).to.equal(1));
+    let b = context.execute('result').then(v => expect(v).to.equal(2));
+    Promise.all([ a, b ])
+      .then(() => delay(10))
+      .then(() => context.execute('result'))
+      .then(v => expect(v).to.be.lessThan(3))
+      .then(() => done(), done);
+  });
 });

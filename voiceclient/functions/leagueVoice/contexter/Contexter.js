@@ -27,8 +27,8 @@ Contexter.prototype.register = function(name) {
   return {
     asInput: () => this.graph.setNodeData(name, { type: 'input' }),
     asConstant: value => this.graph.setNodeData(name, { type: 'constant', value }),
-    asFunction: ({ deps, func, params={}, cached=false }) => {
-      let nodeData = { type: 'function', func, params, cached };
+    asFunction: ({ deps, func, params={}, cached=false, cleanup }) => {
+      let nodeData = { type: 'function', func, cleanup, params, cached };
       this.graph.setNodeData(name, nodeData);
       for (dep of deps) {
         this.graph.addNode(dep, null); // Allow out-of-order registration.
@@ -68,6 +68,27 @@ Contexter.prototype.execute = function(target, inputs={}) {
         break;
     }
   }
+  // CLEANUP
+  Promise.props(context)
+    .then(contextVals => {
+      order.reverse();
+      return Promise.all(order.map(name => {
+        let dep = this.graph.getNodeData(name);
+        if (dep.type !== 'function' || !dep.cleanup)
+          return null;
+        return Promise.props(dep.params)
+          .then(params => {
+            Object.assign(params, contextVals);
+            dep.cleanup(params);
+          })
+          .catch(e => {
+            console.error(`Context ${name} threw error during cleanup.`);
+            console.error(e);
+          });
+      }))
+    })
+    .then(() => Object.keys(context).forEach(k => delete context[k])); // memory leak paranoia
+  // RESULT
   return context[target];
 };
 

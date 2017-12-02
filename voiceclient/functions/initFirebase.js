@@ -7,7 +7,13 @@ try {
   let serviceAccount = require('./serviceAccountKey.json');
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://league-voice-7fa50.firebaseio.com"
+    databaseURL: "https://league-voice-7fa50.firebaseio.com",
+    // optional:
+    apiKey: "AIzaSyB9sQFV5h8cK3kDGkMtKy4-6RK3x7Aados",
+    authDomain: "league-voice-7fa50.firebaseapp.com",
+    projectId: "league-voice-7fa50",
+    storageBucket: "league-voice-7fa50.appspot.com",
+    messagingSenderId: "702299684043"
   });
 }
 catch(e) {

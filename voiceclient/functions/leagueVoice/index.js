@@ -28,9 +28,9 @@ function capitalize(name) {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-const welcomeIntent = (app) => {
-    app.ask("Welcome to League Voice! How can I help you improve?");
-};
+// const welcomeIntent = (app) => {
+//     app.ask("Welcome to League Voice! How can I help you improve?");
+// };
 
 const checkUserRanksIntent = (app) => {
   const numeralEnum = {
@@ -109,7 +109,7 @@ const RegionIntent = (app) => {
 };
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
-    WELCOME_INTENT: 'input.welcome',
+    // WELCOME_INTENT: 'input.welcome',
     CHECK_USER_RANKS: 'CheckUserRanks',
     // STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     // STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
@@ -133,7 +133,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
 };
 
 const actionMap = new Map();
-actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
+// actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
 actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.WHO_TO_PLAY_AGAINST, WhoToPlayAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
@@ -160,6 +160,7 @@ actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent);
 
 //// NEW WAY OF DOING THINGS ////
 let context = new Contexter();
+context.register('request').asInput();
 context.register('assistant').asInput();
 context.register('get').asConstant(url => rp(url).catch(e => rp(url)));
 context.register('locale').asFunction({
@@ -168,6 +169,7 @@ context.register('locale').asFunction({
 });
 //// REGISTER INTENTS ////
 require('./staticIntents/staticIntent')(context);
+require('./firebaseContext')(context);
 
 
 // DEBUG FUNCTIONS
@@ -182,12 +184,12 @@ const leagueVoice = functions.https.onRequest((request, response) => {
   const assistant = new DialogflowApp({ request, response });
   let target = '$' + assistant.getIntent();
   if (context.hasTarget(target)) {
-    context.execute(target, { assistant })
+    context.execute(target, { assistant, request })
       .catch(e => {
         if (!e)
           return;
         console.error(e);
-        assistant.ask('Sorry, I wasn\'t able to understand that.');
+        assistant.ask('Sorry, an error occurred.');
       });
   }
   else {

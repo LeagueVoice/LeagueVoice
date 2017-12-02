@@ -11,7 +11,7 @@ const user = {
    * @param getRef if true, resolves to firebase ref, otherwise JSON
    * @returns {Promise}
    */
-getById: function (uniqueID, {getRef} = {getRef:false}) {
+  getById: function (uniqueID, {getRef} = {getRef:false}) {
     return new Promise((resolve, reject) => {
       return firebase.database()
         .ref('users')
