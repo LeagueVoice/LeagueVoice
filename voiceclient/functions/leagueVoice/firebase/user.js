@@ -11,15 +11,11 @@ const user = {
    * @param getRef if true, resolves to firebase ref, otherwise JSON
    * @returns {Promise}
    */
-  getById: function (uniqueID, {getRef} = {getRef:false}) {
-    return new Promise((resolve, reject) => {
-      return firebase.database()
-        .ref('users')
-        .once('value', function (snapshot) {
-          const value = getRef ? snapshot.child(uniqueID).ref : snapshot.val()[uniqueID]
-          resolve(value)
-        }, reject)
-    })
+  getById(uniqueID, { getRef } = { getRef: false }) {
+    return firebase.database()
+      .ref('users')
+      .once('value')
+      .then(snapshot => getRef ? snapshot.child(uniqueID).ref : snapshot.val()[uniqueID]);
   },
   /**
    * Creates user with summoner info from given summonerName and region

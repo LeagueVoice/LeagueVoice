@@ -14,10 +14,10 @@ module.exports = function(context) {
   });
 
   context.register('debug.FirebaseInfo').asFunction({
-    deps: [ 'assistant', 'firebaseApp' ],
-    func({ assistant, firebaseApp: app }) {
+    deps: [ 'assistant', 'firebase.app' ],
+    func({ assistant, 'firebase.app': app }) {
       if (!app) {
-        assistant.ask("Your app is null.");
+        assistant.ask('Your firebase is ' + app + '.');
         return;
       }
 

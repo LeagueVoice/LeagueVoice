@@ -9,6 +9,12 @@
         ".read": "auth != null && ($uid === auth.uid || auth.token.isAdmin == true)",
         ".write": "auth != null && ($uid === auth.uid || auth.token.isAdmin == true)"
       }
+    },
+    "summoners": {
+      "$sid": {
+        ".read": "true",
+        ".write": "auth != null && auth.token.isAdmin == true"
+      }
     }
   }
 }

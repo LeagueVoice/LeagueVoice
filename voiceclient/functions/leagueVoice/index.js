@@ -14,7 +14,7 @@ const client = require('./backend/client');
 const champselect = require('./backend/championSelect/championSelect.js');
 // const gameTimer = require('./backend/currentGame/gameTimer');
 const fbUser = require('./firebase/user');
-const aggregate = require('./backend/aggregate');
+// const aggregate = require('./backend/aggregate');
 // const spell = require('./backend/currentGame/spellTimer');
 // const tipBackend = require('./backend/userNotes/enemyTips');
 
@@ -31,28 +31,6 @@ function capitalize(name) {
 // const welcomeIntent = (app) => {
 //     app.ask("Welcome to League Voice! How can I help you improve?");
 // };
-
-const checkUserRanksIntent = (app) => {
-  const numeralEnum = {
-    "I": "1",
-    "II": "2",
-    "III": "3",
-    "IV": "4",
-    "V": "5"
-  };
-  aggregate.userRanksByQueue(app.getUser()['user_id'])
-    .then(res => {
-      let rankArray = res["RANKED_SOLO_5x5"].split(" ")
-      let rankStr = rankArray[0].toLowerCase() + " " + numeralEnum[rankArray[1]]
-      if (rankArray[0] !== "CHALLENGER") {
-        app.tell("You're a " + rankStr + " player. Let's work to get you even higher!");
-      }
-      else {
-        app.tell("You're a " + rankStr + " player. Please teach me how to play, senpai.");
-      }
-    })
-    .catch(e => app.tell("I can't get your rank right now. Set up your summoner with me first."));
-};
 
 const WhoToPlayAgainstIntent = (app) => {
   //console.log(client.getChampionID(app.getArgument('champion').toLowerCase()));
@@ -110,7 +88,7 @@ const RegionIntent = (app) => {
 
 const Actions = { // the action names from the DialogFlow intent. actions mapped to functions
     // WELCOME_INTENT: 'input.welcome',
-    CHECK_USER_RANKS: 'CheckUserRanks',
+    // CHECK_USER_RANKS: 'CheckUserRanks', // moved to lookupIntents
     // STATIC_CHAMPION_ABILITY: 'Static.ChampionAbility',
     // STATIC_CHAMPION_ABILITY_COOLDOWN: 'Static.ChampionAbilityCooldown',
     // STATIC_CHAMPION_ATTACK_RANGE: 'Static.ChampionAttackRange',
@@ -134,7 +112,7 @@ const Actions = { // the action names from the DialogFlow intent. actions mapped
 
 const actionMap = new Map();
 // actionMap.set(Actions.WELCOME_INTENT, welcomeIntent);
-actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
+// actionMap.set(Actions.CHECK_USER_RANKS, checkUserRanksIntent);
 actionMap.set(Actions.WHO_TO_PLAY_AGAINST, WhoToPlayAgainstIntent);
 actionMap.set(Actions.ROLE_CHAMP_SUGGEST, RoleChampSuggestIntent);
 actionMap.set(Actions.WHO_TO_BAN, WhoToBanIntent);
@@ -167,15 +145,17 @@ context.register('locale').asFunction({
   deps: [ 'assistant' ],
   func: ({ assistant }) => assistant.getUserLocale() || 'en'
 });
+//// REGISTER CONTEXTS ////
+require('./contexts/firebaseContext')(context);
 //// REGISTER INTENTS ////
 require('./staticIntents/staticIntent')(context);
-require('./firebaseContext')(context);
+require('./lookupIntents/lookupIntents')(context);
 
 
 // DEBUG FUNCTIONS
 let debug = true;
 if (debug) {
-  require('./debugIntent')(context);
+  require('./debugIntents/debugIntent')(context);
 }
 
 
