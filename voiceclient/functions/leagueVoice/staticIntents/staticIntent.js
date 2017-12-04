@@ -4,7 +4,7 @@ module.exports = function(context) {
   const formatValues = require('./formatValues');
   const ChampionSpell = require('./ChampionSpell');
 
-  context.register('champion').asFunction({
+  context.register('static.champion').asFunction({
     deps: [ 'assistant' ],
     func({ assistant }) {
       let champion = assistant.getArgument('champion');
@@ -15,7 +15,7 @@ module.exports = function(context) {
       return champion;
     }
   });
-  context.register('ability').asFunction({
+  context.register('static.ability').asFunction({
     deps: [ 'assistant' ],
     func({ assistant }) {
       let ability = assistant.getArgument('ability');
@@ -27,7 +27,7 @@ module.exports = function(context) {
     }
   });
 
-  context.register('ddragonVersion').asFunction({
+  context.register('static.ddragonVersion').asFunction({
     cached: true,
     deps: [ 'get' ],
     func({ get }) {
@@ -37,7 +37,7 @@ module.exports = function(context) {
     }
   });
 
-  context.register('ddragonLocale').asFunction({
+  context.register('static.ddragonLocale').asFunction({
     deps: [ 'locale' ],
     func({ locale, defaultLocales }) {
       if (2 === locale.length)
@@ -52,7 +52,7 @@ module.exports = function(context) {
     }
   });
 
-  context.register('allChampionData').asFunction({
+  context.register('static.allChampionData').asFunction({
     deps: [ 'get', 'ddragonLocale', 'ddragonVersion' ],
     func({ get, ddragonLocale, ddragonVersion: version, localeCache }) {
       return localeCache[ddragonLocale] = localeCache[ddragonLocale] ||
@@ -63,13 +63,13 @@ module.exports = function(context) {
       localeCache: {}
     }
   });
-  context.register('championBasicData').asFunction({
+  context.register('static.championBasicData').asFunction({
     deps: [ 'allChampionData', 'champion' ],
     func({ allChampionData, champion }) {
       return allChampionData[champion];
     }
   });
-  context.register('championName').asFunction({
+  context.register('static.championName').asFunction({
     deps: [ 'championBasicData' ],
     func({ championBasicData }) {
       return championBasicData.name;
@@ -77,14 +77,14 @@ module.exports = function(context) {
   });
 
   const CDN = 'http://ddragon.leagueoflegends.com/cdn/';
-  context.register('championData').asFunction({
+  context.register('static.championData').asFunction({
     deps: [ 'get', 'ddragonLocale', 'ddragonVersion', 'champion' ],
     func({ get, ddragonLocale: locale, ddragonVersion: version, champion }) {
       return get(`${CDN}${version}/data/${locale}/champion/${champion}.json`)
         .then(JSON.parse).then(json => json.data[champion]);
     }
   });
-  context.register('abilityData').asFunction({
+  context.register('static.abilityData').asFunction({
     deps: [ 'championData', 'ability' ],
     func({ championData, ability, abilitiesIndicies }) {
       if ('passive' === ability)
@@ -100,33 +100,33 @@ module.exports = function(context) {
     return formatValues(arr, 'seconds');
   }
 
-  context.register('$Static.ChampionCount').asFunction({
+  context.register('static.ChampionCount').asFunction({
     deps: [ 'assistant', 'allChampionData' ],
     func({ assistant, allChampionData }) {
       return assistant.ask(`There are ${Object.keys(allChampionData).length} champions.`);
     }
   });
-  context.register('$Static.ChampionAttackRange').asFunction({
+  context.register('static.ChampionAttackRange').asFunction({
     deps: [ 'assistant', 'championBasicData' ],
     func({ assistant, championBasicData: data }) {
       assistant.ask(`${data.name}'s auto attack range is ${data.stats.attackrange} units.`);
     }
   });
-  context.register('$Static.ChampionAbility').asFunction({
+  context.register('static.ChampionAbility').asFunction({
     deps: [ 'assistant', 'championName', 'ability', 'abilityData' ],
     func({ assistant, championName, ability, abilityData }) {
       assistant.ask(
         `${championName}'s ${ability} is ${abilityData.name}: ${ChampionSpell.stripHtml(abilityData.description)}`);
     }
   });
-  context.register('$Static.ChampionAbilityCooldown').asFunction({
+  context.register('static.ChampionAbilityCooldown').asFunction({
     deps: [ 'assistant', 'championName', 'ability', 'abilityData' ],
     func({ assistant, championName, ability, abilityData }) {
       assistant.ask(
         `${championName}'s ${ability} cooldown is ${_cooldownToString(abilityData.cooldown)}.`);
     }
   });
-  context.register('$Static.ChampionAbilityDamage').asFunction({
+  context.register('static.ChampionAbilityDamage').asFunction({
     deps: [ 'assistant', 'championName', 'ability', 'abilityData' ],
     func({ assistant, championName, ability, abilityData }) {
       let spell = new ChampionSpell(abilityData);
@@ -134,7 +134,7 @@ module.exports = function(context) {
         `${championName}'s ${ability} deals ${spell.getDamageString()}.`);
     }
   });
-  context.register('$Static.ChampionAbilityCost').asFunction({
+  context.register('static.ChampionAbilityCost').asFunction({
     deps: [ 'assistant', 'championName', 'ability', 'abilityData' ],
     func({ assistant, championName: name, ability, abilityData: data }) {
       if ('passive' === ability)

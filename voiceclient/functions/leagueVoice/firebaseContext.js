@@ -17,16 +17,20 @@ module.exports = function(context) {
       optionKeys.forEach(key => newOptions[key] = options[key]);
 
       let uniq = [ user.userId, Date.now(), Math.random() ].join(':');
-      console.log(`init firebase app "${uniq}".`);
+      console.log(`Init firebase app "${uniq}".`);
       let firebaseApp = firebase.initializeApp(newOptions, uniq);
       if (!user.accessToken)
         return firebaseApp;
       return firebaseApp.auth().signInWithCustomToken(user.accessToken)
+        .catch(e => {
+          console.log('Failed to to auth user.');
+          console.log(e);
+        })
         .then(() => firebaseApp);
     },
     cleanup({ firebaseApp: app }) {
       if (app) {
-        console.log(`delete firebase app "${app.name}".`);
+        console.log(`Delete firebase app "${app.name}".`);
         app.delete();
       }
     }

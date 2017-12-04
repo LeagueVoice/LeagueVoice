@@ -1,7 +1,7 @@
 module.exports = function(context) {
   const admin = require('firebase-admin');
 
-  context.register('$Debug.UserInfo').asFunction({
+  context.register('debug.UserInfo').asFunction({
     deps: [ 'assistant' ],
     func({ assistant }) {
       let user = assistant.getUser();
@@ -13,7 +13,7 @@ module.exports = function(context) {
     }
   });
 
-  context.register('$Debug.FirebaseInfo').asFunction({
+  context.register('debug.FirebaseInfo').asFunction({
     deps: [ 'assistant', 'firebaseApp' ],
     func({ assistant, firebaseApp: app }) {
       if (!app) {

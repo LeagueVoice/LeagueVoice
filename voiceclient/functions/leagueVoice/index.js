@@ -1,7 +1,7 @@
 'use strict';
 
 const DialogflowApp = require('actions-on-google').DialogflowApp;
-const Contexter = require('./contexter/Contexter');
+const Contextizer = require('contextizer');
 const rp = require('request-promise-native');
 
 // const admin = require("firebase-admin");
@@ -159,7 +159,7 @@ actionMap.set(Actions.ENEMY_TIPS, tipsIntent.EnemyTipsIntent);
 // actionMap.set(Actions.STATIC_CHAMPION_ABILITY_DAMAGE, staticIntent.championAbilityDamage);
 
 //// NEW WAY OF DOING THINGS ////
-let context = new Contexter();
+let context = new Contextizer();
 context.register('request').asInput();
 context.register('assistant').asInput();
 context.register('get').asConstant(url => rp(url).catch(e => rp(url)));
@@ -182,7 +182,8 @@ if (debug) {
 
 const leagueVoice = functions.https.onRequest((request, response) => {
   const assistant = new DialogflowApp({ request, response });
-  let target = '$' + assistant.getIntent();
+  let target = assistant.getIntent();
+  target = target.charAt(0).toLowerCase() + target.slice(1);
   if (context.hasTarget(target)) {
     context.execute(target, { assistant, request })
       .catch(e => {
