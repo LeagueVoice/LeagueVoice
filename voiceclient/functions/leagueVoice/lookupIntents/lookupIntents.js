@@ -2,12 +2,8 @@ module.exports = function(context) {
   const aggregate = require('../backend/aggregate');
 
   context.register('lookup.SummonerInfo').asFunction({
-    deps: [ 'assistant', 'firebase.summonerData' ],
-    func({ assistant, 'firebase.summonerData': summonerData }) {
-      if (!summonerData) {
-        assistant.ask("You haven't registered a summoner yet.");
-        return;
-      }
+    deps: [ 'assistant', 'firebase.summonerDataOrPrompt' ],
+    func({ assistant, 'firebase.summonerDataOrPrompt': summonerData }) {
       assistant.ask(`Your summoner is ${summonerData.name} in ${summonerData.platformId}.`);
     }
   });

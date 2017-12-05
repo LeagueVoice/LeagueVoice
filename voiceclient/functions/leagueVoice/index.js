@@ -145,6 +145,18 @@ context.register('locale').asFunction({
   deps: [ 'assistant' ],
   func: ({ assistant }) => assistant.getUserLocale() || 'en'
 });
+context.register('sign.in').asFunction({
+  deps: [ 'assistant' ],
+  func({ assistant }) {
+    if (assistant.getSignInStatus() === assistant.SignInstatus.OK) {
+      // let accessToken = assistant.getUser().accessToken;
+      // TODO? Check firebase user?
+      assistant.ask('Great, thanks for signing in! How can I help?');
+    } else { // TODO
+      assistant.ask('I won\'t be able to save your data, but let\'s continue!');
+    }
+  }
+})
 //// REGISTER CONTEXTS ////
 require('./contexts/firebaseContext')(context);
 //// REGISTER INTENTS ////
